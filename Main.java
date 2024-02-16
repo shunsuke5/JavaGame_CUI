@@ -6,6 +6,9 @@ public class Main {
         Event.startEvent();
         // マップ選択
         Event.chooseMap();
-        // gitテストコメント
+        // マップ内アクション
+        b.chooseMapAction();
+        // 敵と戦う
+        
     }
 }

@@ -10,10 +10,10 @@ public class HealSpell extends Spell {
         this.healPoint = healPoint;
     }
     // 回復呪文一覧
-    public void hoimi(Brave b) {    // ホイミ
+    public void hoimi() {    // ホイミ
 
     }
-    public void behoimi(Brave b) {  // ベホイミ
+    public void behoimi() {  // ベホイミ
         // レベルチェック
         if (b.getLevel() < 9) {
             return;

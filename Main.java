@@ -6,5 +6,6 @@ public class Main {
         Event.startEvent();
         // マップ選択
         Event.chooseMap();
+        // gitテストコメント
     }
 }

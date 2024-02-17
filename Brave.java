@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import Spell.HealSpell;
 import Spell.Spell;
 
 public class Brave {
@@ -69,7 +70,7 @@ public class Brave {
         int spellNumber = new java.util.Scanner(System.in).nextInt();
         switch(spellNumber) {
             case 1:
-                
+                HealSpell.hoimi();
         }
     }
     public void defense() { // 戦闘において防御するメソッド

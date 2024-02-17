@@ -6,5 +6,7 @@ public class Main {
         Event.startEvent();
         // マップ選択
         Event.chooseMap();
+        // マップ内アクション
+        b.chooseMapAction();
     }
 }

@@ -10,13 +10,22 @@ public class AttackSpell extends Spell {
     }
     // 攻撃呪文
     public void mera() {        // メラ
-
+        // レベルチェック
+        if (b.getLevel() < 9) {
+            return;
+        }
     }
     public void merami() {      // メラミ
-
+        // レベルチェック
+        if (b.getLevel() < 9) {
+            return;
+        }
     }
     public void merazoma() {    // メラゾーマ
-
+        // レベルチェック
+        if (b.getLevel() < 9) {
+            return;
+        }
     }
     // アクセサ
     public int getAttackPoint() { return this.attackPoint; }

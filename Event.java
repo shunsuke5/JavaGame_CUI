@@ -7,7 +7,7 @@ public class Event {
     }
     public static void chooseMap(Brave b) {
         System.out.println("どのマップにいきますか？");
-        System.out.println("山:1 海:2 森:3");
+        System.out.println("森:1 海:2 山:3");
         System.out.print("つぎにいくのは…->\s");
         // ここで現在いるマップは表示しないようにしたい、もしくは
         // 現在いるマップを選択したらもう一度マップアクションをやりなおさせたい

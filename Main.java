@@ -8,7 +8,5 @@ public class Main {
         Event.chooseMap();
         // マップ内アクション
         b.chooseMapAction();
-        // 敵と戦う
-        
     }
 }

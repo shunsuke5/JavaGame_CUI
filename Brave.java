@@ -32,6 +32,7 @@ public class Brave {
     private int spellIndex = 0; // checkSpellUpメソッドでのみ使用、アクセサ不要
     private String spellFormat;
     private int spellChoiceNumber = 1;
+    private String mapAttribute;    // searchEnemyやsearchTreasureで使用するマップ属性
     
     // コンストラクタ
     public Brave() {
@@ -88,25 +89,91 @@ public class Brave {
     }
 
     public void chooseMapAction() {   // マップにおいてどの行動をするか選ぶメソッド
-        // Eventクラスの定型文を呼び出して入力値を変数に格納し、switch文で分岐
-        Event.chooseMapAction();
+        System.out.println("どのこうどうにする？");
+        System.out.println("""
+                　　　てきをさがす：1
+                　おたからをさがす：2
+                　　　　　　やすむ：3
+                ほかのマップへいく：4
+
+                ->\s
+                """);
         int number = new java.util.Scanner(System.in).nextInt();
         switch(number) {
             case 1:
-                this.searchEnemy();;
-                this.battle();   // ここで渡す敵の引数をマップごとに変えるには？
+                this.searchEnemy();;    // 敵と戦う
                 break;
             case 2:
-                this.searchTreasure();
+                this.searchTreasure();  // お宝を探す
                 break;
             case 3:
-                this.rest();
+                this.rest();    // 休んでHPとMP回復
                 break;
             case 4:
-                this.chooseMap();
+                this.chooseMap();   // 他のマップへ移動
+            case 5:
+                this.battleBoss();  // マップボス戦
         }
     }
+    public void searchEnemy() { // 敵を探す
+        System.out.println(this.name + "はてきをみつけた！");
 
+        if (this.mapAttribute.equals("森")) {     // マップ属性が"森"の場合
+            int enemyNumber = new java.util.Random().nextInt(3);
+            switch(enemyNumber) {
+                case 0:
+                    Slime slime = new Slime();
+                    battle(slime);
+                    break;
+                case 1:
+                    // battle()に渡す敵インスタンス「e」に"ゴブリン"を格納
+                    // battle()メソッドへ
+                    break;
+                case 2:
+                    // battle()に渡す敵インスタンス「e」に"さんぞく"を格納
+                    // battle()メソッドへ
+                    break;
+            }
+        } else if (this.mapAttribute.equals("海")) {    // マップ属性が"海"の場合
+            int enemyNumber = new java.util.Random().nextInt(4);
+            switch(enemyNumber) {
+                case 0:
+                    // battle()に渡す敵インスタンス「e」に"スライム"を格納
+                    // battle()メソッドへ
+                    break;
+                case 1:
+                    // battle()に渡す敵インスタンス「e」に"ゴブリン"を格納
+                    // battle()メソッドへ
+                    break;
+                case 2:
+                    // battle()に渡す敵インスタンス「e」に"さんぞく"を格納
+                    // battle()メソッドへ
+                    break;
+                case 3:
+                    // battle()に渡す敵インスタンス「e」に"さんぞく"を格納
+                    // battle()メソッドへ
+            }
+        } else {    // マップ属性が"山"の場合
+            int enemyNumber = new java.util.Random().nextInt(6);
+            switch(enemyNumber) {
+                case 0:
+                    // battle()に渡す敵インスタンス「e」に"スライム"を格納
+                    // battle()メソッドへ
+                    break;
+                case 1:
+                    // battle()に渡す敵インスタンス「e」に"ゴブリン"を格納
+                    // battle()メソッドへ
+                    break;
+                case 2:
+                    // battle()に渡す敵インスタンス「e」に"さんぞく"を格納
+                    // battle()メソッドへ
+                    break;
+                case 3:
+                    // battle()に渡す敵インスタンス「e」に"さんぞく"を格納
+                    // battle()メソッドへ
+            }
+        }
+    }
     public void battle(Enemy e) { // 敵とエンカウントする
         System.out.println(e.getName() + "があらわれた！");     // この文は最初だけ表示する
 
@@ -140,12 +207,13 @@ public class Brave {
         if (this.hp <= 0) {
             this.die();
         } else {
+            System.out.println(e.getName() + "をたおした！");
+            System.out.println(e.getPoint() + "ポイントのけいけんちをかくとく！");
             checkLevelUp(e);
             checkSpellUp();
         }
     }
     public void checkLevelUp(Enemy e) { // レベルが上がっているかチェックする
-        Event.killEnemy(e);
         this.levelPoint += e.getPoint();
         List<Integer> levelList = createLevelList();
         int upLevel = 0;
@@ -202,9 +270,6 @@ public class Brave {
         spellNameList.add("メラゾーマ");
         return java.util.Collections.unmodifiableList(spellNameList);
     }
-    public void searchEnemy() { // 敵を探す
-        System.out.println(this.name + "はてきをみつけた！");
-    }
 
     public void searchTreasure() {  // お宝を探す
 
@@ -219,7 +284,8 @@ public class Brave {
                 防御力：%d
                 すばやさ：%d
                 """;
-        System.out.printf(str,name,level,hp,maxHp,mp,maxMp,attack,defense,agility);
+        System.out.printf(str,this.name,this.level,this.hp,this.maxHp,this.mp,this.maxMp,
+                            this.attack,this.defense,this.agility);
     }
 
     public void rest() {    // 休んで体力と魔力を回復する
@@ -228,12 +294,36 @@ public class Brave {
     }
 
     public void chooseMap() {   // どのマップに行くかの選択
-        System.out.println("どのマップに行きますか？");
-        System.out.print("森：１　海：２　山：３");
+        System.out.println("どのマップにいきますか？");
+        System.out.println("森:1 海:2 山:3");
+        System.out.print("つぎにいくのは…->\s");
+        // 現在いるマップを選択したらもう一度マップアクションをやりなおさせたい
+        int number = new java.util.Scanner(System.in).nextInt();
+        System.out.println(this.name + "は" + "〇〇(変数)へむかった！");
+        switch(number) {
+            case 1:
+                System.out.println(this.name + "は" + "森へむかった！");
+                this.mapAttribute = "森";
+                break;
+            case 2:
+                System.out.println(this.name + "は" + "海へむかった！");
+                this.mapAttribute = "海";
+                break;
+            case 3:
+                System.out.println(this.name + "は" + "山へむかった！");
+                this.mapAttribute = "山";
+                break;
+        }
     }
-
+    public void battleBoss() {
+        if (ボスフラグ == off) {
+            return;
+        } else if (ボスフラグ == on) {
+            chooseMapActionで表示する文字列変数 += "ボスとたたかう：5"
+        }
+    }
     public void die() {     // HPが0になると死ぬ
-
+        System.out.println(this.name + "はしんでしまった！");
     }
     
     // アクセサ

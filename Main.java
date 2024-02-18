@@ -12,5 +12,22 @@ public class Main {
         b.chooseMapAction();
         
         */
+
+        boolean buriburi = unko();
+        if (buriburi) {
+            System.out.println("ちがうだろーーー！！！");
+        } else {
+            System.out.println("なるほどぶりぶりぶりぶりぶり");
+        }
+    }
+    public static boolean unko() {
+        System.out.println("unkoがあらわれた！");
+        System.out.print("どうする？ ->\s");
+        int onara = new java.util.Scanner(System.in).nextInt();
+        if (onara == 1) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }

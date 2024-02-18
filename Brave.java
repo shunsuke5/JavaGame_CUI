@@ -4,6 +4,7 @@ import java.util.List;
 
 import Spell.HealSpell;
 import Spell.Spell;
+import Map.Map;
 
 public class Brave {
     // 基礎ステータス
@@ -26,6 +27,14 @@ public class Brave {
 
     // 呪文
     private Spell spell;
+
+    // 現在地
+    private Map map;
+
+    // ボスフラグ
+    private int forestBossFlag = 0;
+    private int seaBossFlag = 0;
+    private int mountainBossFlag = 0;
 
     // プログラム用変数
     private int levelIndex = 0; // checkLevelUpメソッドでのみ使用、アクセサ不要
@@ -50,45 +59,41 @@ public class Brave {
         this.defense = 10;
         this.agility = 5;
     }
-
     // メソッド
-    public void attack(Enemy e) {   // 戦闘において攻撃するメソッド
-        System.out.println(this.name + "のこうげき！");
-        int damage = e.getDefense() - this.attack;
-        e.setHp(e.getHp() - damage);
-        System.out.println(e.getName() + "に" + damage + "ポイントのダメージ！");
-    }
-
-    public void spell(Enemy e, Spell s) {    // 戦闘において呪文を使用するメソッド
-        // まだ1つも呪文を習得していなかった場合、battleメソッドに戻す
-        if (this.level < 3) {
-            System.out.println("つかえるじゅもんがない！");
-            return;
-        }
-        // 呪文一覧を表示して選択させる
-        System.out.println("どのじゅもんをつかう？(0でたたかいのせんたくしにもどる)");
-        System.out.println(this.spellFormat);
-        int spellNumber = new java.util.Scanner(System.in).nextInt();
-        switch(spellNumber) {
+    public void chooseMap() {   // どのマップに行くかの選択
+        System.out.println("どのマップにいきますか？");
+        System.out.println("森:1 海:2 山:3");
+        System.out.print("つぎにいくのは…->\s");
+        // 現在いるマップを選択したらもう一度マップアクションをやりなおさせたい
+        // そのマップに最初に行く場合、そのマップのインスタンスを生成したい
+        int number = new java.util.Scanner(System.in).nextInt();
+        switch(number) {
             case 1:
-                HealSpell.hoimi();
+                // if (this.mapAttribute == null) {
+                    // this.map = new Forest();
+                    // this.map.createEnemy();
+                    // this.map.bossFlag += 1;
+                // }
+                System.out.println(this.name + "は" + "森へむかった！");
+                this.mapAttribute = "森";
+                break;
+            case 2:
+                System.out.println(this.name + "は" + "海へむかった！");
+                this.mapAttribute = "海";
+                break;
+            case 3:
+                System.out.println(this.name + "は" + "山へむかった！");
+                this.mapAttribute = "山";
+                break;
         }
     }
-    public void defense() { // 戦闘において防御するメソッド
-
-    }
-
-    public void item() {    // 戦闘においてアイテムを使用するメソッド
-        System.out.println("どのアイテムをつかう？");
-        // ここでアイテム一覧を表示、0で戦う選択肢に戻るなど
-    }
-
-    public void run() {     // 戦闘において逃げるメソッド
-        // if (自分と相手のレベルと素早さの合計を比べてなんやかんや計算) → 逃げられるか無理かを決める
-        // if (相手がボスの場合) 逃げられない
-    }
-
     public void chooseMapAction() {   // マップにおいてどの行動をするか選ぶメソッド
+        String str = """
+                　　　てきをさがす：1
+                　おたからをさがす：2
+                　　　　　　やすむ：3
+                ほかのマップへいく：4
+                """;
         System.out.println("どのこうどうにする？");
         System.out.println("""
                 　　　てきをさがす：1
@@ -119,19 +124,26 @@ public class Brave {
         System.out.println(this.name + "はてきをみつけた！");
 
         if (this.mapAttribute.equals("森")) {     // マップ属性が"森"の場合
+            // Enemy enemy = Forest.createEnemy();
+            // battle(enemy);
             int enemyNumber = new java.util.Random().nextInt(3);
             switch(enemyNumber) {
                 case 0:
+                    // this.map.enemy = new Slime();
+                    // battle(this.map.enemy);
                     Slime slime = new Slime();
                     battle(slime);
+                    this.forestBossFlag += 1;
                     break;
                 case 1:
                     // battle()に渡す敵インスタンス「e」に"ゴブリン"を格納
                     // battle()メソッドへ
+                    this.forestBossFlag += 1;
                     break;
                 case 2:
                     // battle()に渡す敵インスタンス「e」に"さんぞく"を格納
                     // battle()メソッドへ
+                    this.forestBossFlag += 1;
                     break;
             }
         } else if (this.mapAttribute.equals("海")) {    // マップ属性が"海"の場合
@@ -195,7 +207,7 @@ public class Brave {
                     defense();
                     break;
                 case 4:
-                    item();
+                    useItem();
                     break;
                 case 5:
                     run();
@@ -293,28 +305,6 @@ public class Brave {
         this.mp = this.maxMp;
     }
 
-    public void chooseMap() {   // どのマップに行くかの選択
-        System.out.println("どのマップにいきますか？");
-        System.out.println("森:1 海:2 山:3");
-        System.out.print("つぎにいくのは…->\s");
-        // 現在いるマップを選択したらもう一度マップアクションをやりなおさせたい
-        int number = new java.util.Scanner(System.in).nextInt();
-        System.out.println(this.name + "は" + "〇〇(変数)へむかった！");
-        switch(number) {
-            case 1:
-                System.out.println(this.name + "は" + "森へむかった！");
-                this.mapAttribute = "森";
-                break;
-            case 2:
-                System.out.println(this.name + "は" + "海へむかった！");
-                this.mapAttribute = "海";
-                break;
-            case 3:
-                System.out.println(this.name + "は" + "山へむかった！");
-                this.mapAttribute = "山";
-                break;
-        }
-    }
     public void battleBoss() {
         if (ボスフラグ == off) {
             return;
@@ -322,6 +312,42 @@ public class Brave {
             chooseMapActionで表示する文字列変数 += "ボスとたたかう：5"
         }
     }
+    public void attack(Enemy e) {   // 戦闘において攻撃するメソッド
+        System.out.println(this.name + "のこうげき！");
+        int damage = e.getDefense() - this.attack;
+        e.setHp(e.getHp() - damage);
+        System.out.println(e.getName() + "に" + damage + "ポイントのダメージ！");
+    }
+
+    public void spell(Enemy e, Spell s) {    // 戦闘において呪文を使用するメソッド
+        // まだ1つも呪文を習得していなかった場合、battleメソッドに戻す
+        if (this.level < 3) {
+            System.out.println("つかえるじゅもんがない！");
+            return;
+        }
+        // 呪文一覧を表示して選択させる
+        System.out.println("どのじゅもんをつかう？(0でたたかいのせんたくしにもどる)");
+        System.out.println(this.spellFormat);
+        int spellNumber = new java.util.Scanner(System.in).nextInt();
+        switch(spellNumber) {
+            case 1:
+                HealSpell.hoimi();
+        }
+    }
+    public void defense() { // 戦闘において防御するメソッド
+
+    }
+
+    public void useItem() {    // 戦闘においてアイテムを使用するメソッド
+        System.out.println("どのアイテムをつかう？");
+        // ここでアイテム一覧を表示、0で戦う選択肢に戻るなど
+    }
+
+    public void run() {     // 戦闘において逃げるメソッド
+        // if (相手がボスの場合) 逃げられない
+        // if (自分と相手のレベルと素早さの合計を比べてなんやかんや計算) → 逃げられるか無理かを決める
+    }
+
     public void die() {     // HPが0になると死ぬ
         System.out.println(this.name + "はしんでしまった！");
     }

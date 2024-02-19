@@ -1,3 +1,6 @@
+package enemy.forestenemy;
+import enemy.Enemy;
+
 public class Slime extends Enemy {
     // コンストラクタ
     public Slime() {

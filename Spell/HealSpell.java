@@ -1,5 +1,4 @@
-package Spell;
-import Brave;
+package spell;
 
 public class HealSpell extends Spell {
     private int healPoint;

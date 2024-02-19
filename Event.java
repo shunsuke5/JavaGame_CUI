@@ -1,5 +1,6 @@
 public class Event {
     private String story;
+    int testFlag;
 
     public static void startEvent() {
         System.out.println("あなたは勇者です。");

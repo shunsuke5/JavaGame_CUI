@@ -1,3 +1,5 @@
+package equipment;
+
 public class Sword extends Equipment {
     private int attack;
 

@@ -2,9 +2,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import Spell.HealSpell;
-import Spell.Spell;
-import Map.Map;
+import map.*;
+import spell.*;
 
 public class Brave {
     // 基礎ステータス
@@ -69,13 +68,9 @@ public class Brave {
         int number = new java.util.Scanner(System.in).nextInt();
         switch(number) {
             case 1:
-                // if (this.mapAttribute == null) {
-                    // this.map = new Forest();
-                    // this.map.createEnemy();
-                    // this.map.bossFlag += 1;
-                // }
                 System.out.println(this.name + "は" + "森へむかった！");
-                this.mapAttribute = "森";
+                Map forestMap = new Forest();
+                this.map = forestMap;    // forestMapのスコープ的にthis.mapはメソッド終了後も大丈夫か？
                 break;
             case 2:
                 System.out.println(this.name + "は" + "海へむかった！");
@@ -123,6 +118,9 @@ public class Brave {
     public void searchEnemy() { // 敵を探す
         System.out.println(this.name + "はてきをみつけた！");
 
+        // Enemy enemy = this.map.createEnemy();
+        
+        // if (this.map.name.equals("森"))
         if (this.mapAttribute.equals("森")) {     // マップ属性が"森"の場合
             // Enemy enemy = Forest.createEnemy();
             // battle(enemy);

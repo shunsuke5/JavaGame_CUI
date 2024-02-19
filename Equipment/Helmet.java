@@ -1,3 +1,5 @@
+package equipment;
+
 public class Helmet extends Equipment {
     private int defense;
 

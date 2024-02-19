@@ -1,3 +1,5 @@
+package enemy;
+
 public abstract class Enemy {
     private String name;    // モンスター名
     private int hp;         // 体力

@@ -1,3 +1,5 @@
+package item;
+
 public class HpItem extends Item {
     private int healPoint;
 

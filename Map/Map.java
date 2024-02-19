@@ -1,4 +1,4 @@
-package Map;
+package map;
 
 public abstract class Map {
     private String name;
@@ -7,4 +7,6 @@ public abstract class Map {
     public Map(String name) {
         this.name = name;
     }
+    // アクセサ
+    public String getName() { return this.name; }
 }

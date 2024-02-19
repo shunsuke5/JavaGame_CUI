@@ -1,4 +1,4 @@
-package Spell;
+package spell;
 
 public class AttackSpell extends Spell {
     private int attackPoint;

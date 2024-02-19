@@ -13,21 +13,12 @@ public class Main {
         
         */
 
-        boolean buriburi = unko();
-        if (buriburi) {
-            System.out.println("ちがうだろーーー！！！");
-        } else {
-            System.out.println("なるほどぶりぶりぶりぶりぶり");
+        int unti = new java.util.Scanner(System.in).nextInt();
+        switch(unti) {
+            case 1:
+                Event event = new Event();
+                break;
         }
-    }
-    public static boolean unko() {
-        System.out.println("unkoがあらわれた！");
-        System.out.print("どうする？ ->\s");
-        int onara = new java.util.Scanner(System.in).nextInt();
-        if (onara == 1) {
-            return false;
-        } else {
-            return true;
-        }
+        System.out.println(event2);
     }
 }

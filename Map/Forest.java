@@ -1,8 +1,27 @@
 package map;
 
+import enemy.Enemy;
+import enemy.forestenemy.*;
+
 public class Forest extends Map {
     // コンストラクタ
     public Forest() {
         super("森");
+    }
+    // メソッド
+    public Enemy createEnemy() {
+        setEnemy(returnEnemy());
+        return getEnemy();
+    }
+    public Enemy returnEnemy() {
+        int enemyNumber = new java.util.Random().nextInt(3);
+        switch(enemyNumber) {
+            case 0:
+                return new Slime();
+            case 1:
+                return new Goblin();
+            default:
+                return new KillerBee();
+        }
     }
 }

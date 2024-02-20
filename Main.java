@@ -9,16 +9,30 @@ public class Main {
         // マップ選択
         Event.chooseMap();
         // マップ内アクション
-        b.chooseMapAction();
+        Event.chooseMapAction();
+        // バトル
+        Event.battle();
         
         */
 
-        int unti = new java.util.Scanner(System.in).nextInt();
-        switch(unti) {
-            case 1:
-                Event event = new Event();
-                break;
-        }
-        System.out.println(event2);
+        /*
+         * b.attack();
+         * e.attack();
+         * b.spell();
+         * e.attack();
+         * b.item();
+         * e.attack();
+         * b.attack();
+         * 
+         * battle end
+         * 
+         * if (b.agility > e.agility) {
+         *      b.turn;     // 先攻
+         *      e.turn;     // 後攻
+         * } else {
+         *      e.turn;     // 先攻
+         *      b.turn;     // 後攻
+         * }
+         */
     }
 }

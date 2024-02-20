@@ -11,6 +11,8 @@ public abstract class Enemy {
     private int money;      // 落とすお金
     private int enemyCount; // 敵の数、今回は使わない予定
 
+    public abstract void turn();
+    
     public void attack(Brave b) {
         System.out.println(this.name + "の攻撃！");
         int damage = b.getDefense() - this.attack;

@@ -4,6 +4,8 @@ import java.util.List;
 
 import map.*;
 import spell.*;
+import enemy.Enemy;
+import equipment.*;
 
 public class Brave {
     // 基礎ステータス
@@ -14,8 +16,10 @@ public class Brave {
     private int maxHp;      // 最大体力
     private int mp;         // 魔力
     private int maxMp;      // 最大魔力
-    private int attack;     // 攻撃力
-    private int defense;    // 防御力
+    private int power;      // ちから
+    private int protect;    // みのまもり
+    private int attack;     // 総攻撃力
+    private int defense;    // 総防御力
     private int agility;    // すばやさ
     private int turnCount;  // 経過ターン数
 
@@ -63,7 +67,7 @@ public class Brave {
         System.out.println("どのマップにいきますか？");
         System.out.println("森:1 海:2 山:3");
         System.out.print("つぎにいくのは…->\s");
-        // 現在いるマップを選択したらもう一度マップアクションをやりなおさせたい
+        // 現在いるマップを選択したらもう一度マップアクションをやりなおさせたい、whileを追加
         // そのマップに最初に行く場合、そのマップのインスタンスを生成したい
         int number = new java.util.Scanner(System.in).nextInt();
         switch(number) {
@@ -74,7 +78,8 @@ public class Brave {
                 break;
             case 2:
                 System.out.println(this.name + "は" + "海へむかった！");
-                this.mapAttribute = "海";
+                Map seaMap = new Sea();
+                this.map = seaMap;
                 break;
             case 3:
                 System.out.println(this.name + "は" + "山へむかった！");
@@ -99,6 +104,7 @@ public class Brave {
                 ->\s
                 """);
         int number = new java.util.Scanner(System.in).nextInt();
+        // 違った選択肢を選ばれたら繰り返したいのでwhileを追加する
         switch(number) {
             case 1:
                 this.searchEnemy();;    // 敵と戦う
@@ -117,73 +123,15 @@ public class Brave {
     }
     public void searchEnemy() { // 敵を探す
         System.out.println(this.name + "はてきをみつけた！");
-
-        // Enemy enemy = this.map.createEnemy();
-        
-        // if (this.map.name.equals("森"))
-        if (this.mapAttribute.equals("森")) {     // マップ属性が"森"の場合
-            // Enemy enemy = Forest.createEnemy();
-            // battle(enemy);
-            int enemyNumber = new java.util.Random().nextInt(3);
-            switch(enemyNumber) {
-                case 0:
-                    // this.map.enemy = new Slime();
-                    // battle(this.map.enemy);
-                    Slime slime = new Slime();
-                    battle(slime);
-                    this.forestBossFlag += 1;
-                    break;
-                case 1:
-                    // battle()に渡す敵インスタンス「e」に"ゴブリン"を格納
-                    // battle()メソッドへ
-                    this.forestBossFlag += 1;
-                    break;
-                case 2:
-                    // battle()に渡す敵インスタンス「e」に"さんぞく"を格納
-                    // battle()メソッドへ
-                    this.forestBossFlag += 1;
-                    break;
-            }
-        } else if (this.mapAttribute.equals("海")) {    // マップ属性が"海"の場合
-            int enemyNumber = new java.util.Random().nextInt(4);
-            switch(enemyNumber) {
-                case 0:
-                    // battle()に渡す敵インスタンス「e」に"スライム"を格納
-                    // battle()メソッドへ
-                    break;
-                case 1:
-                    // battle()に渡す敵インスタンス「e」に"ゴブリン"を格納
-                    // battle()メソッドへ
-                    break;
-                case 2:
-                    // battle()に渡す敵インスタンス「e」に"さんぞく"を格納
-                    // battle()メソッドへ
-                    break;
-                case 3:
-                    // battle()に渡す敵インスタンス「e」に"さんぞく"を格納
-                    // battle()メソッドへ
-            }
-        } else {    // マップ属性が"山"の場合
-            int enemyNumber = new java.util.Random().nextInt(6);
-            switch(enemyNumber) {
-                case 0:
-                    // battle()に渡す敵インスタンス「e」に"スライム"を格納
-                    // battle()メソッドへ
-                    break;
-                case 1:
-                    // battle()に渡す敵インスタンス「e」に"ゴブリン"を格納
-                    // battle()メソッドへ
-                    break;
-                case 2:
-                    // battle()に渡す敵インスタンス「e」に"さんぞく"を格納
-                    // battle()メソッドへ
-                    break;
-                case 3:
-                    // battle()に渡す敵インスタンス「e」に"さんぞく"を格納
-                    // battle()メソッドへ
-            }
-        }
+        Enemy enemy = this.map.createEnemy();
+        battle(enemy);
     }
+    public void turn() {
+        System.out.println(this.name + "はどうする？");
+        System.out.print("攻撃：１　呪文：２　防御：３　アイテム：４　逃げる：５　-> ");
+    }
+    /*
+    
     public void battle(Enemy e) { // 敵とエンカウントする
         System.out.println(e.getName() + "があらわれた！");     // この文は最初だけ表示する
 
@@ -197,6 +145,8 @@ public class Brave {
             switch (action) {
                 case 1:
                     attack(e);
+                    // ここに敵のターンを入れるにはどうすればよい？
+                    // e.attack();
                     break;
                 case 2:
                     spell();
@@ -223,6 +173,8 @@ public class Brave {
             checkSpellUp();
         }
     }
+    
+    */
     public void checkLevelUp(Enemy e) { // レベルが上がっているかチェックする
         this.levelPoint += e.getPoint();
         List<Integer> levelList = createLevelList();
@@ -333,7 +285,10 @@ public class Brave {
         }
     }
     public void defense() { // 戦闘において防御するメソッド
-
+        int defaultDefense = getDefense();
+        int strongDefense = (int) (getDefense() * 1.5);
+        // この行動は素早さ関係なく勇者が先攻となる
+        // そしてこのターン終了時には防御力を元に戻さなければならない
     }
 
     public void useItem() {    // 戦闘においてアイテムを使用するメソッド
@@ -358,6 +313,8 @@ public class Brave {
     public int getMaxHp() { return this.maxHp; }
     public int getMp() { return this.mp; }
     public int getMaxMp() { return this.maxMp; }
+    public int getPower() { return this.power; }
+    public int getProtect() { return this.protect; }
     public int getAttack() { return this.attack; }
     public int getDefense() { return this.defense; }
     public int getAgility() { return this.agility; }
@@ -374,6 +331,8 @@ public class Brave {
     public void setMaxHp(int maxHp) { this.maxHp = maxHp; }
     public void setMp(int mp) { this.mp = mp; }
     public void setMaxMp(int maxMp) { this.maxMp = maxMp; }
+    public void setPower(int power) { this.power = power; }
+    public void setProtect(int protect) { this.protect = protect; }
     public void setAttack(int attack) { this.attack = attack; }
     public void setDefense(int defense) { this.defense = defense; }
     public void setAgility(int agility) { this.agility = agility; }

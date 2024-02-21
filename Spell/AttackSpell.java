@@ -3,28 +3,41 @@ package spell;
 public class AttackSpell extends Spell {
     private int attackPoint;
 
-    // コンストラクタ
-    public AttackSpell(String name, String explanation, int attackPoint) {
-        super(name,explanation);
-        this.attackPoint = attackPoint;
-    }
     // 攻撃呪文
-    public void mera() {        // メラ
-        // レベルチェック
-        if (b.getLevel() < 9) {
-            return;
+    public static int myora(int level) {        // ミョラ
+        if (checkLevel(level, 5)) {
+            int attackPoint = createPoint(6, 6);
+            return attackPoint;
+        } else {
+            return 0;
         }
     }
-    public void merami() {      // メラミ
-        // レベルチェック
-        if (b.getLevel() < 9) {
-            return;
+    public static int myorami(int level) {      // ミョラミ
+        if (checkLevel(level, 14)) {
+            int attackPoint = createPoint(16, 11);
+            return attackPoint;
+        } else {
+            return 0;
         }
     }
-    public void merazoma() {    // メラゾーマ
-        // レベルチェック
-        if (b.getLevel() < 9) {
-            return;
+    public static int myorazoma(int level) {    // ミョラゾーマ
+        if (checkLevel(level, 17)) {
+            int attackPoint = createPoint(28, 16);
+            return attackPoint;
+        } else {
+            return 0;
+        }
+    }
+    // メソッド
+    public static int createPoint(int minimum, int range) {     // 指定した範囲からランダムにポイントを生成
+        int point = new java.util.Random().nextInt(range) + minimum;
+        return point;
+    }
+    public static boolean checkLevel(int level, int border) {
+        if (level > border) {
+            return true;
+        } else {
+            return false;
         }
     }
     // アクセサ

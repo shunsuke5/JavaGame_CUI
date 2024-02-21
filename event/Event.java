@@ -1,3 +1,5 @@
+package event;
+
 import enemy.Enemy;
 
 public class Event {
@@ -15,6 +17,8 @@ public class Event {
 
     }
 
+    /*
+    
     public static void battle(Brave b, Enemy e) {
         System.out.println(e.getName() + "があらわれた！");
 
@@ -31,4 +35,6 @@ public class Event {
         // つまり戻り値はbooleanにすればよい？
         // 勇者が勝ったらtrue,敵が勝ったらfalseにする
     }
+
+    */
 }

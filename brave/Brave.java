@@ -1,3 +1,5 @@
+package brave;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -6,6 +8,7 @@ import map.*;
 import spell.*;
 import enemy.Enemy;
 import equipment.*;
+import text.Text;
 
 public class Brave {
     // 基礎ステータス
@@ -83,7 +86,8 @@ public class Brave {
                 break;
             case 3:
                 System.out.println(this.name + "は" + "山へむかった！");
-                this.mapAttribute = "山";
+                Map mountainMap = new Mountain();
+                this.map = mountainMap;
                 break;
         }
     }
@@ -126,11 +130,6 @@ public class Brave {
         Enemy enemy = this.map.createEnemy();
         battle(enemy);
     }
-    public void turn() {
-        System.out.println(this.name + "はどうする？");
-        System.out.print("攻撃：１　呪文：２　防御：３　アイテム：４　逃げる：５　-> ");
-    }
-    /*
     
     public void battle(Enemy e) { // 敵とエンカウントする
         System.out.println(e.getName() + "があらわれた！");     // この文は最初だけ表示する
@@ -141,27 +140,57 @@ public class Brave {
             int action = new java.util.Scanner(System.in).nextInt();
 
             // ここに主人公と敵の素早さを比較してどちらが先制かを決めるプログラムを記述
-
-            switch (action) {
-                case 1:
-                    attack(e);
-                    // ここに敵のターンを入れるにはどうすればよい？
-                    // e.attack();
-                    break;
-                case 2:
-                    spell();
-                    break;
-                case 3:
-                    defense();
-                    break;
-                case 4:
-                    useItem();
-                    break;
-                case 5:
-                    run();
-                    break;
-                default:
-                    break;
+            if (this.agility >= e.getAgility()) {
+                switch (action) {
+                    case 1:
+                        attack(e);
+                        // ここに敵のターンを入れるにはどうすればよい？
+                        // int damage = e.turn();
+                        // if (damage > 0) {
+                                // this.hp -= damage;
+                        // }
+                        break;
+                    case 2:
+                        spell(e);
+                        break;
+                    case 3:
+                        defense();
+                        break;
+                    case 4:
+                        useItem();
+                        break;
+                    case 5:
+                        run();
+                        break;
+                    default:
+                        break;
+                }
+                // ここがターン内の区切りなので、ここにHPチェックを挟んで0なら残っているターンをスキップ
+                // int damage = e.turn();   勇者の方が早い場合、敵は後に行動
+                // this.hp -= damage;
+            } else {
+                // int damage = e.turn();   敵の方が早い場合、敵は先に行動
+                // this.hp -= damage;
+                // ここがターン内の区切りなので、ここにHPチェックを挟んで0なら残っているターンをスキップ
+                switch (action) {
+                    case 1:
+                        attack(e);
+                        break;
+                    case 2:
+                        spell(e);
+                        break;
+                    case 3:
+                        defense();
+                        break;
+                    case 4:
+                        useItem();
+                        break;
+                    case 5:
+                        run();
+                        break;
+                    default:
+                        break;
+                }
             }
         }
         if (this.hp <= 0) {
@@ -173,8 +202,7 @@ public class Brave {
             checkSpellUp();
         }
     }
-    
-    */
+
     public void checkLevelUp(Enemy e) { // レベルが上がっているかチェックする
         this.levelPoint += e.getPoint();
         List<Integer> levelList = createLevelList();
@@ -225,11 +253,11 @@ public class Brave {
     }
     public List<String> createSpellNameList() {    // 呪文名リストを作成して返す
         List<String> spellNameList = new ArrayList<String>();
-        spellNameList.add("ホイミ");
-        spellNameList.add("メラ");
-        spellNameList.add("ベホイミ");
-        spellNameList.add("メラミ");
-        spellNameList.add("メラゾーマ");
+        spellNameList.add("ピョイミ");
+        spellNameList.add("ミョラ");
+        spellNameList.add("ベピョイミ");
+        spellNameList.add("ミョラミ");
+        spellNameList.add("ミョラゾーマ");
         return java.util.Collections.unmodifiableList(spellNameList);
     }
 
@@ -269,20 +297,71 @@ public class Brave {
         System.out.println(e.getName() + "に" + damage + "ポイントのダメージ！");
     }
 
-    public void spell(Enemy e, Spell s) {    // 戦闘において呪文を使用するメソッド
+    public void spell(Enemy e) {    // 戦闘において呪文を使用するメソッド
         // まだ1つも呪文を習得していなかった場合、battleメソッドに戻す
         if (this.level < 3) {
             System.out.println("つかえるじゅもんがない！");
             return;
         }
         // 呪文一覧を表示して選択させる
+        int point = 0;
         System.out.println("どのじゅもんをつかう？(0でたたかいのせんたくしにもどる)");
         System.out.println(this.spellFormat);
+        System.out.println("\n->\s");
         int spellNumber = new java.util.Scanner(System.in).nextInt();
         switch(spellNumber) {
             case 1:
-                HealSpell.hoimi();
+                point = HealSpell.pyoimi();
+                this.hp += point;
+                Text.healSpell(this.name, point);
+                break;
+            case 2:
+                // レベルが満たない場合に0が返ってきたときの判定メソッドをここに置く
+                /*
+                 * if (point == 0) {
+                 *      return;
+                 * }
+                 */
+                point = HealSpell.pyoimi();
+                this.hp += point;
+                Text.healSpell(this.name, point);
+                break;
+            case 3:
+                this.hp += HealSpell.bepyoimi(this.level);
+                break;
+            case 4:
+                e.setHp(e.getHp() - AttackSpell.myorami(this.level));
+                break;
+            case 5:
+                e.setHp(e.getHp() - AttackSpell.myorazoma(this.level));
+                break;
+            default:
+                break;
         }
+    }
+    public void spellReturn() {
+        /*
+         * switch(spellNumber) {
+            case 1:
+                return HealSpell.pyoimi();
+            case 2:
+                return AttackSpell.myora(this.level);
+            case 3:
+                return HealSpell.bepyoimi(this.level);
+            case 4:
+                return AttackSpell.myorami(this.level);
+            case 5:
+                return AttackSpell.myorazoma(this.level);
+            default:
+                return 0;
+        }
+        回復なら正の数、攻撃なら負の数として
+        まずは正の数か負の数を判定するプログラムを置き、
+        そのあとに仮に負の値(攻撃呪文)ならばそれを絶対値として正の数にしてreturnさせたい
+        switch文はこの記述で行きたいのでその判定を置くとするならおおもとのspellメソッドの方か？
+        そして0が返ってきたら(呪文で0が返ってくることはありえないことを想定しているので)
+        じゅもんのせんたくしから一旦戦いの選択肢に戻るようにする
+         */
     }
     public void defense() { // 戦闘において防御するメソッド
         int defaultDefense = getDefense();

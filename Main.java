@@ -10,8 +10,10 @@ public class Main {
         Event.chooseMap();
         // マップ内アクション
         Event.chooseMapAction();
-        // バトル
-        Event.battle();
+        // 全てのマップをクリアしたらラスボス戦
+        Event.lastBattle();
+        // ラスボスを倒せばゲームクリア
+        Event.congratulations();
         
         */
 
@@ -26,13 +28,6 @@ public class Main {
          * 
          * battle end
          * 
-         * if (b.agility > e.agility) {
-         *      b.turn;     // 先攻
-         *      e.turn;     // 後攻
-         * } else {
-         *      e.turn;     // 先攻
-         *      b.turn;     // 後攻
-         * }
          */
     }
 }

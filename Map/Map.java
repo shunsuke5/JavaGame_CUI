@@ -13,7 +13,8 @@ public abstract class Map {
     public abstract Enemy createEnemy();
     // アクセサ
     public String getName() { return this.name; }
-    public void setName(String name) { this.name = name; }
     public Enemy getEnemy() { return this.enemy; }
+
+    public void setName(String name) { this.name = name; }
     public void setEnemy(Enemy enemy) { this.enemy = enemy; }
 }

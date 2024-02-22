@@ -4,6 +4,10 @@ import enemy.Enemy;
 import enemy.mountainenemy.*;
 
 public class Mountain extends Map {
+    private static int enemyKillCount;
+    private static boolean treasureFlag;
+    private static boolean bossFlag;
+
     // コンストラクタ
     public Mountain() {
         super("山");
@@ -22,6 +26,11 @@ public class Mountain extends Map {
                 return new 
             default:
                 return new 
+            // 敵の実装を考える
         }
     }
+    // アクセサ
+    public static int getEnemyKillCount() { return enemyKillCount; }
+    public static boolean getTreasureFlag() { return treasureFlag; }
+    public static boolean getBossFlag() { return bossFlag; }
 }

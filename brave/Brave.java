@@ -99,16 +99,17 @@ public class Brave {
                 ほかのマップへいく：4
                 """;
         System.out.println("どのこうどうにする？");
-        System.out.println("""
-                　　　てきをさがす：1
-                　おたからをさがす：2
-                　　　　　　やすむ：3
-                ほかのマップへいく：4
-
-                ->\s
-                """);
+        if (this.map.getBossFlag()) {
+            str += "　　ボスとたたかう：5";
+            System.out.print(str + "\n\n\s->\s");
+        } else {
+            System.out.println(str);
+            System.out.print(str + "\n\n\s->\s");
+        }
         int number = new java.util.Scanner(System.in).nextInt();
         // 違った選択肢を選ばれたら繰り返したいのでwhileを追加する
+        // というか、chooseMapActionはラスボス戦まで続くので
+        // while (ラスボス戦フラグ == off) のような形？
         switch(number) {
             case 1:
                 this.searchEnemy();;    // 敵と戦う
@@ -200,6 +201,7 @@ public class Brave {
             System.out.println(e.getPoint() + "ポイントのけいけんちをかくとく！");
             checkLevelUp(e);
             checkSpellUp();
+            this.map.setEnemyKillCount(this.map.getEnemyKillCount() + 1);
         }
     }
 

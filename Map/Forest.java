@@ -4,6 +4,10 @@ import enemy.Enemy;
 import enemy.forestenemy.*;
 
 public class Forest extends Map {
+    private static int enemyKillCount;
+    private static boolean treasureFlag;
+    private static boolean bossFlag;
+
     // コンストラクタ
     public Forest() {
         super("森");
@@ -24,4 +28,8 @@ public class Forest extends Map {
                 return new KillerBee();
         }
     }
+    // アクセサ
+    public static int getEnemyKillCount() { return enemyKillCount; }
+    public static boolean getTreasureFlag() { return treasureFlag; }
+    public static boolean getBossFlag() { return bossFlag; }
 }

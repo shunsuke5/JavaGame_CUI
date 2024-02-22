@@ -17,17 +17,14 @@ public class Main {
         
         */
 
-        /*
-         * b.attack();
-         * e.attack();
-         * b.spell();
-         * e.attack();
-         * b.item();
-         * e.attack();
-         * b.attack();
-         * 
-         * battle end
-         * 
-         */
+        String str = """
+                　　　てきをさがす：1
+                　おたからをさがす：2
+                　　　　　　やすむ：3
+                ほかのマップへいく：4
+                """;
+        System.out.println(str);
+        str += "　　ボスとたたかう：5";
+        System.out.print(str + "\n\n\s->\s");
     }
 }

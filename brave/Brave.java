@@ -13,7 +13,7 @@ import text.Text;
 public class Brave {
     // 基礎ステータス
     private String name;    // 名前
-    private int level;      // レベル
+    private int level;      // レベル、上限は20
     private int levelPoint; // 経験値
     private int hp;         // 体力
     private int maxHp;      // 最大体力
@@ -145,11 +145,6 @@ public class Brave {
                 switch (action) {
                     case 1:
                         attack(e);
-                        // ここに敵のターンを入れるにはどうすればよい？
-                        // int damage = e.turn();
-                        // if (damage > 0) {
-                                // this.hp -= damage;
-                        // }
                         break;
                     case 2:
                         spell(e);

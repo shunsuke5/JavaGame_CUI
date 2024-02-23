@@ -12,4 +12,8 @@ public class Slime extends Enemy {
         setPoint(2);
         setMoney(1);
     }
+    // メソッド
+    public int turn() {
+        super.runJadgement();
+    }
 }

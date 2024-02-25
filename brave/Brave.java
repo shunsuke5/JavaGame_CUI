@@ -48,6 +48,8 @@ public class Brave {
     private String spellFormat;
     private int spellChoiceNumber = 1;
     private String mapAttribute;    // searchEnemyやsearchTreasureで使用するマップ属性
+    private boolean battleWin;  // バトルに勝った時にtrue
+    private boolean battleLose; // バトルに負けた時にtrue
     
     // コンストラクタ
     public Brave() {
@@ -69,7 +71,8 @@ public class Brave {
     public void chooseMap() {   // どのマップに行くかの選択
         System.out.println("どのマップにいきますか？");
         System.out.println("森:1 海:2 山:3");
-        System.out.print("つぎにいくのは…->\s");
+        System.out.println("つぎにいくのは…");
+        System.out.print("\n\s->\s");
         // 現在いるマップを選択したらもう一度マップアクションをやりなおさせたい、whileを追加
         // そのマップに最初に行く場合、そのマップのインスタンスを生成したい
         int number = new java.util.Scanner(System.in).nextInt();
@@ -101,10 +104,10 @@ public class Brave {
         System.out.println("どのこうどうにする？");
         if (this.map.getBossFlag()) {
             str += "　　ボスとたたかう：5";
-            System.out.print(str + "\n\n\s->\s");
+            System.out.println(str + "\n\s->\s");
         } else {
             System.out.println(str);
-            System.out.print(str + "\n\n\s->\s");
+            System.out.println(str + "\n\s->\s");
         }
         int number = new java.util.Scanner(System.in).nextInt();
         // 違った選択肢を選ばれたら繰り返したいのでwhileを追加する
@@ -134,15 +137,17 @@ public class Brave {
     
     public void battle(Enemy e) { // 敵とエンカウントする
         System.out.println(e.getName() + "があらわれた！");     // この文は最初だけ表示する
+        this.turnCount = 0;     // 自身の経過ターン数を初期化
 
-        while (this.hp <= 0 || e.getHp() <= 0) {
+        while (!this.battleWin || !this.battleLose) {    // while文の条件式を変更する
             System.out.println(this.name + "はどうする？");
-            System.out.print("攻撃：１　呪文：２　防御：３　アイテム：４　逃げる：５　-> ");
+            System.out.println("攻撃：１　呪文：２　防御：３　アイテム：４　逃げる：５");
+            System.out.print("\n\s->\s");
             int action = new java.util.Scanner(System.in).nextInt();
 
             // ここに主人公と敵の素早さを比較してどちらが先制かを決めるプログラムを記述
             if (this.agility >= e.getAgility()) {
-                switch (action) {
+                switch (action) {   // 勇者ターン
                     case 1:
                         attack(e);
                         break;
@@ -161,14 +166,37 @@ public class Brave {
                     default:
                         break;
                 }
-                // ここがターン内の区切りなので、ここにHPチェックを挟んで0なら残っているターンをスキップ
-                // int damage = e.turn();   勇者の方が早い場合、敵は後に行動
-                // this.hp -= damage;
+                this.turnCount += 1;
+                // 勇者ターン終了、敵HPチェック
+                if (e.getHp() <= 0) {
+                    win(e);
+                    break;
+                }
+                // 敵が逃げるかの判断
+                if (e.runJadgement(this.level)) {
+                    // 敵が逃げて戦い終了の処理を記述
+                } else {    // 敵ターン
+                    int damage = e.turn(this.name, this.level, this.defense);
+                    this.hp -= damage;
+                }
+                // 敵ターン終了、勇者HPチェック
+                if (this.hp <= 0) {
+                    die();
+                    break;
+                }
             } else {
-                // int damage = e.turn();   敵の方が早い場合、敵は先に行動
-                // this.hp -= damage;
-                // ここがターン内の区切りなので、ここにHPチェックを挟んで0なら残っているターンをスキップ
-                switch (action) {
+                if (e.runJadgement(this.level)) {
+                    // 敵が逃げて戦い終了の処理を記述
+                } else {    // 敵ターン
+                    int damage = e.turn(this.name, this.level, this.defense);
+                    this.hp -= damage;
+                }
+                // 敵ターン終了、勇者HPチェック
+                if (this.hp <= 0) {
+                    die();
+                    break;
+                }
+                switch (action) {   // 勇者ターン
                     case 1:
                         attack(e);
                         break;
@@ -188,16 +216,21 @@ public class Brave {
                         break;
                 }
             }
+            this.turnCount += 1;
+            // 勇者ターン終了、敵HPチェック
+            if (e.getHp() <= 0) {
+                win(e);
+                break;
+            }
         }
-        if (this.hp <= 0) {
-            this.die();
-        } else {
-            System.out.println(e.getName() + "をたおした！");
-            System.out.println(e.getPoint() + "ポイントのけいけんちをかくとく！");
-            checkLevelUp(e);
-            checkSpellUp();
-            this.map.setEnemyKillCount(this.map.getEnemyKillCount() + 1);
-        }
+    }
+
+    public void win(Enemy e) {
+        this.battleWin = true;
+        System.out.println(e.getName() + "をたおした！");
+        System.out.println(e.getPoint() + "ポイントのけいけんちをかくとく！");
+        checkLevelUp(e);
+        checkSpellUp();
     }
 
     public void checkLevelUp(Enemy e) { // レベルが上がっているかチェックする
@@ -378,6 +411,7 @@ public class Brave {
     }
 
     public void die() {     // HPが0になると死ぬ
+        this.battleLose = true;
         System.out.println(this.name + "はしんでしまった！");
     }
     

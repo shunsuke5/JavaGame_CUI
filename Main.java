@@ -17,14 +17,23 @@ public class Main {
         
         */
 
-        String str = """
-                　　　てきをさがす：1
-                　おたからをさがす：2
-                　　　　　　やすむ：3
-                ほかのマップへいく：4
-                """;
-        System.out.println(str);
-        str += "　　ボスとたたかう：5";
-        System.out.print(str + "\n\n\s->\s");
+        int a = 1;
+        int b = 1;
+        int i = 0;
+        while(i < 3) {
+            System.out.println("while--start");
+            if (b == 1) {
+                System.out.println("if--start");
+                switch(a) {
+                    case 1:
+                        System.out.println("switch");
+                        i++;
+                        break;
+                }
+                System.out.println("if--end");
+            }
+            System.out.println("while--end");
+        }
+        System.out.println("全てのループが終了");
     }
 }

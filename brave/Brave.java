@@ -26,6 +26,9 @@ public class Brave {
     private int agility;    // すばやさ
     private int turnCount;  // 経過ターン数
 
+    // 所持金
+    private int money;
+
     // 装備やアイテム
     private Sword sword;    // 剣
     private Helmet helmet;  // かぶと
@@ -50,6 +53,7 @@ public class Brave {
     private String mapAttribute;    // searchEnemyやsearchTreasureで使用するマップ属性
     private boolean battleWin;  // バトルに勝った時にtrue
     private boolean battleLose; // バトルに負けた時にtrue
+    private boolean escapeFlag; // バトルから逃げた時にtrue
     
     // コンストラクタ
     public Brave() {
@@ -98,12 +102,14 @@ public class Brave {
         String str = """
                 　　　てきをさがす：1
                 　おたからをさがす：2
-                　　　　　　やすむ：3
-                ほかのマップへいく：4
+                　　　やどでやすむ：3
+                　　アイテムをかう：4
+                ステータスかくにん：5
+                ほかのマップへいく：6
                 """;
         System.out.println("どのこうどうにする？");
         if (this.map.getBossFlag()) {
-            str += "　　ボスとたたかう：5";
+            str += "　　ボスとたたかう：7";
             System.out.println(str + "\n\s->\s");
         } else {
             System.out.println(str);
@@ -115,18 +121,22 @@ public class Brave {
         // while (ラスボス戦フラグ == off) のような形？
         switch(number) {
             case 1:
-                this.searchEnemy();;    // 敵と戦う
+                searchEnemy();;    // 敵と戦う
                 break;
             case 2:
-                this.searchTreasure();  // お宝を探す
+                searchTreasure();  // お宝を探す
                 break;
             case 3:
-                this.rest();    // 休んでHPとMP回復
+                rest();    // 休んでHPとMP回復
                 break;
             case 4:
-                this.chooseMap();   // 他のマップへ移動
-            case 5:
-                this.battleBoss();  // マップボス戦
+                shopping();     // アイテム購入
+            case 6:
+                chooseMap();   // 他のマップへ移動
+                break;
+            case 7:
+                battleBoss();  // マップボス戦
+                break;
         }
     }
     public void searchEnemy() { // 敵を探す
@@ -139,42 +149,43 @@ public class Brave {
         System.out.println(e.getName() + "があらわれた！");     // この文は最初だけ表示する
         this.turnCount = 0;     // 自身の経過ターン数を初期化
 
-        while (!this.battleWin || !this.battleLose) {    // while文の条件式を変更する
-            System.out.println(this.name + "はどうする？");
-            System.out.println("攻撃：１　呪文：２　防御：３　アイテム：４　逃げる：５");
-            System.out.print("\n\s->\s");
-            int action = new java.util.Scanner(System.in).nextInt();
+        while (!this.battleWin || !this.battleLose || !this.escapeFlag || !e.getEscapeFlag()) {
+            // じゅもんやアイテム画面から「0」で戻った時、ここに戻りたい
+            if (this.agility >= e.getAgility()) {   // 勇者が先攻の場合
+                do {    // 勇者ターン
+                    System.out.println(this.name + "はどうする？");
+                    System.out.println("攻撃：１　呪文：２　防御：３　アイテム：４　逃げる：５");
+                    System.out.print("\n\s->\s");
+                    int action = new java.util.Scanner(System.in).nextInt();
 
-            // ここに主人公と敵の素早さを比較してどちらが先制かを決めるプログラムを記述
-            if (this.agility >= e.getAgility()) {
-                switch (action) {   // 勇者ターン
-                    case 1:
-                        attack(e);
-                        break;
-                    case 2:
-                        spell(e);
-                        break;
-                    case 3:
-                        defense();
-                        break;
-                    case 4:
-                        useItem();
-                        break;
-                    case 5:
-                        run();
-                        break;
-                    default:
-                        break;
-                }
-                this.turnCount += 1;
+                    switch (action) {
+                        case 1:
+                            attack(e);
+                            break;
+                        case 2:
+                            spell(e);
+                            break;
+                        case 3:
+                            defense();
+                            break;
+                        case 4:
+                            useItem();
+                            break;
+                        case 5:
+                            run();
+                            continue;
+                        default:
+                            break;
+                    }
+                } while(this.turnCount < ( this.turnCount + 1 ));
                 // 勇者ターン終了、敵HPチェック
                 if (e.getHp() <= 0) {
                     win(e);
-                    break;
+                    continue;
                 }
-                // 敵が逃げるかの判断
-                if (e.runJadgement(this.level)) {
-                    // 敵が逃げて戦い終了の処理を記述
+                if (e.runJadgement(this.level)) {   // 敵の逃げ判定
+                    e.run();
+                    continue;
                 } else {    // 敵ターン
                     int damage = e.turn(this.name, this.level, this.defense);
                     this.hp -= damage;
@@ -182,11 +193,12 @@ public class Brave {
                 // 敵ターン終了、勇者HPチェック
                 if (this.hp <= 0) {
                     die();
-                    break;
+                    continue;
                 }
-            } else {
+            } else {    // 敵が先攻の場合
                 if (e.runJadgement(this.level)) {
-                    // 敵が逃げて戦い終了の処理を記述
+                    e.run();
+                    continue;
                 } else {    // 敵ターン
                     int damage = e.turn(this.name, this.level, this.defense);
                     this.hp -= damage;
@@ -194,33 +206,39 @@ public class Brave {
                 // 敵ターン終了、勇者HPチェック
                 if (this.hp <= 0) {
                     die();
-                    break;
+                    continue;
                 }
-                switch (action) {   // 勇者ターン
-                    case 1:
-                        attack(e);
-                        break;
-                    case 2:
-                        spell(e);
-                        break;
-                    case 3:
-                        defense();
-                        break;
-                    case 4:
-                        useItem();
-                        break;
-                    case 5:
-                        run();
-                        break;
-                    default:
-                        break;
+                do {    // 勇者ターン
+                    System.out.println(this.name + "はどうする？");
+                    System.out.println("攻撃：１　呪文：２　防御：３　アイテム：４　逃げる：５");
+                    System.out.print("\n\s->\s");
+                    int action = new java.util.Scanner(System.in).nextInt();
+
+                    switch (action) {
+                        case 1:
+                            attack(e);
+                            break;
+                        case 2:
+                            spell(e);
+                            break;
+                        case 3:
+                            defense();
+                            break;
+                        case 4:
+                            useItem();
+                            break;
+                        case 5:
+                            run();
+                            continue;
+                        default:
+                            break;
+                    }
+                } while(this.turnCount < ( this.turnCount + 1 ));
+                // 勇者ターン終了、敵HPチェック
+                if (e.getHp() <= 0) {
+                    win(e);
+                    continue;
                 }
-            }
-            this.turnCount += 1;
-            // 勇者ターン終了、敵HPチェック
-            if (e.getHp() <= 0) {
-                win(e);
-                break;
             }
         }
     }
@@ -320,13 +338,41 @@ public class Brave {
             chooseMapActionで表示する文字列変数 += "ボスとたたかう：5"
         }
     }
-    public void attack(Enemy e) {   // 戦闘において攻撃するメソッド
-        System.out.println(this.name + "のこうげき！");
-        int damage = e.getDefense() - this.attack;
-        e.setHp(e.getHp() - damage);
-        System.out.println(e.getName() + "に" + damage + "ポイントのダメージ！");
-    }
+    public void attack(Enemy e) {
+        // ミス、通常攻撃、痛恨の一撃のどれが出るかをランダムに決定する
+        int result = new java.util.Random().nextInt(100) + 1;
 
+        if (1 <= result && result <= 10) {              // 1から10が出たらミス
+            System.out.println("ミス！" + e.getName() + "はダメージをうけない！");
+            this.turnCount += 1;
+        } else if (95 <= result && result >= 100) {     // 95から100が出たら痛恨の一撃
+            int damage = calculateDamage(e) * 2;
+            System.out.println("かいしんのいちげき！");
+            System.out.println(e.getName() + "に" + damage + "ポイントのダメージ！");
+            e.setHp(e.getHp() - damage);
+            this.turnCount += 1;
+        } else {                                        // それ以外は通常攻撃
+            int damage = calculateDamage(e);
+            System.out.println(e.getName() + "に" + damage + "ポイントのダメージ！");
+            e.setHp(e.getHp() - damage);
+            this.turnCount += 1;
+        }
+    }
+    public int calculateDamage(Enemy e) {   // ダメージ値を計算して返す
+        final int DEFAULT_RANGE = 1;
+        int attackRange = (this.attack % 4) + DEFAULT_RANGE;    // 攻撃力が4増える毎にダメージ範囲を +1
+        int braveAttack = new java.util.Random().nextInt(attackRange) + this.attack;
+        int damage = braveAttack - e.getDefense();
+        damage = adjustDamage(damage);
+        return damage;
+    }
+    public int adjustDamage(int damage) {   // ダメージ値がマイナス値だった場合に0に変換する
+        if (damage < 0) {
+            return 0;
+        } else {
+            return damage;
+        }
+    }
     public void spell(Enemy e) {    // 戦闘において呪文を使用するメソッド
         // まだ1つも呪文を習得していなかった場合、battleメソッドに戻す
         if (this.level < 3) {
@@ -335,74 +381,63 @@ public class Brave {
         }
         // 呪文一覧を表示して選択させる
         int point = 0;
-        System.out.println("どのじゅもんをつかう？(0でたたかいのせんたくしにもどる)");
+        System.out.println("どのじゅもんをつかう？(0でもどる)");
         System.out.println(this.spellFormat);
-        System.out.println("\n->\s");
+        System.out.print("\n->\s");
         int spellNumber = new java.util.Scanner(System.in).nextInt();
         switch(spellNumber) {
             case 1:
-                point = HealSpell.pyoimi();
-                this.hp += point;
-                Text.healSpell(this.name, point);
+                point = HealSpell.pyoimi();                 // ピョイミ
+                healSpell(point);
                 break;
             case 2:
-                // レベルが満たない場合に0が返ってきたときの判定メソッドをここに置く
-                /*
-                 * if (point == 0) {
-                 *      return;
-                 * }
-                 */
-                point = HealSpell.pyoimi();
-                this.hp += point;
-                Text.healSpell(this.name, point);
+                point = HealSpell.bepyoimi(this.level);     // ベピョイミ
+                healSpell(point);
                 break;
             case 3:
-                this.hp += HealSpell.bepyoimi(this.level);
+                point = AttackSpell.myora(this.level);      // ミョラ
+                attackSpell(point, e);
                 break;
             case 4:
-                e.setHp(e.getHp() - AttackSpell.myorami(this.level));
+                point = AttackSpell.myorami(this.level);    // ミョラミ
+                attackSpell(point, e);
                 break;
             case 5:
-                e.setHp(e.getHp() - AttackSpell.myorazoma(this.level));
+                point = AttackSpell.myorazoma(this.level);  // ミョラゾマ
+                attackSpell(point, e);
                 break;
             default:
                 break;
         }
     }
-    public void spellReturn() {
-        /*
-         * switch(spellNumber) {
-            case 1:
-                return HealSpell.pyoimi();
-            case 2:
-                return AttackSpell.myora(this.level);
-            case 3:
-                return HealSpell.bepyoimi(this.level);
-            case 4:
-                return AttackSpell.myorami(this.level);
-            case 5:
-                return AttackSpell.myorazoma(this.level);
-            default:
-                return 0;
+    public void healSpell(int point) {              // 回復呪文で行う処理
+        if (point == 0) {
+            return;
         }
-        回復なら正の数、攻撃なら負の数として
-        まずは正の数か負の数を判定するプログラムを置き、
-        そのあとに仮に負の値(攻撃呪文)ならばそれを絶対値として正の数にしてreturnさせたい
-        switch文はこの記述で行きたいのでその判定を置くとするならおおもとのspellメソッドの方か？
-        そして0が返ってきたら(呪文で0が返ってくることはありえないことを想定しているので)
-        じゅもんのせんたくしから一旦戦いの選択肢に戻るようにする
-         */
+        this.hp += point;
+        Text.healSpell(this.name, point);
+        this.turnCount += 1;
+    }
+    public void attackSpell(int point, Enemy e) {   // 攻撃呪文で行う処理
+        if (point == 0) {
+            return;
+        }
+        e.setHp(e.getHp() - point);
+        Text.attackSpell(e.getName(), point);
+        this.turnCount += 1;
     }
     public void defense() { // 戦闘において防御するメソッド
-        int defaultDefense = getDefense();
-        int strongDefense = (int) (getDefense() * 1.5);
+        int strongDefense = (int) (this.defense * 1.5);
         // この行動は素早さ関係なく勇者が先攻となる
         // そしてこのターン終了時には防御力を元に戻さなければならない
+        this.turnCount += 1;
     }
 
     public void useItem() {    // 戦闘においてアイテムを使用するメソッド
         System.out.println("どのアイテムをつかう？");
         // ここでアイテム一覧を表示、0で戦う選択肢に戻るなど
+
+        this.turnCount += 1;
     }
 
     public void run() {     // 戦闘において逃げるメソッド

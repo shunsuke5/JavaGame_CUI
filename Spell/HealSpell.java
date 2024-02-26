@@ -16,11 +16,11 @@ public class HealSpell extends Spell {
         }
     }
     // メソッド
-    public static int createPoint(int minimum, int range) {     // 指定した範囲からランダムにポイントを生成
+    private static int createPoint(int minimum, int range) {     // 指定した範囲からランダムにポイントを生成
         int point = new java.util.Random().nextInt(range) + minimum;
         return point;
     }
-    public static boolean checkLevel(int level, int border) {
+    private static boolean checkLevel(int level, int border) {   // 呪文を使えるレベルならtrueを返す
         if (level > border) {
             return true;
         } else {

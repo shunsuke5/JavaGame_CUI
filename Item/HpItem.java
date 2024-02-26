@@ -9,8 +9,8 @@ public class HpItem extends Item {
         this.healPoint = healPoint;
     }
     // メソッド
-    public void use(Brave b) {
-        b.setHp(b.getHp() + this.healPoint);
+    public int use() {
+        return this.healPoint;
     }
     // アクセサ
     public int getHealPoint() { return this.healPoint; }

@@ -9,8 +9,6 @@ public abstract class Item {
         this.name = name;
         this.explanation = explanation;
     }
-    // 抽象メソッド
-    public abstract void use(Brave b);
     // アクセサ
     public String getName() { return this.name; }
     public String getExplanation() { return this.explanation; }

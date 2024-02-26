@@ -17,23 +17,25 @@ public class Main {
         
         */
 
-        int a = 1;
-        int b = 1;
-        int i = 0;
-        while(i < 3) {
+        boolean a = false;
+        int num10 = 10;
+        int num20 = 20;
+        int action = 1;
+        while(!a) {
             System.out.println("while--start");
-            if (b == 1) {
+            if (num10 < num20) {
                 System.out.println("if--start");
-                switch(a) {
+                switch(action) {
                     case 1:
                         System.out.println("switch");
-                        i++;
-                        break;
+                        a = true;
+                        continue;
                 }
+                a = true;
                 System.out.println("if--end");
+                continue;
             }
             System.out.println("while--end");
         }
-        System.out.println("全てのループが終了");
     }
 }

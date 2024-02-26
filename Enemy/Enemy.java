@@ -10,7 +10,7 @@ public abstract class Enemy {
     private int agility;    // すばやさ
     private int point;      // 経験値
     private int money;      // 落とすお金
-    private boolean battleFlag;     // 敵が逃げた時の戦闘フラグ
+    private boolean escapeFlag;     // 敵が逃げた時にtrue
     private int enemyCount; // 敵の数、今回は使わない予定
 
     // 抽象メソッド
@@ -18,17 +18,40 @@ public abstract class Enemy {
     
     // メソッド
     public int attack(String braveName, int braveDefense) {
+        // ミス、通常攻撃、痛恨の一撃のどれが出るかをランダムに決定する
+        int result = new java.util.Random().nextInt(100) + 1;
+        if (1 <= result && result <= 10) {  // 1から10が出たらミス
+            System.out.println("ミス！" + braveName + "はダメージをうけない！");
+            return 0;
+        } else if (95 <= result && result >= 100) {     // 95から100が出たら痛恨の一撃
+            int damage = calculateDamage(braveDefense) * 2;
+            System.out.println("つうこんのいちげき！");
+            System.out.println(braveName + "に" + damage + "ポイントのダメージ！");
+            return damage;
+        } else {    // それ以外は通常攻撃
+            int damage = calculateDamage(braveDefense);
+            System.out.println(braveName + "に" + damage + "ポイントのダメージ！");
+            return damage;
+        }
+    }
+    public int calculateDamage(int braveDefense) {      // ダメージ値を計算して返す
         final int DEFAULT_RANGE = 1;
         int attackRange = (this.attack % 4) + DEFAULT_RANGE;    // 攻撃力が4増える毎にダメージ範囲を +1
         int enemyAttack = new java.util.Random().nextInt(attackRange) + this.attack;
         int damage = enemyAttack - braveDefense;
-        System.out.println(braveName + "に" + damage + "ポイントのダメージ！");
+        damage = adjustDamage(damage);
         return damage;
+    }
+    public int adjustDamage(int damage) {   // ダメージ値がマイナス値だった場合に0に変換する
+        if (damage < 0) {
+            return 0;
+        } else {
+            return damage;
+        }
     }
     public void run() {
         System.out.println(this.name + "はにげだした！");
-        this.battleFlag = false;
-        // 敵の戦闘フラグをNOにするようなプログラム
+        this.escapeFlag = true;
     }
     public boolean runJadgement(int braveLevel) {
         // 勇者と自身のレベルを比較し、相手の方が大きければ大きいほど逃げる確率を高くする
@@ -59,7 +82,7 @@ public abstract class Enemy {
     public int getPoint() { return this.point; }
     public int getMoney() { return this.money; }
     public int getEnemyCount() { return this.enemyCount; }
-    public boolean getBattleFlag() { return this.battleFlag; }
+    public boolean getEscapeFlag() { return this.escapeFlag; }
 
     public void setName(String name) { this.name = name; }
     public void setLevel(int level) { this.level = level; }
@@ -71,5 +94,5 @@ public abstract class Enemy {
     public void setPoint(int point) { this.point = point; }
     public void setMoney(int money) { this.money = money; }
     public void setEnemyCount(int enemyCount) { this.enemyCount = enemyCount; }
-    public void setBattleFlag(boolean battleFlag) { this.battleFlag = battleFlag; }
+    public void setEscapeFlag(boolean escapeFlag) { this.escapeFlag = escapeFlag; }
 }

@@ -1,10 +1,11 @@
-package item;
+package item.mpitem;
+import item.Item;
 
-public class HpItem extends Item {
+public class MpItem extends Item {
     private int healPoint;
 
     // コンストラクタ
-    public HpItem(String name, String explanation, int healPoint) {
+    public MpItem(String name, String explanation, int healPoint) {
         super(name,explanation);
         this.healPoint = healPoint;
     }

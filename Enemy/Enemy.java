@@ -9,17 +9,18 @@ public abstract class Enemy {
     private int defense;    // 防御力
     private int agility;    // すばやさ
     private int point;      // 経験値
-    private int money;      // 落とすお金
+    private int dropMoney;      // 落とすお金
     private boolean escapeFlag;     // 敵が逃げた時にtrue
     private int enemyCount; // 敵の数、今回は使わない予定
 
     // 抽象メソッド
-    public abstract int turn(String braveName, int braveLevel, int braveDefense);    // 敵の行動をランダムに決めるメソッド
+    public abstract int turn(String braveName, int braveDefense);    // 敵の行動をランダムに決めるメソッド
     
     // メソッド
     public int attack(String braveName, int braveDefense) {
         // ミス、通常攻撃、痛恨の一撃のどれが出るかをランダムに決定する
         int result = new java.util.Random().nextInt(100) + 1;
+
         if (1 <= result && result <= 10) {  // 1から10が出たらミス
             System.out.println("ミス！" + braveName + "はダメージをうけない！");
             return 0;
@@ -80,7 +81,7 @@ public abstract class Enemy {
     public int getDefense() { return this.defense; }
     public int getAgility() { return this.agility; }
     public int getPoint() { return this.point; }
-    public int getMoney() { return this.money; }
+    public int getMoney() { return this.dropMoney; }
     public int getEnemyCount() { return this.enemyCount; }
     public boolean getEscapeFlag() { return this.escapeFlag; }
 
@@ -92,7 +93,7 @@ public abstract class Enemy {
     public void setDefense(int defense) { this.defense = defense; }
     public void setAgility(int agility) { this.agility = agility; }
     public void setPoint(int point) { this.point = point; }
-    public void setMoney(int money) { this.money = money; }
+    public void setMoney(int dropMoney) { this.dropMoney = dropMoney; }
     public void setEnemyCount(int enemyCount) { this.enemyCount = enemyCount; }
     public void setEscapeFlag(boolean escapeFlag) { this.escapeFlag = escapeFlag; }
 }

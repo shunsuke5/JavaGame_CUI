@@ -2,11 +2,11 @@ package map;
 import enemy.Enemy;
 
 public abstract class Map {
-    private String name;
-    private Enemy enemy;
-    private int enemyKillCount;
-    private boolean treasureObtain;
-    private boolean bossFlag;
+    private String name;            // マップ名
+    private Enemy enemy;            // マップの敵
+    private int enemyKillCount;     // 敵を倒した数
+    private boolean bossKill;       // ボスを倒したかどうか
+    private boolean thereIs;        // 現在地を判別
     
     // コンストラクタ
     public Map(String name) {
@@ -19,12 +19,12 @@ public abstract class Map {
     public String getName() { return this.name; }
     public Enemy getEnemy() { return this.enemy; }
     public int getEnemyKillCount() { return this.enemyKillCount; }
-    public boolean getTreasureObtain() { return this.treasureObtain; }
-    public boolean getBossFlag() { return this.bossFlag; }
+    public boolean getBossKill() { return this.bossKill; }
+    public boolean getThereIs() { return this.thereIs; }
 
     public void setName(String name) { this.name = name; }
     public void setEnemy(Enemy enemy) { this.enemy = enemy; }
     public void setEnemyKillCount(int enemyKillCount) { this.enemyKillCount = enemyKillCount; }
-    public void setTreasureObtain(boolean treasureObtain) { this.treasureObtain = treasureObtain; }
-    public void setBossFlag(boolean bossFlag) { this.bossFlag = bossFlag; }
+    public void setBossFlag(boolean bossKill) { this.bossKill = bossKill; }
+    public void setThereIs(boolean thereIs) { this.thereIs = thereIs; }
 }

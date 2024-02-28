@@ -522,6 +522,7 @@ itemList.add(item);
 使用時の処理
 itemList.contains()
 itemList.remove(item);
+itemList.add(createItem("yakusou"));
 
 ・アイテムリストにはアイテム名を格納し、そのアイテムを使いたい時、
 　アイテムリストの先頭から使いたいアイテム名に一致するものを探していく。
@@ -534,8 +535,63 @@ itemList.remove(item);
 
 ・アイテム上限は各アイテム99個とする、そうしたら配列が使用できる？
 
-・[進捗]各Mapのsetterを使用してどうにかマップの敵キル数や宝入手状況、ボスフラグを保存できないか
-　　　　defense()について経過ターン数を用いた判定の実装
+・単純に考えて、アイテムを入手する状況は2つしかない。
+　自分で買う時と、モンスターがドロップする時。
+　買えるアイテムはレベルの進行具合、もしくはマップの進行具合によって順次増やしていきたい。
+　マップクリアごとに商品入荷、など。
+
+・果たして本当にMapクラスにボスを倒したかどうかの判定や、敵を倒した数のフィールドを実装する必要があるか？
+　createEnemy()はマップごとに敵の情報が違うためマップは敵の情報を持っている=createEnemy()はMapクラスに
+　実装したが、ボスを倒した、敵を倒したなどの情報は別に勇者クラスが持っていてもよいのでは？
+　Mapは1つしか存在しえないのにそのマップに移動するたびにMapインスタンスが生成されなおすというのも
+　おかしいとは思うが、ならばMapインスタンスを保存する方法を考えるべきか？
+　勇者クラスにforestMap、seaMap、mountainMapの3つのフィールドを持って
+　今いるマップはtrue、いないマップはbooleanのようにすべきか？
+　各マップのフィールドにboolean there;のようなフィールドを用意して、今いるマップはそれがtrueになる、など
+　そうすればchooseMapの時もif (this.forestMap == null) のようなチェックができる。
+　こうすれば各マップは1つしか生成されなくなる
+
+・そのマップの中でも弱い敵、強い敵がいるため出現確率は同じではなく弱い敵ほど出やすいようにしたい。
+
+・マップ内アクションを表示する時など、thereIsがtrueになっているマップの情報を表示したい時
+　どうすればよいか？forestMap.thereIs,seaMap.thereIs,mountain.thereIs の3つ
+　この3つのどれがtrueになっているか調べ、trueになっているマップの任意の情報を取り出すには？
+　if (forestMap.thereIs) { enemy = forestMap.createEnemy(); }
+　敵を作るのはこれでできそうだが、問題はマップ内で一定の敵を倒したら選択肢に現れる
+　「ひきょうをたんさく」について。これを表示するには
+　マップの敵キルカウントを調べ、一定数以上ならテキストを追加で表示する
+　if (forestMap.enemyKillCount > 5) { str += うんたらかんたら}
+　プログラムが少しわかりづらくなってしまうが、今のところはこれでいいか
+　というかこれの判別用メソッドを別で作って、それを呼び出す形にしたい
+　3つの内のどれかのマップ.createEnemy();のようにしたいので
+public Map hogehoge() {
+    if (this.forestMap.thereIs) {
+        return this.forestMap;
+    } else if(this.seaMap.thereIs) {
+        return this.seaMap;
+    } else {
+        return this.mountainMap;
+    }
+}
+
+・マップ移動の時、移動先のマップのthereIsをtrueにするだけでなく、
+　移動元のマップのthereIsをfalseにしなければならない。
+　currentLocation().thereIs = false;のようにしたいが、
+　たとえばゲームの最初に森に行く場合を考えてみる。
+　そうすると、currentLocation()はthereIsがtrueのMapを返すメソッドなので
+　ゲームの最初は全てのthereIsがfalseになってしまっているため、
+　必ずmountainMapが返ってきてしまう。何ならこれを利用してどうにかできないか？
+　currentLocation()を行ったうえでmountainMap.thereIsがfalseになっているのなら
+　全マップのthereIsがfalseになっているということ = ゲームの最初と言うことが分かる。
+　というか今わかったけどこれ別に問題ないのでは？ゲームの最初に森にいったとして
+　currentLocation().thereIs() = false;にしても元々falseだったmountainMapのthereIsにfalse念押ししてるだけだし、
+　最初に山に行ってもmountainMap.thereIsにfalse設定した後にtrueにする処理を持ってきているので、
+　恐らく問題ないわ。
+　いやちょっと待ってくれ、currentLocation()ってforestMap.thereIsの内容を見るから
+　これまだ他のマップのインスタンス生成されてなかったらまずくね？
+　　→　フィールド宣言時の段階で　Map forestMap = new Forest;　のようにして解決。
+
+・[進捗]defense()について経過ターン数を用いた判定の実装
 　　　　アイテムの実装について考える　→　取組中
 　　　　敵のアイテムドロップについて考える
 　　　　ショップという概念も作る

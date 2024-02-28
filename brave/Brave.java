@@ -31,21 +31,18 @@ public class Brave {
     private int money;
 
     // 装備やアイテム
-    private Sword sword;    // 剣
-    private Helmet helmet;  // かぶと
-    private Armor armor;    // よろい
-    private List<Item> itemList;
+    private Sword sword;            // 剣
+    private Helmet helmet;          // かぶと
+    private Armor armor;            // よろい
+    private List<Item> itemList;    // 所持アイテム一覧
 
     // 呪文
     private Spell spell;
 
     // 現在地
-    private Map map;
-
-    // ボスフラグ
-    private int forestBossFlag = 0;
-    private int seaBossFlag = 0;
-    private int mountainBossFlag = 0;
+    private Map forestMap = new Forest();
+    private Map seaMap = new Sea();
+    private Map mountainMap = new Mountain();
 
     // プログラム用変数
     private int levelIndex = 0; // checkLevelUpメソッドでのみ使用、アクセサ不要
@@ -85,18 +82,18 @@ public class Brave {
         switch(number) {
             case 1:
                 System.out.println(this.name + "は" + "森へむかった！");
-                Map forestMap = new Forest();
-                this.map = forestMap;    // forestMapのスコープ的にthis.mapはメソッド終了後も大丈夫か？
+                currentLocation().setThereIs(false);
+                this.forestMap.setThereIs(true);
                 break;
             case 2:
                 System.out.println(this.name + "は" + "海へむかった！");
-                Map seaMap = new Sea();
-                this.map = seaMap;
+                currentLocation().setThereIs(false);
+                this.seaMap.setThereIs(true);
                 break;
             case 3:
                 System.out.println(this.name + "は" + "山へむかった！");
-                Map mountainMap = new Mountain();
-                this.map = mountainMap;
+                currentLocation().setThereIs(false);
+                this.mountainMap.setThereIs(true);
                 break;
         }
     }
@@ -111,7 +108,7 @@ public class Brave {
                 　　　　ボスとたたかう：7
                 """;
         System.out.println("どのこうどうにする？");
-        if (this.map.getBossFlag()) {
+        if (currentLocation().getEnemyKillCount() > 6) {
             str += "ひきょうをたんさくする：8";
             System.out.print(str);
             System.out.print("\n\s->\s");
@@ -148,18 +145,26 @@ public class Brave {
             case 8:
                 searchHikyou();     // 秘境探索(中ボス)
                 break;
+            default:
+                break;              // 想定外の選択肢の場合、もう一度選ばせる
         }
     }
     public void searchEnemy() {     // 敵と戦う
         System.out.println(this.name + "はてきをみつけた！");
-        Enemy enemy = this.map.createEnemy();
-        battle(enemy);
+        battle(currentLocation().createEnemy());
     }
     public void rest() {            // 休んで体力と魔力を回復する
         this.hp = this.maxHp;
         this.mp = this.maxMp;
     }
     public void shopping() {        // アイテム購入
+        String menu = """
+                　　　やくそう：1
+                まりょくのみず：2
+                """;
+        System.out.println("なにをかいますか？");
+        System.out.println(menu);
+        System.out.print("\n\s->\s");
 
     }
     public void checkItemList() {   // アイテムリスト確認
@@ -461,7 +466,16 @@ public class Brave {
         e.setHp(e.getHp() - point);
         Text.attackSpell(e.getName(), point);
         this.turnCount += 1;
-    }    
+    }
+    public Map currentLocation() {  // 現在地を返す
+        if (this.forestMap.getThereIs()) {
+            return this.forestMap;
+        } else if(this.seaMap.getThereIs()) {
+            return this.seaMap;
+        } else {
+            return this.mountainMap;
+        }
+    }
     // アクセサ
     public String getName() { return this.name; }
     public int getLevel() { return this.level; }

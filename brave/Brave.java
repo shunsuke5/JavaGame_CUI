@@ -39,20 +39,23 @@ public class Brave {
     // 呪文
     private Spell spell;
 
-    // 現在地
+    // マップ情報
     private Map forestMap = new Forest();
     private Map seaMap = new Sea();
     private Map mountainMap = new Mountain();
 
     // プログラム用変数
-    private int levelIndex = 0; // checkLevelUpメソッドでのみ使用、アクセサ不要
-    private int spellIndex = 0; // checkSpellUpメソッドでのみ使用、アクセサ不要
-    private String spellFormat;
-    private int spellChoiceNumber = 1;
-    private String mapAttribute;    // searchEnemyやsearchTreasureで使用するマップ属性
-    private boolean battleWin;  // バトルに勝った時にtrue
-    private boolean battleLose; // バトルに負けた時にtrue
-    private boolean escapeFlag; // バトルから逃げた時にtrue
+    private int levelIndex = 0;         // checkLevelUpメソッドでのみ使用、アクセサ不要
+    private int spellIndex = 0;         // checkSpellUpメソッドでのみ使用、アクセサ不要
+    private String spellFormat;         // たたかいの呪文テキスト
+    private int spellChoiceNumber = 1;  // 呪文選択時の番号
+    private int itemIndex = 0;          // addShopItem()でのみ使用、アクセサ不要
+    private int itemChoiceNumber = 1;   // ショップのアイテム選択番号
+    private String shopItemFormat;      // ショップのアイテムテキスト
+    private boolean battleWin;          // バトルに勝った時にtrue
+    private boolean battleLose;         // バトルに負けた時にtrue
+    private boolean escapeFlag;         // バトルから逃げた時にtrue
+    private int bossKillCount;          // ボスを倒した数
     
     // コンストラクタ
     public Brave() {
@@ -72,10 +75,7 @@ public class Brave {
     }
     // メソッド
     public void chooseMap() {   // どのマップに行くかの選択
-        System.out.println("どのマップにいきますか？");
-        System.out.println("森:1 海:2 山:3");
-        System.out.println("つぎにいくのは…");
-        System.out.print("\n\s->\s");
+        Text.chooseMap();
         // 現在いるマップを選択したらもう一度マップアクションをやりなおさせたい、whileを追加
         // そのマップに最初に行く場合、そのマップのインスタンスを生成したい
         int number = new java.util.Scanner(System.in).nextInt();
@@ -110,11 +110,9 @@ public class Brave {
         System.out.println("どのこうどうにする？");
         if (currentLocation().getEnemyKillCount() > 6) {
             str += "ひきょうをたんさくする：8";
-            System.out.print(str);
-            System.out.print("\n\s->\s");
+            Text.chooseChangedText(str);
         } else {
-            System.out.println(str);
-            System.out.print("\n\s->\s");
+            Text.chooseChangedText(str);
         }
         int number = new java.util.Scanner(System.in).nextInt();
         // 違った選択肢を選ばれたら繰り返したいのでwhileを追加する
@@ -158,25 +156,38 @@ public class Brave {
         this.mp = this.maxMp;
     }
     public void shopping() {        // アイテム購入
-        String menu = """
-                　　　やくそう：1
-                まりょくのみず：2
+        String menu;
+        switch(countBossKill()) {
+            case 0:
+                menu = """
+                　　　  　　やくそう：1
+                　  　まりょくのみず：2
+                    """;
+                break;
+            case 1:
+                menu = """
+                　　　  　　やくそう：1
+                　  　まりょくのみず：2
+                    　　かいふくやく：3
+                    まほうのせいすい：4
+                    """;
+                break;
+        }
+        menu = """
+                　　　　やくそう：1
+                　まりょくのみず：2
                 """;
         System.out.println("なにをかいますか？");
-        System.out.println(menu);
-        System.out.print("\n\s->\s");
-
+        Text.chooseChangedText(menu);
     }
     public void checkItemList() {   // アイテムリスト確認
 
     }
     public void checkStatus() {     // ステータス確認
         String str = """
-                名前：%s    レベル：%d
-                HP：%d / %d
-                MP：%d / %d
-                攻撃力：%d
-                防御力：%d
+                なまえ：%s　レベル：%d
+                HP：%d / %d　MP：%d / %d
+                ちから：%d　まもり：%d
                 すばやさ：%d
                 """;
         System.out.printf(str,this.name,this.level,this.hp,this.maxHp,this.mp,this.maxMp,
@@ -184,14 +195,17 @@ public class Brave {
     }
 
     public void battleBoss() {      // マップボス戦
-        
+        // ボスとのバトル
+        // 勝ったら以下のようにボスキルカウントに+1する
+        this.bossKillCount++;
+        // ショップのアイテムを増やす処理を以下に記述
     }
     public void searchHikyou() {    // 秘境探索(中ボス)
         // 秘境が解放されているかのチェック
     }
-    public void battle(Enemy e) { // 敵とエンカウントする
-        System.out.println(e.getName() + "があらわれた！");     // この文は最初だけ表示する
-        this.turnCount = 0;     // 自身の経過ターン数を初期化
+    public void battle(Enemy e) {   // 敵とエンカウントする
+        System.out.println(e.getName() + "があらわれた！");
+        this.turnCount = 0;
 
         while (!this.battleWin || !this.battleLose || !this.escapeFlag || !e.getEscapeFlag()) {
             // じゅもんやアイテム画面から「0」で戻った時、ここに戻りたい
@@ -315,8 +329,7 @@ public class Brave {
         // 呪文一覧を表示して選択させる
         int point = 0;
         System.out.println("どのじゅもんをつかう？(0でもどる)");
-        System.out.println(this.spellFormat);
-        System.out.print("\n->\s");
+        Text.chooseChangedText(spellFormat);
         int spellNumber = new java.util.Scanner(System.in).nextInt();
         switch(spellNumber) {
             case 1:
@@ -362,7 +375,7 @@ public class Brave {
         // if (自分と相手のレベルと素早さの合計を比べてなんやかんや計算) → 逃げられるか無理かを決める
     }
 
-    public void win(Enemy e) {
+    public void win(Enemy e) {  // 戦いに勝利
         this.battleWin = true;
         System.out.println(e.getName() + "をたおした！");
         System.out.println(e.getPoint() + "ポイントのけいけんちをかくとく！");
@@ -370,7 +383,7 @@ public class Brave {
         checkSpellUp();
     }
 
-    public void die() {     // HPが0になると死ぬ
+    public void die() {         // 戦いに敗北
         this.battleLose = true;
         System.out.println(this.name + "はしんでしまった！");
     }
@@ -385,9 +398,9 @@ public class Brave {
                 this.levelIndex += 1;
                 upLevel += 1;
             } while (this.getLevelPoint() >= levelList.get(this.levelIndex));
-        }
-        System.out.println(this.name + "のレベルが" + (this.level - upLevel) + "から" + 
+            System.out.println(this.name + "のレベルが" + (this.level - upLevel) + "から" + 
                             this.level + "にあがった！");
+        }
     }
     public void levelUp(int beforeLevel, int afterLevel) {
         // レベルアップによるステータス上昇の処理
@@ -397,13 +410,18 @@ public class Brave {
         List<String> spellNameList = createSpellNameList();
         if (this.level >= getSpellLevelList.get(this.spellIndex)) {
             do {
-                this.spellFormat += "\n" + spellNameList.get(this.spellIndex) + "：" + this.spellChoiceNumber;
+                this.spellFormat += "\n" + spellNameList.get(this.spellIndex) + this.spellChoiceNumber;
                 System.out.println(this.name + "は" + spellNameList.get(this.spellIndex) + 
                                     "のじゅもんがつかえるようになった！");
                 this.spellIndex++;
                 this.spellChoiceNumber++;
             } while (this.getLevel() >= getSpellLevelList.get(spellIndex));
         }
+    }
+    public void addShopItem() {         // ショップにアイテムを増やす
+        List<Integer> bossKillList = createBossKillList();
+        List<String> shopItemList = createShopItemList();
+        this.shopItemFormat += "\n" + shopItemList.get(this.itemIndex) + this.itemChoiceNumber;
     }
     public List<Integer> createLevelList() {    // レベルアップに必要な経験値リストを作成して返す
         List<Integer> levelList = new ArrayList<Integer>();
@@ -417,7 +435,7 @@ public class Brave {
         }
         return java.util.Collections.unmodifiableList(levelList);
     }
-    public List<Integer> createGetSpellLevelList() {  // 呪文習得レベルリストを作成して返す
+    public List<Integer> createGetSpellLevelList() {  // 呪文習得レベルリストを作成する
         List<Integer> spellLevelList = new ArrayList<Integer>();
         spellLevelList.add(3);
         spellLevelList.add(5);
@@ -426,16 +444,35 @@ public class Brave {
         spellLevelList.add(17);
         return java.util.Collections.unmodifiableList(spellLevelList);
     }
-    public List<String> createSpellNameList() {    // 呪文名リストを作成して返す
+    public List<String> createSpellNameList() {    // 呪文名リストを作成する
         List<String> spellNameList = new ArrayList<String>();
-        spellNameList.add("ピョイミ");
-        spellNameList.add("ミョラ");
-        spellNameList.add("ベピョイミ");
-        spellNameList.add("ミョラミ");
-        spellNameList.add("ミョラゾーマ");
+        spellNameList.add("　　ピョイミ：");
+        spellNameList.add("　　　ミョラ：");
+        spellNameList.add("　ベピョイミ：");
+        spellNameList.add("　　ミョラミ：");
+        spellNameList.add("ミョラゾーマ：");
         return java.util.Collections.unmodifiableList(spellNameList);
     }
-
+    public List<Integer> createBossKillList() {  // アイテム購入可能ボス討伐数リストを作成する
+        List<Integer> bossKillList = new ArrayList<Integer>();
+        bossKillList.add(0);
+        bossKillList.add(1);
+        bossKillList.add(2);
+        bossKillList.add(3);
+        return java.util.Collections.unmodifiableList(bossKillList);
+    }
+    public List<String> createShopItemList() {      // ショップのアイテムリストを作成する
+        List<String> shopItemList = new ArrayList<String>();
+        shopItemList.add("　　　　　　やくそう：");
+        shopItemList.add("　　　まりょくのみず：");
+        shopItemList.add("　　　　かいふくやく：");
+        shopItemList.add("　　まほうのせいすい：");
+        shopItemList.add("　　　　せいめいそう：");
+        shopItemList.add("いにしえのまどうしょ：");
+        shopItemList.add("　だいちのしゅくふく：");
+        shopItemList.add("　めがみのしゅくふく：");
+        return java.util.Collections.unmodifiableList(shopItemList);
+    }
     public int calculateDamage(Enemy e) {   // ダメージ値を計算して返す
         final int DEFAULT_RANGE = 1;
         int attackRange = (this.attack % 4) + DEFAULT_RANGE;    // 攻撃力が4増える毎にダメージ範囲を +1
@@ -475,6 +512,19 @@ public class Brave {
         } else {
             return this.mountainMap;
         }
+    }
+    public int countBossKill() {    // shopping()内で使用する。ボスを倒した数を取得
+        int bossKillCount = 0;
+        if (this.forestMap.getBossKill()) {
+            bossKillCount++;
+        }
+        if (this.seaMap.getBossKill()) {
+            bossKillCount++;
+        }
+        if (this.mountainMap.getBossKill()) {
+            bossKillCount++;
+        }
+        return bossKillCount;
     }
     // アクセサ
     public String getName() { return this.name; }

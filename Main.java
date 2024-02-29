@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
         /*
@@ -16,7 +20,9 @@ public class Main {
         Event.congratulations();
         
         */
-
-        
+        List<String> a = new ArrayList<String>();
+        a.add("puri");
+        a.add("puripuri");
+        a.add("hogehoge");
     }
 }

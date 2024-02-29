@@ -1,10 +1,23 @@
 package text;
 
-public class Text {
-    public static void healSpell(String name, int healPoint) {
+public abstract class Text {
+    private static final String ANSWER_ARROW = "\n\s->\s";
+
+    public static void chooseMap() {
+        System.out.println("どのマップにいきますか？");
+        System.out.println("森:1 海:2 山:3");
+        System.out.println("つぎにいくのは…");
+        System.out.print(ANSWER_ARROW);
+    }
+    // マップアクションやショップなど、状況に応じて変化する選択肢を表示する時に用いるメソッド
+    public static void chooseChangedText(String text) {
+        System.out.println(text);
+        System.out.print(ANSWER_ARROW);
+    }
+    public static void healSpell(String name, int healPoint) {      // 回復呪文使用時テキスト
         System.out.println(name + "のHPを" + healPoint + "ポイントかいふくした！");
     }
-    public static void attackSpell(String name, int attackPoint) {
+    public static void attackSpell(String name, int attackPoint) {  // 攻撃呪文使用時テキスト
         System.out.println(name + "に" + attackPoint + "ポイントのダメージ！");
     }
 }

@@ -10,6 +10,7 @@ import enemy.Enemy;
 import equipment.*;
 import text.Text;
 import item.Item;
+import item.hpitem.Herb;
 
 public class Brave {
     // 基礎ステータス
@@ -34,7 +35,7 @@ public class Brave {
     private Sword sword;            // 剣
     private Helmet helmet;          // かぶと
     private Armor armor;            // よろい
-    private List<Item> itemList;    // 所持アイテム一覧
+    private ArrayList<Item> itemList;    // 所持アイテム一覧
 
     // 呪文
     private Spell spell;
@@ -50,8 +51,8 @@ public class Brave {
     private String spellFormat;         // たたかいの呪文テキスト
     private int spellChoiceNumber = 1;  // 呪文選択時の番号
     private int itemIndex = 0;          // addShopItem()でのみ使用、アクセサ不要
-    private int itemChoiceNumber = 1;   // ショップのアイテム選択番号
-    private String shopItemFormat;      // ショップのアイテムテキスト
+    private int itemChoiceNumber = 3;   // ショップのアイテム選択番号
+    private String itemFormat;      // ショップのアイテムテキスト
     private boolean battleWin;          // バトルに勝った時にtrue
     private boolean battleLose;         // バトルに負けた時にtrue
     private boolean escapeFlag;         // バトルから逃げた時にtrue
@@ -72,6 +73,12 @@ public class Brave {
         this.attack = 10;
         this.defense = 10;
         this.agility = 5;
+
+        this.itemFormat = """
+                　　　　　　やくそう：1
+                　　　まりょくのみず：2
+                """;
+
     }
     // メソッド
     public void chooseMap() {   // どのマップに行くかの選択
@@ -156,29 +163,9 @@ public class Brave {
         this.mp = this.maxMp;
     }
     public void shopping() {        // アイテム購入
-        String menu;
-        switch(countBossKill()) {
-            case 0:
-                menu = """
-                　　　  　　やくそう：1
-                　  　まりょくのみず：2
-                    """;
-                break;
-            case 1:
-                menu = """
-                　　　  　　やくそう：1
-                　  　まりょくのみず：2
-                    　　かいふくやく：3
-                    まほうのせいすい：4
-                    """;
-                break;
-        }
-        menu = """
-                　　　　やくそう：1
-                　まりょくのみず：2
-                """;
         System.out.println("なにをかいますか？");
-        Text.chooseChangedText(menu);
+        Text.chooseChangedText(this.itemFormat);
+        int buyItem = new java.util.Scanner(System.in).nextInt();
     }
     public void checkItemList() {   // アイテムリスト確認
 
@@ -199,6 +186,7 @@ public class Brave {
         // 勝ったら以下のようにボスキルカウントに+1する
         this.bossKillCount++;
         // ショップのアイテムを増やす処理を以下に記述
+        addItemFormat();
     }
     public void searchHikyou() {    // 秘境探索(中ボス)
         // 秘境が解放されているかのチェック
@@ -366,7 +354,15 @@ public class Brave {
     public void useItem() {    // 戦闘においてアイテムを使用するメソッド
         System.out.println("どのアイテムをつかう？");
         // ここでアイテム一覧を表示、0で戦う選択肢に戻るなど
+        Text.chooseChangedText(itemFormat);
+        int useItem = new java.util.Scanner(System.in).nextInt();
+        if (useItem == 0) {
+            return;
+        }
+        switch(useItem) {
+            case 1:
 
+        }
         this.turnCount += 1;
     }
 
@@ -418,11 +414,6 @@ public class Brave {
             } while (this.getLevel() >= getSpellLevelList.get(spellIndex));
         }
     }
-    public void addShopItem() {         // ショップにアイテムを増やす
-        List<Integer> bossKillList = createBossKillList();
-        List<String> shopItemList = createShopItemList();
-        this.shopItemFormat += "\n" + shopItemList.get(this.itemIndex) + this.itemChoiceNumber;
-    }
     public List<Integer> createLevelList() {    // レベルアップに必要な経験値リストを作成して返す
         List<Integer> levelList = new ArrayList<Integer>();
         int levelCount = 1;
@@ -453,18 +444,17 @@ public class Brave {
         spellNameList.add("ミョラゾーマ：");
         return java.util.Collections.unmodifiableList(spellNameList);
     }
-    public List<Integer> createBossKillList() {  // アイテム購入可能ボス討伐数リストを作成する
-        List<Integer> bossKillList = new ArrayList<Integer>();
-        bossKillList.add(0);
-        bossKillList.add(1);
-        bossKillList.add(2);
-        bossKillList.add(3);
-        return java.util.Collections.unmodifiableList(bossKillList);
+    public void addItemFormat() {
+        List<String> shopItemList = createShopItemList();
+        do {
+            this.itemFormat += "\n" + shopItemList.get(this.itemIndex) + this.itemChoiceNumber;
+            this.itemIndex++;
+            this.itemChoiceNumber++;    
+        } while(this.itemIndex % 2 == 0);
     }
+
     public List<String> createShopItemList() {      // ショップのアイテムリストを作成する
         List<String> shopItemList = new ArrayList<String>();
-        shopItemList.add("　　　　　　やくそう：");
-        shopItemList.add("　　　まりょくのみず：");
         shopItemList.add("　　　　かいふくやく：");
         shopItemList.add("　　まほうのせいすい：");
         shopItemList.add("　　　　せいめいそう：");
@@ -513,7 +503,7 @@ public class Brave {
             return this.mountainMap;
         }
     }
-    public int countBossKill() {    // shopping()内で使用する。ボスを倒した数を取得
+    public int countBossKill() {    // ボスを倒した数を取得
         int bossKillCount = 0;
         if (this.forestMap.getBossKill()) {
             bossKillCount++;
@@ -525,6 +515,12 @@ public class Brave {
             bossKillCount++;
         }
         return bossKillCount;
+    }
+    public Item createItem(String itemName) {
+        switch(itemName) {
+            case "yakusou":
+                return new Herb();
+        }
     }
     // アクセサ
     public String getName() { return this.name; }

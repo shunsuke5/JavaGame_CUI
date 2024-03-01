@@ -3,11 +3,14 @@ import item.Item;
 
 public class MpItem extends Item {
     private int healPoint;
+    private int minHealPoint;
+    private int healRange;
 
     // コンストラクタ
-    public MpItem(String name, String explanation, int healPoint) {
+    public MpItem(String name, String explanation, int minHealPoint, int healRange) {
         super(name,explanation);
-        this.healPoint = healPoint;
+        this.minHealPoint = minHealPoint;
+        this.healRange = healRange;
     }
     // メソッド
     public int use() {

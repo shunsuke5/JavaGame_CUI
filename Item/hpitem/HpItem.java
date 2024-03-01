@@ -3,14 +3,18 @@ import item.Item;
 
 public class HpItem extends Item {
     private int healPoint;
+    private int minHealPoint;
+    private int healRange;
 
     // コンストラクタ
-    public HpItem(String name, String explanation, int minHealPoint, int range) {
+    public HpItem(String name, String explanation, int minHealPoint, int healRange) {
         super(name,explanation);
-        this.healPoint = new java.util.Random().nextInt(range) + minHealPoint;
+        this.minHealPoint = minHealPoint;
+        this.healRange = healRange;
     }
     // メソッド
     public int use() {
+        this.healPoint = new java.util.Random().nextInt(this.healRange) + this.minHealPoint;
         return this.healPoint;
     }
     // アクセサ

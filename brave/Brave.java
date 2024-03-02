@@ -11,6 +11,7 @@ import equipment.*;
 import text.Text;
 import item.Item;
 import item.hpitem.Herb;
+import item.mpitem.MagicWater;
 
 public class Brave {
     // 基礎ステータス
@@ -35,7 +36,7 @@ public class Brave {
     private Sword sword;            // 剣
     private Helmet helmet;          // かぶと
     private Armor armor;            // よろい
-    private ArrayList<Item> itemList;    // 所持アイテム一覧
+    private ArrayList<Item> itemBag;    // 所持アイテム一覧
 
     // 呪文
     private Spell spell;
@@ -46,13 +47,23 @@ public class Brave {
     private Map mountainMap = new Mountain();
 
     // プログラム用変数
+    private final int ITEM_KINDS = 8;           // アイテムの種類数
+    private final int HERB = 1;                 // アイテム番号(やくそう)
+    private final int MAGIC_WATER = 2;          // アイテム番号(まりょくのみず)
+    private final int MEDICINE_LIQUID = 3;      // アイテム番号(かいふくやく)
+    private final int MAGIC_HOLY_WATER = 4;     // アイテム番号(まほうのせいすい)
+    private final int LIFE_HERB = 5;            // アイテム番号(せいめいそう)
+    private final int ANCIENT_MAGIC_BOOK = 6;   // アイテム番号(いにしえのまどうしょ)
+    private final int BLESSING_OF_GROUND = 7;   // アイテム番号(だいちのしゅくふく)
+    private final int BLESSING_OF_VENUS = 8;    // アイテム番号(めがみのしゅくふく)
+
     private int levelIndex = 0;         // checkLevelUpメソッドでのみ使用、アクセサ不要
     private int spellIndex = 0;         // checkSpellUpメソッドでのみ使用、アクセサ不要
     private String spellFormat;         // たたかいの呪文テキスト
     private int spellChoiceNumber = 1;  // 呪文選択時の番号
     private int itemIndex = 0;          // addShopItem()でのみ使用、アクセサ不要
     private int itemChoiceNumber = 3;   // ショップのアイテム選択番号
-    private String itemFormat;      // ショップのアイテムテキスト
+    private String itemFormat;          // ショップのアイテムテキスト
     private boolean battleWin;          // バトルに勝った時にtrue
     private boolean battleLose;         // バトルに負けた時にtrue
     private boolean escapeFlag;         // バトルから逃げた時にtrue
@@ -166,6 +177,17 @@ public class Brave {
         System.out.println("なにをかいますか？");
         Text.chooseChangedText(this.itemFormat);
         int buyItem = new java.util.Scanner(System.in).nextInt();
+
+        switch(buyItem) {
+            case HERB:
+                // 初入手かどうかのチェック
+                if (checkItemBagEmpty() && !checkItemDuplication("Herb")) {
+                    this.itemBag.add(new Herb());
+                    break;
+                }
+                // Herbが入っている要素にアクセスしてhaveCountに+1する
+                break;
+        }
     }
     public void checkItemList() {   // アイテムリスト確認
 
@@ -516,11 +538,21 @@ public class Brave {
         }
         return bossKillCount;
     }
-    public Item createItem(String itemName) {
-        switch(itemName) {
-            case "yakusou":
-                return new Herb();
+    public boolean checkItemBagEmpty() {    // itemBagが空かどうかを確認する
+        if (this.itemBag.size() == 0) {
+            return true;
+        } else {
+            return false;
         }
+    }
+    public boolean checkItemDuplication(String itemClassName) {     // itemBagに既にアイテムがあるか確認する
+        for (int i = 0; i < this.itemBag.size(); i++) {
+            String str = this.itemBag.get(i).toString();
+            if (str.contains(itemClassName)) {
+                return true;
+            }
+        }
+        return false;
     }
     // アクセサ
     public String getName() { return this.name; }

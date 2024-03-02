@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import item.Item;
+import item.hpitem.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -20,9 +22,12 @@ public class Main {
         Event.congratulations();
         
         */
-        List<String> a = new ArrayList<String>();
-        a.add("puri");
-        a.add("puripuri");
-        a.add("hogehoge");
+        List<Item> itemBag = new ArrayList<>();
+        Item yakusou = new Herb();
+        itemBag.add(new Herb());
+        System.out.println(itemBag.get(0));
+        if (itemBag.contains(Herb)) {
+
+        }
     }
 }

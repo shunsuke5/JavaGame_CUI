@@ -7,4 +7,8 @@ public class Herb extends HpItem {
         "たいりょくをかいふくできるきちょうなしょくぶつ。\nHPを10～15ポイントかいふくする。",
          10, 6);
     }
+    // メソッド
+    public static String toString() {
+        return getName();
+    }
 }

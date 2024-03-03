@@ -1,5 +1,6 @@
 package brave;
 
+import java.nio.file.attribute.GroupPrincipal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -10,7 +11,13 @@ import enemy.Enemy;
 import equipment.*;
 import text.Text;
 import item.Item;
+import item.hpitem.BlessingOfGround;
 import item.hpitem.Herb;
+import item.hpitem.LifeHerb;
+import item.hpitem.MedicineLiquid;
+import item.mpitem.AncientMagicBook;
+import item.mpitem.BlessingOfVenus;
+import item.mpitem.MagicHolyWater;
 import item.mpitem.MagicWater;
 
 public class Brave {
@@ -33,10 +40,11 @@ public class Brave {
     private int money;
 
     // 装備やアイテム
-    private Sword sword;            // 剣
-    private Helmet helmet;          // かぶと
-    private Armor armor;            // よろい
-    private ArrayList<Item> itemBag;    // 所持アイテム一覧
+    private Sword sword;                        // 剣
+    private Helmet helmet;                      // かぶと
+    private Armor armor;                        // よろい
+    private ArrayList<Item> itemBag;            // 所持アイテム一覧
+    private ArrayList<Equipment> equipmentBag;  // 所持そうび一覧
 
     // 呪文
     private Spell spell;
@@ -174,19 +182,37 @@ public class Brave {
         this.mp = this.maxMp;
     }
     public void shopping() {        // アイテム購入
-        System.out.println("なにをかいますか？");
+        System.out.println("なにをかいますか？(0でマップアクションへもどる)");
         Text.chooseChangedText(this.itemFormat);
-        int buyItem = new java.util.Scanner(System.in).nextInt();
+        int item = new java.util.Scanner(System.in).nextInt();
 
-        switch(buyItem) {
+        switch(item) {
             case HERB:
-                // 初入手かどうかのチェック
-                if (checkItemBagEmpty() && !checkItemDuplication("Herb")) {
-                    this.itemBag.add(new Herb());
-                    break;
-                }
-                // Herbが入っている要素にアクセスしてhaveCountに+1する
+                buyItem(HERB, "やくそう");
                 break;
+            case MAGIC_WATER:
+                buyItem(MAGIC_WATER, "まりょくのみず");
+                break;
+            case MEDICINE_LIQUID:
+                buyItem(MEDICINE_LIQUID, "かいふくやく");
+                break;
+            case MAGIC_HOLY_WATER:
+                buyItem(MAGIC_HOLY_WATER, "まほうのせいすい");
+                break;
+            case LIFE_HERB:
+                buyItem(LIFE_HERB, "せいめいそう");
+                break;
+            case ANCIENT_MAGIC_BOOK:
+                buyItem(ANCIENT_MAGIC_BOOK, "いにしえのまどうしょ");
+                break;
+            case BLESSING_OF_GROUND:
+                buyItem(BLESSING_OF_GROUND, "だいちのしゅくふく");
+                break;
+            case BLESSING_OF_VENUS:
+                buyItem(BLESSING_OF_VENUS, "めがみのしゅくふく");
+                break;
+            case 0:
+                return;
         }
     }
     public void checkItemList() {   // アイテムリスト確認
@@ -382,8 +408,30 @@ public class Brave {
             return;
         }
         switch(useItem) {
-            case 1:
-
+            case HERB:
+                hpHeal(this.itemBag.get(HERB).use());
+                break;
+            case MAGIC_WATER:
+                mpHeal(this.itemBag.get(MAGIC_WATER).use());
+                break;
+            case MEDICINE_LIQUID:
+                hpHeal(this.itemBag.get(MEDICINE_LIQUID).use());
+                break;
+            case MAGIC_HOLY_WATER:
+                mpHeal(this.itemBag.get(MAGIC_HOLY_WATER).use());
+                break;
+            case LIFE_HERB:
+                hpHeal(this.itemBag.get(LIFE_HERB).use());
+                break;
+            case ANCIENT_MAGIC_BOOK:
+                mpHeal(this.itemBag.get(ANCIENT_MAGIC_BOOK).use());
+                break;
+            case BLESSING_OF_GROUND:
+                hpHeal(this.itemBag.get(BLESSING_OF_GROUND).use());
+                break;
+            case BLESSING_OF_VENUS:
+                mpHeal(this.itemBag.get(BLESSING_OF_VENUS).use());
+                break;
         }
         this.turnCount += 1;
     }
@@ -504,8 +552,7 @@ public class Brave {
         if (point == 0) {
             return;
         }
-        this.hp += point;
-        Text.healSpell(this.name, point);
+        hpHeal(point);
         this.turnCount += 1;
     }
     public void attackSpell(int point, Enemy e) {   // 攻撃呪文で行う処理
@@ -538,21 +585,91 @@ public class Brave {
         }
         return bossKillCount;
     }
-    public boolean checkItemBagEmpty() {    // itemBagが空かどうかを確認する
+    public boolean checkItemBagEmpty() {                       // itemBagが空かどうかを確認する
         if (this.itemBag.size() == 0) {
             return true;
         } else {
             return false;
         }
     }
-    public boolean checkItemDuplication(String itemClassName) {     // itemBagに既にアイテムがあるか確認する
+    public boolean checkItemDuplication(String itemName) {     // itemBagに既にアイテムがあるか確認する
         for (int i = 0; i < this.itemBag.size(); i++) {
-            String str = this.itemBag.get(i).toString();
-            if (str.contains(itemClassName)) {
+            String str = this.itemBag.get(i).getName();
+            if (str.contains(itemName)) {
                 return true;
             }
         }
         return false;
+    }
+    public int returnItemPosition(String itemName) {     // 任意のアイテムがitemBagに入っている位置を返す
+        for (int i = 0; i < this.itemBag.size(); i++) {
+            String str = this.itemBag.get(i).getName();
+            if (str.contains(itemName)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    public int returnBuyCount(Item item) {      // 購入数を返す
+        System.out.print("いくつかいますか？");
+        Text.printAnswerArrow();
+        int buyCount = new java.util.Scanner(System.in).nextInt();
+
+        if (buyCount > (99 - item.getHaveCount())) {
+            System.out.println("アイテムがもてるのは 99こ までです。");
+            System.out.println("ぜんぶで 99こ になるようにこうにゅうします。");
+            return 99 - item.getHaveCount();
+        }
+        return buyCount;
+    }
+    public void buyItem(int itemNumber, String itemName) {
+        // 初入手かどうかのチェック
+        if (checkItemBagEmpty() && !checkItemDuplication(itemName)) {
+            this.itemBag.add(itemNumber, createItemInstance(itemName));
+            itemBag.get(itemNumber).plusHaveCount(returnBuyCount(itemBag.get(itemNumber)));
+            return;
+        }
+        itemBag.get(itemNumber).plusHaveCount(returnBuyCount(itemBag.get(itemNumber)));
+        return;
+    }
+    public Item createItemInstance(String itemName) {
+        Item item = new Herb();
+
+        switch(itemName) {
+            case "やくそう":
+                item = new Herb();
+            case "まりょくのみず":
+                item = new MagicWater();
+            case "かいふくやく":
+                item = new MedicineLiquid();
+            case "まほうのせいすい":
+                item = new MagicHolyWater();
+            case "せいめいそう":
+                item = new LifeHerb();
+            case "いにしえのまどうしょ":
+                item = new AncientMagicBook();
+            case "だいちのしゅくふく":
+                item = new BlessingOfGround();
+            case "めがみのしゅくふく":
+                item = new BlessingOfVenus();
+        }
+        return item;
+    }
+    public void hpHeal(int healPoint) {      // 勇者の体力を回復する際に呼び出すメソッド
+        if (hp > (this.maxHp - this.hp)) {
+            this.hp = this.maxHp;
+        } else {
+            this.hp += healPoint;
+        }
+        System.out.println(this.name + "のHPが" + healPoint + "ポイントかいふくした！");
+    }
+    public void mpHeal(int healPoint) {     // 勇者のMPを回復する際に呼び出すメソッド
+        if (hp > (this.maxMp - this.mp)) {
+            this.mp = this.maxMp;
+        } else {
+            this.mp += healPoint;
+        }
+        System.out.println(this.name + "のMPが" + healPoint + "ポイントかいふくした！");
     }
     // アクセサ
     public String getName() { return this.name; }

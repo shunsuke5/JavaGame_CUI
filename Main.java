@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 import item.Item;
 import item.hpitem.*;
 
@@ -22,12 +23,7 @@ public class Main {
         Event.congratulations();
         
         */
-        List<Item> itemBag = new ArrayList<>();
-        Item yakusou = new Herb();
-        itemBag.add(new Herb());
-        System.out.println(itemBag.get(0));
-        if (itemBag.contains(Herb)) {
-
-        }
+        int a = new java.util.Random().nextInt(1) + 999;
+        System.out.println(a);
     }
 }

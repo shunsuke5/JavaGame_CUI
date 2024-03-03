@@ -5,10 +5,6 @@ public class BlessingOfVenus extends MpItem {
     public BlessingOfVenus() {
         super("めがみのしゅくふく",
         "ははなるめがみからのしゅくふく。MPをすべてかいふくする。",
-        0,0);
-    }
-    public int use(int braveMp, int braveMaxMp) {
-        this.setHealPoint(braveMaxMp - braveMp);
-        return getHealPoint();
+        999,1);
     }
 }

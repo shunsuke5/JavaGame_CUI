@@ -3,6 +3,10 @@ package text;
 public abstract class Text {
     private static final String ANSWER_ARROW = "\n\s->\s";
 
+    public static void printAnswerArrow() {
+        System.out.print(ANSWER_ARROW);
+    }
+
     public static void chooseMap() {
         System.out.println("どのマップにいきますか？");
         System.out.println("森:1 海:2 山:3");

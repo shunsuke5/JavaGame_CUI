@@ -14,6 +14,7 @@ public class MpItem extends Item {
     }
     // メソッド
     public int use() {
+        this.healPoint = new java.util.Random().nextInt(this.healRange) + this.minHealPoint;
         return this.healPoint;
     }
     // アクセサ

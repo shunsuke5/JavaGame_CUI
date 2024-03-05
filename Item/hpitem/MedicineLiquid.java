@@ -5,6 +5,6 @@ public class MedicineLiquid extends HpItem {
     public MedicineLiquid() {
         super("かいふくやく",
         "やくそうをちょうごうしたこうかばつぐんののみぐすり。\nHPを20～30ポイントかいふくする。",
-        20,11);
+        10,20,11);
     }
 }

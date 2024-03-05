@@ -13,6 +13,12 @@ public abstract class Text {
         System.out.println("つぎにいくのは…");
         System.out.print(ANSWER_ARROW);
     }
+    public static void rest() {
+        System.out.println("やどやでやすみますか？");
+        System.out.println("ひとばん 20 マネーです。");
+        System.out.println("やすむ：１　やめる：0");
+        System.out.println(ANSWER_ARROW);
+    }
     // マップアクションやショップなど、状況に応じて変化する選択肢を表示する時に用いるメソッド
     public static void chooseChangedText(String text) {
         System.out.println(text);

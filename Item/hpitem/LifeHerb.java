@@ -5,7 +5,7 @@ public class LifeHerb extends HpItem {
     public LifeHerb() {
         super("せいめいそう",
         "せいめいりょくあふれるまぼろしのしょくぶつ。\nHPを30～45ポイントかいふくする。",
-        30,16);
+        25,30,16);
     }
     
 }

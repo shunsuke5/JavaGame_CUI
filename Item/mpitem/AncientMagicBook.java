@@ -5,6 +5,6 @@ public class AncientMagicBook extends MpItem {
     public AncientMagicBook() {
         super("いにしえのまどうしょ",
         "すさまじいまりょくをひめたこだいのまどうしょ。MPを25～40ポイントかいふくする。",
-        20,11);
+        30,20,11);
     }
 }

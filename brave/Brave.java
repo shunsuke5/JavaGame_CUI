@@ -133,8 +133,8 @@ public class Brave {
                 　　ほかのマップへいく：6
                 　　　　ボスとたたかう：7
                 """;
-        System.out.println("どのこうどうにする？");
-        if (currentLocation().getEnemyKillCount() > 6) {
+        System.out.println("なにをする？");
+        if (currentLocation().getEnemyKillCount() > 12) {
             str += "ひきょうをたんさくする：8";
             Text.chooseChangedText(str);
         } else {
@@ -178,8 +178,16 @@ public class Brave {
         battle(currentLocation().createEnemy());
     }
     public void rest() {            // 休んで体力と魔力を回復する
-        this.hp = this.maxHp;
-        this.mp = this.maxMp;
+        Text.rest();
+        int choose = new java.util.Scanner(System.in).nextInt();
+        if (choose == 1) {
+            this.money -= 20;
+            this.hp = this.maxHp;
+            this.mp = this.maxMp;
+        } else {
+            return;
+        }
+        
     }
     public void shopping() {        // アイテム購入
         System.out.println("なにをかいますか？(0でマップアクションへもどる)");
@@ -400,7 +408,7 @@ public class Brave {
     }
 
     public void useItem() {    // 戦闘においてアイテムを使用するメソッド
-        System.out.println("どのアイテムをつかう？");
+        System.out.println("どのアイテムをつかう？(0でもどる)");
         // ここでアイテム一覧を表示、0で戦う選択肢に戻るなど
         Text.chooseChangedText(itemFormat);
         int useItem = new java.util.Scanner(System.in).nextInt();
@@ -656,7 +664,7 @@ public class Brave {
         return item;
     }
     public void hpHeal(int healPoint) {      // 勇者の体力を回復する際に呼び出すメソッド
-        if (hp > (this.maxHp - this.hp)) {
+        if (healPoint > (this.maxHp - this.hp)) {
             this.hp = this.maxHp;
         } else {
             this.hp += healPoint;
@@ -664,7 +672,7 @@ public class Brave {
         System.out.println(this.name + "のHPが" + healPoint + "ポイントかいふくした！");
     }
     public void mpHeal(int healPoint) {     // 勇者のMPを回復する際に呼び出すメソッド
-        if (hp > (this.maxMp - this.mp)) {
+        if (healPoint > (this.maxMp - this.mp)) {
             this.mp = this.maxMp;
         } else {
             this.mp += healPoint;

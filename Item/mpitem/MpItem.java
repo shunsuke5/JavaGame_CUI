@@ -7,8 +7,8 @@ public class MpItem extends Item {
     private int healRange;
 
     // コンストラクタ
-    public MpItem(String name, String explanation, int minHealPoint, int healRange) {
-        super(name,explanation);
+    public MpItem(String name, String explanation, int price, int minHealPoint, int healRange) {
+        super(name,explanation,price);
         this.minHealPoint = minHealPoint;
         this.healRange = healRange;
     }

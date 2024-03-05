@@ -7,8 +7,8 @@ public class HpItem extends Item {
     private int healRange;
 
     // コンストラクタ
-    public HpItem(String name, String explanation, int minHealPoint, int healRange) {
-        super(name,explanation);
+    public HpItem(String name, String explanation, int price, int minHealPoint, int healRange) {
+        super(name,explanation,price);
         this.minHealPoint = minHealPoint;
         this.healRange = healRange;
     }

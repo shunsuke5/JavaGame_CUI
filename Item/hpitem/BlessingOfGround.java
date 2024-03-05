@@ -5,6 +5,6 @@ public class BlessingOfGround extends HpItem {
     public BlessingOfGround() {
         super("だいちのしゅくふく",
         "おおいなるだいちからのしゅくふく。HPをすべてかいふくする。",
-        999,1);
+        100,999,1);
     }
 }

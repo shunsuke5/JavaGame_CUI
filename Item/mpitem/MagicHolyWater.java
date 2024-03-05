@@ -5,6 +5,6 @@ public class MagicHolyWater extends MpItem {
     public MagicHolyWater() {
         super("まほうのせいすい",
         "じゃあくをきよめるまりょくをもつせいすい。MPを12～20ポイントかいふくする。",
-        12,9);
+        10, 12,9);
     }
 }

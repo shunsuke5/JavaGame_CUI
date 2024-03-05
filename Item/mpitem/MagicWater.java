@@ -5,6 +5,6 @@ public class MagicWater extends MpItem {
     public MagicWater() {
         super("まりょくのみず",
         "すこしまりょくがやどっているきれいなみず。MPを6～10ポイントかいふくする。",
-        6,5);
+        5,6,5);
     }
 }

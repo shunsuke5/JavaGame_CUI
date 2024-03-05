@@ -5,6 +5,6 @@ public class Herb extends HpItem {
     public Herb() {
         super("やくそう", 
         "たいりょくをかいふくできるきちょうなしょくぶつ。\nHPを10～15ポイントかいふくする。",
-         10, 6);
+        5,10, 6);
     }
 }

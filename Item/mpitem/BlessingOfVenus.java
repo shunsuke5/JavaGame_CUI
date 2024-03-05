@@ -5,6 +5,6 @@ public class BlessingOfVenus extends MpItem {
     public BlessingOfVenus() {
         super("めがみのしゅくふく",
         "ははなるめがみからのしゅくふく。MPをすべてかいふくする。",
-        999,1);
+        100, 999,1);
     }
 }

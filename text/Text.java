@@ -6,7 +6,10 @@ public abstract class Text {
     public static void printAnswerArrow() {
         System.out.print(ANSWER_ARROW);
     }
-
+    public static int inputChoice() {
+        printAnswerArrow();
+        return new java.util.Scanner(System.in).nextInt();
+    }
     public static void chooseMap() {
         System.out.println("どのマップにいきますか？");
         System.out.println("森:1 海:2 山:3");

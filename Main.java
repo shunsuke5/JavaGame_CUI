@@ -25,25 +25,12 @@ public class Main {
         Event.congratulations();
         
         */
-        LinkedHashMap<String,Integer> menu = new LinkedHashMap<String,Integer>();
-        menu.put("　　　　　　やくそう：",5);
-        menu.put("　　　まりょくのみず：",5);
-        menu.put("　　　　かいふくやく：",10);
-        menu.put("　　まほうのせいすい：",10);
-        menu.put("　　　　せいめいそう：",25);
-        menu.put("いにしえのまどうしょ：",25);
-        menu.put("　だいちのしゅくふく：",100);
-        menu.put("　めがみのしゅくふく：",100);
-
-        System.out.println("ショップへようこそ。");
-        System.out.println("なにをかいますか？\n");
-        int i = 1;
-        for (String itemName : menu.keySet()) {
-            System.out.println(itemName + menu.get(itemName) + "m" + "\s->\s" + i);
-            i++;
-        }
         
-
-        // やくそう：5m　->　1
+        // メンバクラスの呼び出し方
+        // 外部クラスのインスタンスを生成
+        Inner in = new Inner();
+        // 外部クラス内のメンバクラスを生成する
+        Inner.Inclass inClass = in.new Inclass();
+        inClass.methodA();
     }
 }

@@ -594,11 +594,7 @@ public class Brave {
         return bossKillCount;
     }
     public boolean checkItemBagEmpty() {                       // itemBagが空かどうかを確認する
-        if (this.itemBag.size() == 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.itemBag.size() == 0;
     }
     public boolean checkItemDuplication(String itemName) {     // itemBagに既にアイテムがあるか確認する
         for (int i = 0; i < this.itemBag.size(); i++) {

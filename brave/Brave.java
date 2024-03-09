@@ -19,6 +19,7 @@ import item.mpitem.AncientMagicBook;
 import item.mpitem.BlessingOfVenus;
 import item.mpitem.MagicHolyWater;
 import item.mpitem.MagicWater;
+import itembag.ItemBag;
 
 public class Brave {
     // 基礎ステータス
@@ -44,6 +45,7 @@ public class Brave {
     private Helmet helmet;                      // かぶと
     private Armor armor;                        // よろい
     private ArrayList<Item> itemBag;            // 所持アイテム一覧
+    private ItemBag itemBag2;                   // 自作アイテムバッグクラス
     private ArrayList<Equipment> equipmentBag;  // 所持そうび一覧
 
     // 呪文

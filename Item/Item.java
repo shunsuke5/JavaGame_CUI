@@ -1,5 +1,8 @@
 package item;
 
+import java.io.BufferedReader;
+import java.io.Reader;
+
 public abstract class Item {
     private String name;            // アイテム名
     private String explanation;     // アイテムの説明
@@ -9,6 +12,9 @@ public abstract class Item {
     // コンストラクタ
     public Item(String name, String explanation, int price) {
         this.name = name;
+        // ファイルを読み込み、先頭に「name」がある行の情報をフィールドに格納していく
+        Reader r = Reader.nullReader();
+        BufferedReader br = new BufferedReader(r);
         this.explanation = explanation;
         this.price = price;
     }

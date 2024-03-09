@@ -1,14 +1,20 @@
+import java.io.OutputStream;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.io.FilterOutputStream;
 
 import item.Item;
 import item.hpitem.*;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         /*
         
         // 主人公を生み出す
@@ -26,11 +32,12 @@ public class Main {
         
         */
         
-        // メンバクラスの呼び出し方
-        // 外部クラスのインスタンスを生成
-        Inner in = new Inner();
-        // 外部クラス内のメンバクラスを生成する
-        Inner.Inclass inClass = in.new Inclass();
-        inClass.methodA();
+        // ↓↓↓Itemクラスのコンストラクタに使えそうなファイル読み取りプログラム↓↓↓
+        BufferedReader br = new BufferedReader(new FileReader("test.txt"));
+        String str = br.readLine();
+        while(str != null) {
+            System.out.println(str);
+            str = br.readLine();
+        }
     }
 }

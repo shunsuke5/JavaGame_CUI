@@ -1,35 +1,35 @@
 package item;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.Reader;
 
 public abstract class Item {
-    private String name;            // アイテム名
-    private String explanation;     // アイテムの説明
-    private int price;              // アイテムの値段
-    private int haveCount;          // アイテム所持数
+    private String name;          // 名前
+    private int itemId;           // 識別番号
+    private int price;            // 値段
+    private String explanation;   // 説明
+    private int haveCount = 0;    // 所持数
 
     // コンストラクタ
-    public Item(String name, String explanation, int price) {
+    public Item(String name) throws IOException {
         this.name = name;
-        // ファイルを読み込み、先頭に「name」がある行の情報をフィールドに格納していく
-        Reader r = Reader.nullReader();
-        BufferedReader br = new BufferedReader(r);
-        this.explanation = explanation;
-        this.price = price;
     }
     // 抽象メソッド
     public abstract int use();
     // アクセサ
     public String getName() { return this.name; }
-    public String getExplanation() { return this.explanation; }
+    public int getItemId() { return this.itemId; }
     public int getPrice() { return this.price; }
+    public String getExplanation() { return this.explanation; }
     public int getHaveCount() { return this.haveCount; }
 
     public void setName(String name) { this.name = name; }
-    public void setExplanation(String explanation) { this.explanation = explanation; }
+    public void setItemId(int itemId) { this.itemId = itemId; }
     public void setPrice(int price) { this.price = price; }
+    public void setExplanation(String explanation) { this.explanation = explanation; }
     public void setHaveCount(int haveCount) { this.haveCount = haveCount; }
     public void plusHaveCount(int haveCount) { this.haveCount += haveCount; }
-    public void minusHaveCount(int haveCount) { this.haveCount--; }
+    public void minusHaveCount() { this.haveCount--; }
 }

@@ -1,10 +1,10 @@
 package item.mpitem;
 
+import java.io.IOException;
+
 public class MagicHolyWater extends MpItem {
     // コンストラクタ
-    public MagicHolyWater() {
-        super("まほうのせいすい",
-        "じゃあくをきよめるまりょくをもつせいすい。MPを12～20ポイントかいふくする。",
-        10, 12,9);
+    public MagicHolyWater() throws IOException {
+        super("まほうのせいすい");
     }
 }

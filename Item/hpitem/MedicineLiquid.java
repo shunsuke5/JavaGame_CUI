@@ -1,10 +1,10 @@
 package item.hpitem;
 
+import java.io.IOException;
+
 public class MedicineLiquid extends HpItem {
     // コンストラクタ
-    public MedicineLiquid() {
-        super("かいふくやく",
-        "やくそうをちょうごうしたこうかばつぐんののみぐすり。\nHPを20～30ポイントかいふくする。",
-        10,20,11);
+    public MedicineLiquid() throws IOException {
+        super("かいふくやく");
     }
 }

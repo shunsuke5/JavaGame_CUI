@@ -1,8 +1,8 @@
-public class DecimalToHexadecimal {
-    // 10進数を16進数に変換するプログラム
+public class DecimalToHexadecimal {                         // 10進数を16進数に変換するプログラム
+
     public static void decimalToHexadecimal(int decimal) {  // 10進数を16進数に変換し表示する
-        int a = (int) ( decimal / 16 );     // 1桁目の計算
-        int b = decimal % 16;               // 2桁目の計算
+        int a = (int) ( decimal / 16 );                     // 1桁目の計算
+        int b = decimal % 16;                               // 2桁目の計算
         System.out.println("0x" + conversion(a,b));
     }
     public static String conversion(int a, int b) {         // 0x??の?を文字列に変換して返す

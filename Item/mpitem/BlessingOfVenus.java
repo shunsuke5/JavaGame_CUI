@@ -1,10 +1,10 @@
 package item.mpitem;
 
+import java.io.IOException;
+
 public class BlessingOfVenus extends MpItem {
     // コンストラクタ
-    public BlessingOfVenus() {
-        super("めがみのしゅくふく",
-        "ははなるめがみからのしゅくふく。MPをすべてかいふくする。",
-        100, 999,1);
+    public BlessingOfVenus() throws IOException {
+        super("めがみのしゅくふく");
     }
 }

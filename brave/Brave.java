@@ -1,5 +1,8 @@
 package brave;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.file.attribute.GroupPrincipal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -44,8 +47,8 @@ public class Brave {
     private Sword sword;                        // 剣
     private Helmet helmet;                      // かぶと
     private Armor armor;                        // よろい
-    private ArrayList<Item> itemBag;            // 所持アイテム一覧
-    private ItemBag itemBag2;                   // 自作アイテムバッグクラス
+    // private ArrayList<Item> itemBag;            // 所持アイテム一覧
+    private ItemBag itemBag;                   // 自作アイテムバッグクラス
     private ArrayList<Equipment> equipmentBag;  // 所持そうび一覧
 
     // 呪文
@@ -129,7 +132,7 @@ public class Brave {
         String str = """
                 　　　　　てきをさがす：1
                 　　　　　やどでやすむ：2
-                　　　　アイテムをかう：3
+                　　　　ショップにいく：3
                 　　　　アイテムリスト：4
                 　　ステータスかくにん：5
                 　　ほかのマップへいく：6
@@ -157,7 +160,7 @@ public class Brave {
                 shopping();         // アイテム購入
                 break;
             case 4:
-                checkItemList();    // アイテムリスト確認
+                displayItemBag();    // アイテムリスト確認
                 break;
             case 5:
                 checkStatus();      // ステータス確認
@@ -191,42 +194,53 @@ public class Brave {
         }
         
     }
-    public void shopping() {        // アイテム購入
+    public void shopping() throws IOException {        // アイテム購入
         System.out.println("なにをかいますか？(0でマップアクションへもどる)");
         Text.chooseChangedText(this.itemFormat);
-        int item = new java.util.Scanner(System.in).nextInt();
+        int itemId = new java.util.Scanner(System.in).nextInt();
+        String itemName = itemIdToItemName(itemId);
 
-        switch(item) {
-            case HERB:
+        switch(itemName) {
+            case "やくそう":
                 buyItem(HERB, "やくそう");
                 break;
-            case MAGIC_WATER:
+            case "まりょくのみず":
                 buyItem(MAGIC_WATER, "まりょくのみず");
                 break;
-            case MEDICINE_LIQUID:
+            case "かいふくやく":
                 buyItem(MEDICINE_LIQUID, "かいふくやく");
                 break;
-            case MAGIC_HOLY_WATER:
+            case "まほうのせいすい":
                 buyItem(MAGIC_HOLY_WATER, "まほうのせいすい");
                 break;
-            case LIFE_HERB:
+            case "せいめいそう":
                 buyItem(LIFE_HERB, "せいめいそう");
                 break;
-            case ANCIENT_MAGIC_BOOK:
+            case "いにしえのまどうしょ":
                 buyItem(ANCIENT_MAGIC_BOOK, "いにしえのまどうしょ");
                 break;
-            case BLESSING_OF_GROUND:
+            case "だいちのしゅくふく":
                 buyItem(BLESSING_OF_GROUND, "だいちのしゅくふく");
                 break;
-            case BLESSING_OF_VENUS:
+            case "めがみのしゅくふく":
                 buyItem(BLESSING_OF_VENUS, "めがみのしゅくふく");
                 break;
-            case 0:
+            default:
                 return;
         }
     }
-    public void checkItemList() {   // アイテムリスト確認
+    public void displayItemBag() throws IOException {   // アイテムリスト確認
+        // -1 が選択されるまで表示し続けるwhile
+        for (int i = 0; i < 8; i++) {
+            if (this.itemBag.getItem()[i][0] == null) {
+                continue;
+            }
+            System.out.println(this.itemBag.getItem()[i][0].getName() + "：" + this.itemBag.getItem()[i][0].getHaveCount() + "こ");
+            System.out.println("つかいたいアイテムはありますか？");
+            int itemId = new java.util.Random().nextInt();
 
+            String itemName = itemIdToItemName(itemId);
+        }
     }
     public void checkStatus() {     // ステータス確認
         String str = """
@@ -409,37 +423,40 @@ public class Brave {
         this.turnCount += 1;
     }
 
-    public void useItem() {    // 戦闘においてアイテムを使用するメソッド
-        System.out.println("どのアイテムをつかう？(0でもどる)");
+    public void useItem() throws IOException {    // 戦闘においてアイテムを使用するメソッド
+        System.out.println("どのアイテムをつかう？(-1でもどる)");
         // ここでアイテム一覧を表示、0で戦う選択肢に戻るなど
         Text.chooseChangedText(itemFormat);
-        int useItem = new java.util.Scanner(System.in).nextInt();
-        if (useItem == 0) {
+        int itemId = new java.util.Scanner(System.in).nextInt();
+        if (itemId == -1) {
             return;
         }
-        switch(useItem) {
-            case HERB:
-                hpHeal(this.itemBag.get(HERB).use());
+        String useItemName = itemIdToItemName(itemId);
+
+        switch(useItemName) {
+            case "やくそう":
+                hpHeal(this.itemBag.getItem()[itemId][0].use());
+                this.itemBag.decrease(new Herb());
                 break;
-            case MAGIC_WATER:
+            case "まりょくのみず":
                 mpHeal(this.itemBag.get(MAGIC_WATER).use());
                 break;
-            case MEDICINE_LIQUID:
+            case "かいふくやく":
                 hpHeal(this.itemBag.get(MEDICINE_LIQUID).use());
                 break;
-            case MAGIC_HOLY_WATER:
+            case "まほうのせいすい":
                 mpHeal(this.itemBag.get(MAGIC_HOLY_WATER).use());
                 break;
-            case LIFE_HERB:
+            case "せいめいそう":
                 hpHeal(this.itemBag.get(LIFE_HERB).use());
                 break;
-            case ANCIENT_MAGIC_BOOK:
+            case "いにしえのまどうしょ":
                 mpHeal(this.itemBag.get(ANCIENT_MAGIC_BOOK).use());
                 break;
-            case BLESSING_OF_GROUND:
+            case "だいちのしゅくふく":
                 hpHeal(this.itemBag.get(BLESSING_OF_GROUND).use());
                 break;
-            case BLESSING_OF_VENUS:
+            case "めがみのしゅくふく":
                 mpHeal(this.itemBag.get(BLESSING_OF_VENUS).use());
                 break;
         }
@@ -638,27 +655,28 @@ public class Brave {
         itemBag.get(itemNumber).plusHaveCount(returnBuyCount(itemBag.get(itemNumber)));
         return;
     }
-    public Item createItemInstance(String itemName) {
+    public Item createItemInstance(String itemName) throws IOException {
         Item item = new Herb();
-
+        this.itemBag.setItem(new Herb());
         switch(itemName) {
             case "やくそう":
-                item = new Herb();
+                return new Herb();
             case "まりょくのみず":
-                item = new MagicWater();
+                return new MagicWater();
             case "かいふくやく":
-                item = new MedicineLiquid();
+                return new MedicineLiquid();
             case "まほうのせいすい":
-                item = new MagicHolyWater();
+                return new MagicHolyWater();
             case "せいめいそう":
-                item = new LifeHerb();
+                return new LifeHerb();
             case "いにしえのまどうしょ":
-                item = new AncientMagicBook();
+                return new AncientMagicBook();
             case "だいちのしゅくふく":
-                item = new BlessingOfGround();
+                return new BlessingOfGround();
             case "めがみのしゅくふく":
-                item = new BlessingOfVenus();
+                return new BlessingOfVenus();
         }
+
         return item;
     }
     public void hpHeal(int healPoint) {      // 勇者の体力を回復する際に呼び出すメソッド
@@ -676,6 +694,20 @@ public class Brave {
             this.mp += healPoint;
         }
         System.out.println(this.name + "のMPが" + healPoint + "ポイントかいふくした！");
+    }
+    public String itemIdToItemName(int itemId) throws IOException {
+        // csvファイルから入力値(識別番号)を検索し、その行の名前をString変数に格納する処理
+        String itemName = "";
+        BufferedReader br = new BufferedReader(new FileReader("ItemId_Data.csv"));
+        String str = br.readLine();
+        while(str != null) {
+            if (str.contains(Integer.toString(itemId))) {
+                Object[] objArray = str.split(",");
+                itemName = (String)objArray[0];
+            }
+            str = br.readLine();
+        }
+        return itemName;
     }
     // アクセサ
     public String getName() { return this.name; }

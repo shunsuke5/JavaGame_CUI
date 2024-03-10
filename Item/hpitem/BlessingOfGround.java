@@ -1,10 +1,10 @@
 package item.hpitem;
 
+import java.io.IOException;
+
 public class BlessingOfGround extends HpItem {
     // コンストラクタ
-    public BlessingOfGround() {
-        super("だいちのしゅくふく",
-        "おおいなるだいちからのしゅくふく。HPをすべてかいふくする。",
-        100,999,1);
+    public BlessingOfGround() throws IOException {
+        super("だいちのしゅくふく");
     }
 }

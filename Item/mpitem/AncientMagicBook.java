@@ -1,10 +1,10 @@
 package item.mpitem;
 
+import java.io.IOException;
+
 public class AncientMagicBook extends MpItem {
     // コンストラクタ
-    public AncientMagicBook() {
-        super("いにしえのまどうしょ",
-        "すさまじいまりょくをひめたこだいのまどうしょ。MPを25～40ポイントかいふくする。",
-        30,20,11);
+    public AncientMagicBook() throws IOException {
+        super("いにしえのまどうしょ");
     }
 }

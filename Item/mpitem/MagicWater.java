@@ -1,10 +1,10 @@
 package item.mpitem;
 
+import java.io.IOException;
+
 public class MagicWater extends MpItem {
     // コンストラクタ
-    public MagicWater() {
-        super("まりょくのみず",
-        "すこしまりょくがやどっているきれいなみず。MPを6～10ポイントかいふくする。",
-        5,6,5);
+    public MagicWater() throws IOException {
+        super("まりょくのみず");
     }
 }

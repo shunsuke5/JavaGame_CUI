@@ -1,23 +1,34 @@
 package item.hpitem;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 import item.Item;
 
 public class HpItem extends Item {
-    private int healPoint;
     private int minHealPoint;
     private int healRange;
 
     // コンストラクタ
-    public HpItem(String name, String explanation, int price, int minHealPoint, int healRange) {
-        super(name,explanation,price);
-        this.minHealPoint = minHealPoint;
-        this.healRange = healRange;
+    public HpItem(String name) throws IOException {
+        super(name);
+        
+        BufferedReader br = new BufferedReader(new FileReader("HpItem_Data.csv"));
+        String str = br.readLine();
+        while(str != null) {
+            if (str.contains(getName())) {
+                Object[] objArray = str.split(",");
+                setItemId((int)objArray[1]);
+                setPrice((int)objArray[2]);
+                this.minHealPoint = (int)objArray[3];
+                this.healRange = (int)objArray[4];
+                setExplanation((String)objArray[5]);
+            }
+            str = br.readLine();
+        }
     }
     // メソッド
     public int use() {
-        this.healPoint = new java.util.Random().nextInt(this.healRange) + this.minHealPoint;
-        return this.healPoint;
+        return new java.util.Random().nextInt(this.healRange) + this.minHealPoint;
     }
-    // アクセサ
-    public int getHealPoint() { return this.healPoint; }
-    public void setHealPoint(int healPoint) { this.healPoint = healPoint; }
 }

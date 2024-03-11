@@ -229,18 +229,15 @@ public class Brave {
                 return;
         }
     }
-    public void displayItemBag() throws IOException {   // アイテムリスト確認
-        // -1 が選択されるまで表示し続けるwhile
-        for (int i = 0; i < 8; i++) {
-            if (this.itemBag.getItem()[i][0] == null) {
-                continue;
-            }
-            System.out.println(this.itemBag.getItem()[i][0].getName() + "：" + this.itemBag.getItem()[i][0].getHaveCount() + "こ");
-            System.out.println("つかいたいアイテムはありますか？");
-            int itemId = new java.util.Random().nextInt();
+    public void checkItemBag() throws IOException {   // アイテムリスト確認
+        int itemId = 0;
 
-            String itemName = itemIdToItemName(itemId);
-        }
+        do {
+            this.itemBag.displayItemBag();
+            System.out.println("つかいたいアイテムはありますか？(-1でマップへ)");
+            itemId = new java.util.Random().nextInt();
+            useItem(itemId);
+        } while(itemId != -1);
     }
     public void checkStatus() {     // ステータス確認
         String str = """
@@ -423,46 +420,62 @@ public class Brave {
         this.turnCount += 1;
     }
 
-    public void useItem() throws IOException {    // 戦闘においてアイテムを使用するメソッド
+    public void battleUseItem() throws IOException {    // 戦闘においてアイテムを使用するメソッド
         System.out.println("どのアイテムをつかう？(-1でもどる)");
-        // ここでアイテム一覧を表示、0で戦う選択肢に戻るなど
         Text.chooseChangedText(itemFormat);
         int itemId = new java.util.Scanner(System.in).nextInt();
         if (itemId == -1) {
             return;
         }
+        useItem(itemId);
+        this.turnCount += 1;
+    }
+    public void useItem(int itemId) throws IOException {
+        this.itemBag.displayItemBag();
         String useItemName = itemIdToItemName(itemId);
+        /* 
+         * 持っていないアイテムは表示されないようにしているが、もし持っていないアイテムの数字が
+         * 入力されたときにその入力を弾く処理を入れなければならない。現段階だと持っていないアイテムも使える
+         * プログラムになってしまっている。
+         * てかこれ下のswitch文内の処理、アイテム間で違ってる部分が"hp"healか"mp"healかだけでは？
+         * アイテムデータファイルにHP系かMP系かのデータも入れたらif(HP)-else(MP)で記述できるのでは？
+         */
 
         switch(useItemName) {
             case "やくそう":
                 hpHeal(this.itemBag.getItem()[itemId][0].use());
-                this.itemBag.decrease(new Herb());
+                this.itemBag.decrease(itemId);
                 break;
             case "まりょくのみず":
-                mpHeal(this.itemBag.get(MAGIC_WATER).use());
+                mpHeal(this.itemBag.getItem()[itemId][0].use());
+                this.itemBag.decrease(itemId);
                 break;
             case "かいふくやく":
-                hpHeal(this.itemBag.get(MEDICINE_LIQUID).use());
+                hpHeal(this.itemBag.getItem()[itemId][0].use());
+                this.itemBag.decrease(itemId);
                 break;
             case "まほうのせいすい":
-                mpHeal(this.itemBag.get(MAGIC_HOLY_WATER).use());
+                mpHeal(this.itemBag.getItem()[itemId][0].use());
+                this.itemBag.decrease(itemId);
                 break;
             case "せいめいそう":
-                hpHeal(this.itemBag.get(LIFE_HERB).use());
+                hpHeal(this.itemBag.getItem()[itemId][0].use());
+                this.itemBag.decrease(itemId);
                 break;
             case "いにしえのまどうしょ":
-                mpHeal(this.itemBag.get(ANCIENT_MAGIC_BOOK).use());
+                mpHeal(this.itemBag.getItem()[itemId][0].use());
+                this.itemBag.decrease(itemId);
                 break;
             case "だいちのしゅくふく":
-                hpHeal(this.itemBag.get(BLESSING_OF_GROUND).use());
+                hpHeal(this.itemBag.getItem()[itemId][0].use());
+                this.itemBag.decrease(itemId);
                 break;
             case "めがみのしゅくふく":
-                mpHeal(this.itemBag.get(BLESSING_OF_VENUS).use());
+                mpHeal(this.itemBag.getItem()[itemId][0].use());
+                this.itemBag.decrease(itemId);
                 break;
         }
-        this.turnCount += 1;
     }
-
     public void run() {     // 戦闘において逃げるメソッド
         // if (相手がボスの場合) 逃げられない
         // if (自分と相手のレベルと素早さの合計を比べてなんやかんや計算) → 逃げられるか無理かを決める
@@ -612,49 +625,7 @@ public class Brave {
         }
         return bossKillCount;
     }
-    public boolean checkItemBagEmpty() {                       // itemBagが空かどうかを確認する
-        return this.itemBag.size() == 0;
-    }
-    public boolean checkItemDuplication(String itemName) {     // itemBagに既にアイテムがあるか確認する
-        for (int i = 0; i < this.itemBag.size(); i++) {
-            String str = this.itemBag.get(i).getName();
-            if (str.contains(itemName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    public int returnItemPosition(String itemName) {     // 任意のアイテムがitemBagに入っている位置を返す
-        for (int i = 0; i < this.itemBag.size(); i++) {
-            String str = this.itemBag.get(i).getName();
-            if (str.contains(itemName)) {
-                return i;
-            }
-        }
-        return -1;
-    }
-    public int returnBuyCount(Item item) {      // 購入数を返す
-        System.out.print("いくつかいますか？");
-        Text.printAnswerArrow();
-        int buyCount = new java.util.Scanner(System.in).nextInt();
 
-        if (buyCount > (99 - item.getHaveCount())) {
-            System.out.println("アイテムがもてるのは 99こ までです。");
-            System.out.println("ぜんぶで 99こ になるようにこうにゅうします。");
-            return 99 - item.getHaveCount();
-        }
-        return buyCount;
-    }
-    public void buyItem(int itemNumber, String itemName) {
-        // 初入手かどうかのチェック
-        if (checkItemBagEmpty() && !checkItemDuplication(itemName)) {
-            this.itemBag.add(itemNumber, createItemInstance(itemName));
-            itemBag.get(itemNumber).plusHaveCount(returnBuyCount(itemBag.get(itemNumber)));
-            return;
-        }
-        itemBag.get(itemNumber).plusHaveCount(returnBuyCount(itemBag.get(itemNumber)));
-        return;
-    }
     public Item createItemInstance(String itemName) throws IOException {
         Item item = new Herb();
         this.itemBag.setItem(new Herb());
@@ -698,7 +669,7 @@ public class Brave {
     public String itemIdToItemName(int itemId) throws IOException {
         // csvファイルから入力値(識別番号)を検索し、その行の名前をString変数に格納する処理
         String itemName = "";
-        BufferedReader br = new BufferedReader(new FileReader("ItemId_Data.csv"));
+        BufferedReader br = new BufferedReader(new FileReader("..\\data\\ItemId_data.csv"));
         String str = br.readLine();
         while(str != null) {
             if (str.contains(Integer.toString(itemId))) {
@@ -708,6 +679,13 @@ public class Brave {
             str = br.readLine();
         }
         return itemName;
+    }
+    public void putInItemBag(int itemId) {
+        if (this.itemBag.getItem()[itemId][0] == null) {
+            Item herb = new herb();
+        } else {
+            this.itemBag.getItem()[itemId][herb.haveCount] = new herb;
+        }
     }
     // アクセサ
     public String getName() { return this.name; }

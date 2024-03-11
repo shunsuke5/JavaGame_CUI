@@ -1,43 +1,59 @@
 package itembag;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 import item.Item;
+import item.hpitem.*;
+import item.mpitem.*;
 
 public class ItemBag {
-    private int itemId; // アイテム識別番号
     private Item[][] item;      // アイテムインスタンス
 
     // コンストラクタ
-    public ItemBag() {
+    public ItemBag() throws IOException {   // Item[][]の要素数をデータファイルから読み込んで初期化する処理
+        int i = 0;
 
+        BufferedReader br = new BufferedReader(new FileReader("..\\data\\ItemId_data.csv"));
+        String str = br.readLine();
+        while(str != null) {
+            i++;
+            br.readLine();
+        }
+        item = new Item[i][99];
     }
     // メソッド
-
-    // increase(new herb(), 3)
-    // this.item[0][0] = new herb();
-    // (int i = 3; i < 5; i++) {
-        // this.item[item.getItemId()][i] = item;
-    // }
-    /*
-     * 3個持っていて、5個買う
-     * itemCount = 3;
-     * add = 5;
-     * total = 8;
-     * for (int i = itemCount(3); i(3) < total(8); i++) {
-     *      this.item[item.getItemId()][i(3)] = item;
-     * }
-     */
-
-    public void increase(Item item, int add) {  // アイテムが増える動作
-        int itemCount = item.getHaveCount();
+    public void increase(int itemId, int add) throws IOException {  // アイテムが増える動作
+        int itemCount = checkStorage(itemId);
         int total = itemCount + add;    // アイテムの合計所持数 = 現在のアイテム所持数 + 増えるアイテム数
 
         for (int i = itemCount; i < total; i++) {
-            this.item[item.getItemId()][i] = item;
+            this.item[itemId][i] = createItem(itemId);    // ここでアイテムを生成したい　new アイテム();　としたい
         }
-        item.setHaveCount(total);
     }
-    public void decrease(Item item) {           // アイテムが減る動作
-        this.item[item.getItemId()][item.getHaveCount()] = null;
-        item.minusHaveCount();
+    public void decrease(int itemId) {           // アイテムが減る動作
+        this.item[itemId][checkStorage(itemId)] = null;
+    }
+    public void displayItemBag() throws IOException {
+        // ItemId_data.csvファイルから各アイテムの識別番号を取得していく
+        int itemId;
+        String itemName;
+
+        BufferedReader br = new BufferedReader(new FileReader("..\\data\\ItemId_data.csv"));
+        String str = br.readLine();
+        while(str != null) {
+            Object[] objArray = str.split(",");
+            itemName = (String)objArray[0];
+            itemId = (int)objArray[1];
+            if (checkStorage(itemId) == 0) {
+                str = br.readLine();
+            } else {
+                // ここでアイテムを表示できる？
+                int itemCount = checkStorage(itemId);
+                System.out.println(itemName + "：" + itemCount + "こ");
+                str = br.readLine();
+            }
+        }
     }
     public int checkStorage(int itemId) {       // 配列の要素がどこまで入っているかを調べる
         int i = 0;
@@ -46,20 +62,42 @@ public class ItemBag {
         }
         return i;
     }
-
-    /*
-     * item[0][0] = new Herb();
-     * item[0][1] = new Herb();
-     * item[1][1] = new MagicWater();
-     * item[0][1] = null;
-     * this.itemBag.increase(herb,herb.HERB)
-     * this.itemBag += new Herb();
-     * this.itemBag.herb.use();
-     */
+    public Item createItem(int itemId) throws IOException {
+        String itemName = itemIdToItemName(itemId);
+        Item item = new Herb();
+        switch(itemName) {
+            case "やくそう":
+                item = new Herb();
+            case "まりょくのみず":
+                item = new MagicWater();
+            case "かいふくやく":
+                item = new MedicineLiquid();
+            case "まほうのせいすい":
+                item = new MagicHolyWater();
+            case "せいめいそう":
+                item = new LifeHerb();
+            case "いにしえのまどうしょ":
+                item = new AncientMagicBook();
+            case "だいちのしゅくふく":
+                item = new BlessingOfGround();
+            case "めがみのしゅくふく":
+                item = new BlessingOfVenus();
+        }
+        return item;
+    }
+    public String itemIdToItemName(int itemId) throws IOException { // アイテムIDに対応するアイテム名を返す
+        String itemName = "";
+        BufferedReader br = new BufferedReader(new FileReader("..\\data\\ItemId_data.csv"));
+        String str = br.readLine();
+        while(str != null) {
+            if (str.contains(Integer.toString(itemId))) {
+                Object[] objArray = str.split(",");
+                itemName = (String)objArray[0];
+            }
+            str = br.readLine();
+        }
+        return itemName;
+    }
     // アクセサ
-    public int getItemId() { return this.itemId; }
     public Item[][] getItem() { return this.item; }
-    // getItem()[0][0]　といった書き方は勇者クラス側で可能か？　→　なんかいけそう
-
-    public void setItemId(int itemId) { this.itemId = itemId; }
 }

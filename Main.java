@@ -32,12 +32,6 @@ public class Main {
         
         */
         
-        // ↓↓↓Itemクラスのコンストラクタに使えそうなファイル読み取りプログラム↓↓↓
-        BufferedReader br = new BufferedReader(new FileReader("test.txt"));
-        String str = br.readLine();
-        while(str != null) {
-            System.out.println(str);
-            str = br.readLine();
-        }
+        
     }
 }

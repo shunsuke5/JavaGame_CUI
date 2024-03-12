@@ -32,6 +32,19 @@ public class Main {
         
         */
         
-        
+        if(a()) {
+            System.out.println("a()でtrueが返されました");
+        } else {
+            System.out.println("a()でfalseが返されました");
+        }
+    }
+    public static boolean a() {
+        System.out.print("数字を入力してください：");
+        int num = new java.util.Scanner(System.in).nextInt();
+        if (num == 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

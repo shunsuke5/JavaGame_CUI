@@ -42,13 +42,12 @@ public class ItemBag {
         BufferedReader br = new BufferedReader(new FileReader("..\\data\\ItemId_data.csv"));
         String str = br.readLine();
         while(str != null) {
-            Object[] objArray = str.split(",");
-            itemName = (String)objArray[0];
-            itemId = (int)objArray[1];
+            String[] itemArray = str.split(",");
+            itemName = itemArray[0];
+            itemId = Integer.parseInt(itemArray[1]);
             if (checkStorage(itemId) == 0) {
                 str = br.readLine();
             } else {
-                // ここでアイテムを表示できる？
                 int itemCount = checkStorage(itemId);
                 System.out.println(itemName + "：" + itemCount + "こ");
                 str = br.readLine();
@@ -63,40 +62,39 @@ public class ItemBag {
         return i;
     }
     public Item createItem(int itemId) throws IOException {
-        String itemName = itemIdToItemName(itemId);
-        Item item = new Herb();
+        String[] itemArray = itemLookUp(itemId);
+        String itemName = itemArray[0];
         switch(itemName) {
             case "やくそう":
-                item = new Herb();
+                return new Herb();
             case "まりょくのみず":
-                item = new MagicWater();
+                return new MagicWater();
             case "かいふくやく":
-                item = new MedicineLiquid();
+                return new MedicineLiquid();
             case "まほうのせいすい":
-                item = new MagicHolyWater();
+                return new MagicHolyWater();
             case "せいめいそう":
-                item = new LifeHerb();
+                return new LifeHerb();
             case "いにしえのまどうしょ":
-                item = new AncientMagicBook();
+                return new AncientMagicBook();
             case "だいちのしゅくふく":
-                item = new BlessingOfGround();
+                return new BlessingOfGround();
             case "めがみのしゅくふく":
-                item = new BlessingOfVenus();
+                return new BlessingOfVenus();
         }
-        return item;
+        return null;
     }
-    public String itemIdToItemName(int itemId) throws IOException { // アイテムIDに対応するアイテム名を返す
-        String itemName = "";
+    public String[] itemLookUp(int itemId) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("..\\data\\ItemId_data.csv"));
         String str = br.readLine();
         while(str != null) {
             if (str.contains(Integer.toString(itemId))) {
-                Object[] objArray = str.split(",");
-                itemName = (String)objArray[0];
+                String[] itemArray = str.split(",");
+                return itemArray;
             }
             str = br.readLine();
         }
-        return itemName;
+        return null;
     }
     // アクセサ
     public Item[][] getItem() { return this.item; }

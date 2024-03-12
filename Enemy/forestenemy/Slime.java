@@ -13,6 +13,7 @@ public class Slime extends Enemy {
         setAgility(1);
         setPoint(2);
         setMoney(2);
+        setTurnCount();
     }
     // メソッド
     public int turn(String braveName, int braveDefense) {

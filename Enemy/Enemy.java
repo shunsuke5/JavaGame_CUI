@@ -1,17 +1,18 @@
 package enemy;
 
 public abstract class Enemy {
-    private String name;    // モンスター名
-    private int level;      // レベル、これを用いて逃げるかの判断をする
-    private int hp;         // 体力
-    private int mp;         // 魔力
-    private int attack;     // 攻撃力、これが通常攻撃の最低値となる
-    private int defense;    // 防御力
-    private int agility;    // すばやさ
-    private int point;      // 経験値
+    private String name;        // モンスター名
+    private int level;          // レベル、これを用いて逃げるかの判断をする
+    private int hp;             // 体力
+    private int mp;             // 魔力
+    private int attack;         // 攻撃力、これが通常攻撃の最低値となる
+    private int defense;        // 防御力
+    private int agility;        // すばやさ
+    private int point;          // 経験値
     private int dropMoney;      // 落とすお金
-    private boolean escapeFlag;     // 敵が逃げた時にtrue
-    private int enemyCount; // 敵の数、今回は使わない予定
+    private int turnCount;      // ターン経過数
+    private boolean escapeFlag; // 敵が逃げた時にtrue
+    private int enemyCount;     // 敵の数、今回は使わない予定
 
     // 抽象メソッド
     public abstract int turn(String braveName, int braveDefense);    // 敵の行動をランダムに決めるメソッド
@@ -84,6 +85,7 @@ public abstract class Enemy {
     public int getMoney() { return this.dropMoney; }
     public int getEnemyCount() { return this.enemyCount; }
     public boolean getEscapeFlag() { return this.escapeFlag; }
+    public int getTurnCount() { return this.turnCount; }
 
     public void setName(String name) { this.name = name; }
     public void setLevel(int level) { this.level = level; }
@@ -96,4 +98,6 @@ public abstract class Enemy {
     public void setMoney(int dropMoney) { this.dropMoney = dropMoney; }
     public void setEnemyCount(int enemyCount) { this.enemyCount = enemyCount; }
     public void setEscapeFlag(boolean escapeFlag) { this.escapeFlag = escapeFlag; }
+    public void setTurnCount() { this.turnCount = 0; }
+    public void plusTurnCount() { this.turnCount++; }
 }

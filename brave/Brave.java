@@ -6,9 +6,11 @@ import java.io.IOException;
 import java.nio.file.attribute.GroupPrincipal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 import map.*;
+import shop.itemshop.ItemShop;
 import spell.*;
 import enemy.Enemy;
 import equipment.*;
@@ -47,8 +49,7 @@ public class Brave {
     private Sword sword;                        // 剣
     private Helmet helmet;                      // かぶと
     private Armor armor;                        // よろい
-    // private ArrayList<Item> itemBag;            // 所持アイテム一覧
-    private ItemBag itemBag;                   // 自作アイテムバッグクラス
+    private ItemBag itemBag;                    // 自作アイテムバッグクラス
     private ArrayList<Equipment> equipmentBag;  // 所持そうび一覧
 
     // 呪文
@@ -60,16 +61,6 @@ public class Brave {
     private Map mountainMap = new Mountain();
 
     // プログラム用変数
-    private final int ITEM_KINDS = 8;           // アイテムの種類数
-    private final int HERB = 1;                 // アイテム番号(やくそう)
-    private final int MAGIC_WATER = 2;          // アイテム番号(まりょくのみず)
-    private final int MEDICINE_LIQUID = 3;      // アイテム番号(かいふくやく)
-    private final int MAGIC_HOLY_WATER = 4;     // アイテム番号(まほうのせいすい)
-    private final int LIFE_HERB = 5;            // アイテム番号(せいめいそう)
-    private final int ANCIENT_MAGIC_BOOK = 6;   // アイテム番号(いにしえのまどうしょ)
-    private final int BLESSING_OF_GROUND = 7;   // アイテム番号(だいちのしゅくふく)
-    private final int BLESSING_OF_VENUS = 8;    // アイテム番号(めがみのしゅくふく)
-
     private int levelIndex = 0;         // checkLevelUpメソッドでのみ使用、アクセサ不要
     private int spellIndex = 0;         // checkSpellUpメソッドでのみ使用、アクセサ不要
     private String spellFormat;         // たたかいの呪文テキスト
@@ -128,7 +119,10 @@ public class Brave {
                 break;
         }
     }
-    public void chooseMapAction() {   // マップにおいてどの行動をするか選ぶメソッド
+    public void chooseMapAction() throws IOException {   // マップにおいてどの行動をするか選ぶメソッド
+        // 違った選択肢を選ばれたら繰り返したいのでwhileを追加する
+        // というか、chooseMapActionはラスボス戦まで続くので
+        // while (ラスボス戦フラグ == off) のような形？
         String str = """
                 　　　　　てきをさがす：1
                 　　　　　やどでやすむ：2
@@ -146,9 +140,7 @@ public class Brave {
             Text.chooseChangedText(str);
         }
         int number = new java.util.Scanner(System.in).nextInt();
-        // 違った選択肢を選ばれたら繰り返したいのでwhileを追加する
-        // というか、chooseMapActionはラスボス戦まで続くので
-        // while (ラスボス戦フラグ == off) のような形？
+
         switch(number) {
             case 1:
                 searchEnemy();      // 敵と戦う
@@ -160,7 +152,7 @@ public class Brave {
                 shopping();         // アイテム購入
                 break;
             case 4:
-                displayItemBag();    // アイテムリスト確認
+                checkItemBag();    // アイテムリスト確認
                 break;
             case 5:
                 checkStatus();      // ステータス確認
@@ -178,7 +170,7 @@ public class Brave {
                 break;              // 想定外の選択肢の場合、もう一度選ばせる
         }
     }
-    public void searchEnemy() {     // 敵と戦う
+    public void searchEnemy() throws IOException {     // 敵と戦う
         System.out.println(this.name + "はてきをみつけた！");
         battle(currentLocation().createEnemy());
     }
@@ -192,41 +184,12 @@ public class Brave {
         } else {
             return;
         }
-        
     }
     public void shopping() throws IOException {        // アイテム購入
-        System.out.println("なにをかいますか？(0でマップアクションへもどる)");
-        Text.chooseChangedText(this.itemFormat);
-        int itemId = new java.util.Scanner(System.in).nextInt();
-        String itemName = itemIdToItemName(itemId);
-
-        switch(itemName) {
-            case "やくそう":
-                buyItem(HERB, "やくそう");
-                break;
-            case "まりょくのみず":
-                buyItem(MAGIC_WATER, "まりょくのみず");
-                break;
-            case "かいふくやく":
-                buyItem(MEDICINE_LIQUID, "かいふくやく");
-                break;
-            case "まほうのせいすい":
-                buyItem(MAGIC_HOLY_WATER, "まほうのせいすい");
-                break;
-            case "せいめいそう":
-                buyItem(LIFE_HERB, "せいめいそう");
-                break;
-            case "いにしえのまどうしょ":
-                buyItem(ANCIENT_MAGIC_BOOK, "いにしえのまどうしょ");
-                break;
-            case "だいちのしゅくふく":
-                buyItem(BLESSING_OF_GROUND, "だいちのしゅくふく");
-                break;
-            case "めがみのしゅくふく":
-                buyItem(BLESSING_OF_VENUS, "めがみのしゅくふく");
-                break;
-            default:
-                return;
+        ItemShop itemShop = new ItemShop();
+        HashMap<Integer,Integer> buyList = itemShop.sell(this.bossKillCount);
+        for (int itemId : buyList.keySet()) {
+            this.itemBag.increase(itemId, buyList.get(itemId));
         }
     }
     public void checkItemBag() throws IOException {   // アイテムリスト確認
@@ -255,19 +218,18 @@ public class Brave {
         // 勝ったら以下のようにボスキルカウントに+1する
         this.bossKillCount++;
         // ショップのアイテムを増やす処理を以下に記述
-        addItemFormat();
     }
     public void searchHikyou() {    // 秘境探索(中ボス)
         // 秘境が解放されているかのチェック
     }
-    public void battle(Enemy e) {   // 敵とエンカウントする
+    public void battle(Enemy e) throws IOException {   // 敵とエンカウントする
         System.out.println(e.getName() + "があらわれた！");
         this.turnCount = 0;
 
         while (!this.battleWin || !this.battleLose || !this.escapeFlag || !e.getEscapeFlag()) {
             // じゅもんやアイテム画面から「0」で戻った時、ここに戻りたい
-            if (this.agility >= e.getAgility()) {   // 勇者が先攻の場合
-                do {    // 勇者ターン
+            if (this.agility >= e.getAgility()) {               // 勇者が先攻の場合
+                do {                                            // 勇者ターン
                     System.out.println(this.name + "はどうする？");
                     System.out.println("攻撃：１　呪文：２　防御：３　アイテム：４　逃げる：５");
                     System.out.print("\n\s->\s");
@@ -284,7 +246,7 @@ public class Brave {
                             defense();
                             break;
                         case 4:
-                            useItem();
+                            battleUseItem();
                             break;
                         case 5:
                             run();
@@ -292,38 +254,35 @@ public class Brave {
                         default:
                             break;
                     }
-                } while(this.turnCount < ( this.turnCount + 1 ));
-                // 勇者ターン終了、敵HPチェック
-                if (e.getHp() <= 0) {
+                } while(this.turnCount == e.getTurnCount());
+                if (e.getHp() <= 0) {                           // 勇者ターン終了、敵HPチェック
                     win(e);
                     continue;
                 }
-                if (e.runJadgement(this.level)) {   // 敵の逃げ判定
+                if (e.runJadgement(this.level)) {               // 敵の逃げ判定
                     e.run();
                     continue;
-                } else {    // 敵ターン
-                    int damage = e.turn(this.name,this.defense);
-                    this.hp -= damage;
                 }
-                // 敵ターン終了、勇者HPチェック
-                if (this.hp <= 0) {
+                int damage = e.turn(this.name,this.defense);    // 敵ターン
+                this.hp -= damage;
+                e.plusTurnCount();
+                if (this.hp <= 0) {                             // 敵ターン終了、勇者HPチェック
                     die();
                     continue;
                 }
-            } else {    // 敵が先攻の場合
+            } else {                                            // 敵が先攻の場合
                 if (e.runJadgement(this.level)) {
                     e.run();
                     continue;
-                } else {    // 敵ターン
-                    int damage = e.turn(this.name,this.defense);
-                    this.hp -= damage;
                 }
-                // 敵ターン終了、勇者HPチェック
-                if (this.hp <= 0) {
+                int damage = e.turn(this.name,this.defense);    // 敵ターン
+                this.hp -= damage;
+                e.plusTurnCount();
+                if (this.hp <= 0) {                             // 敵ターン終了、勇者HPチェック
                     die();
                     continue;
                 }
-                do {    // 勇者ターン
+                do {                                            // 勇者ターン
                     System.out.println(this.name + "はどうする？");
                     System.out.println("攻撃：１　呪文：２　防御：３　アイテム：４　逃げる：５");
                     System.out.print("\n\s->\s");
@@ -340,7 +299,7 @@ public class Brave {
                             defense();
                             break;
                         case 4:
-                            useItem();
+                            battleUseItem();
                             break;
                         case 5:
                             run();
@@ -348,9 +307,8 @@ public class Brave {
                         default:
                             break;
                     }
-                } while(this.turnCount < ( this.turnCount + 1 ));
-                // 勇者ターン終了、敵HPチェック
-                if (e.getHp() <= 0) {
+                } while(this.turnCount != e.getTurnCount());
+                if (e.getHp() <= 0) {                           // 勇者ターン終了、敵HPチェック
                     win(e);
                     continue;
                 }
@@ -363,18 +321,18 @@ public class Brave {
 
         if (1 <= result && result <= 10) {              // 1から10が出たらミス
             System.out.println("ミス！" + e.getName() + "はダメージをうけない！");
-            this.turnCount += 1;
+            this.turnCount++;
         } else if (95 <= result && result >= 100) {     // 95から100が出たら痛恨の一撃
             int damage = calculateDamage(e) * 2;
             System.out.println("かいしんのいちげき！");
             System.out.println(e.getName() + "に" + damage + "ポイントのダメージ！");
             e.setHp(e.getHp() - damage);
-            this.turnCount += 1;
+            this.turnCount++;
         } else {                                        // それ以外は通常攻撃
             int damage = calculateDamage(e);
             System.out.println(e.getName() + "に" + damage + "ポイントのダメージ！");
             e.setHp(e.getHp() - damage);
-            this.turnCount += 1;
+            this.turnCount++;
         }
     }
     public void spell(Enemy e) {    // 戦闘において呪文を使用するメソッド
@@ -417,64 +375,34 @@ public class Brave {
         int strongDefense = (int) (this.defense * 1.5);
         // この行動は素早さ関係なく勇者が先攻となる
         // そしてこのターン終了時には防御力を元に戻さなければならない
-        this.turnCount += 1;
+        this.turnCount++;
     }
 
     public void battleUseItem() throws IOException {    // 戦闘においてアイテムを使用するメソッド
         System.out.println("どのアイテムをつかう？(-1でもどる)");
-        Text.chooseChangedText(itemFormat);
+        this.itemBag.displayItemBag();
         int itemId = new java.util.Scanner(System.in).nextInt();
         if (itemId == -1) {
             return;
         }
-        useItem(itemId);
-        this.turnCount += 1;
-    }
-    public void useItem(int itemId) throws IOException {
-        this.itemBag.displayItemBag();
-        String useItemName = itemIdToItemName(itemId);
-        /* 
-         * 持っていないアイテムは表示されないようにしているが、もし持っていないアイテムの数字が
-         * 入力されたときにその入力を弾く処理を入れなければならない。現段階だと持っていないアイテムも使える
-         * プログラムになってしまっている。
-         * てかこれ下のswitch文内の処理、アイテム間で違ってる部分が"hp"healか"mp"healかだけでは？
-         * アイテムデータファイルにHP系かMP系かのデータも入れたらif(HP)-else(MP)で記述できるのでは？
-         */
-
-        switch(useItemName) {
-            case "やくそう":
-                hpHeal(this.itemBag.getItem()[itemId][0].use());
-                this.itemBag.decrease(itemId);
-                break;
-            case "まりょくのみず":
-                mpHeal(this.itemBag.getItem()[itemId][0].use());
-                this.itemBag.decrease(itemId);
-                break;
-            case "かいふくやく":
-                hpHeal(this.itemBag.getItem()[itemId][0].use());
-                this.itemBag.decrease(itemId);
-                break;
-            case "まほうのせいすい":
-                mpHeal(this.itemBag.getItem()[itemId][0].use());
-                this.itemBag.decrease(itemId);
-                break;
-            case "せいめいそう":
-                hpHeal(this.itemBag.getItem()[itemId][0].use());
-                this.itemBag.decrease(itemId);
-                break;
-            case "いにしえのまどうしょ":
-                mpHeal(this.itemBag.getItem()[itemId][0].use());
-                this.itemBag.decrease(itemId);
-                break;
-            case "だいちのしゅくふく":
-                hpHeal(this.itemBag.getItem()[itemId][0].use());
-                this.itemBag.decrease(itemId);
-                break;
-            case "めがみのしゅくふく":
-                mpHeal(this.itemBag.getItem()[itemId][0].use());
-                this.itemBag.decrease(itemId);
-                break;
+        if (useItem(itemId)) {
+            this.turnCount++;
+        } else {
+            return;
         }
+    }
+    public boolean useItem(int itemId) throws IOException {    // アイテムを使用するメソッド
+        // 使用したいアイテムがあれば使用してtrue、なければfalseを返す
+        if (this.itemBag.checkStorage(itemId) == 0) {
+            return false;
+        }
+        String[] itemArray = this.itemBag.itemLookUp(itemId);
+        if (itemArray[2].equals("HP")) {
+            hpHeal(this.itemBag.getItem()[itemId][0].use());
+        } else {
+            mpHeal(this.itemBag.getItem()[itemId][0].use());
+        }
+        return true;
     }
     public void run() {     // 戦闘において逃げるメソッド
         // if (相手がボスの場合) 逃げられない
@@ -554,25 +482,6 @@ public class Brave {
         spellNameList.add("ミョラゾーマ：");
         return java.util.Collections.unmodifiableList(spellNameList);
     }
-    public void addItemFormat() {
-        List<String> shopItemList = createShopItemList();
-        do {
-            this.itemFormat += "\n" + shopItemList.get(this.itemIndex) + this.itemChoiceNumber;
-            this.itemIndex++;
-            this.itemChoiceNumber++;    
-        } while(this.itemIndex % 2 == 0);
-    }
-
-    public List<String> createShopItemList() {      // ショップのアイテムリストを作成する
-        List<String> shopItemList = new ArrayList<String>();
-        shopItemList.add("　　　　かいふくやく：");
-        shopItemList.add("　　まほうのせいすい：");
-        shopItemList.add("　　　　せいめいそう：");
-        shopItemList.add("いにしえのまどうしょ：");
-        shopItemList.add("　だいちのしゅくふく：");
-        shopItemList.add("　めがみのしゅくふく：");
-        return java.util.Collections.unmodifiableList(shopItemList);
-    }
     public int calculateDamage(Enemy e) {   // ダメージ値を計算して返す
         final int DEFAULT_RANGE = 1;
         int attackRange = (this.attack % 4) + DEFAULT_RANGE;    // 攻撃力が4増える毎にダメージ範囲を +1
@@ -593,7 +502,7 @@ public class Brave {
             return;
         }
         hpHeal(point);
-        this.turnCount += 1;
+        this.turnCount++;
     }
     public void attackSpell(int point, Enemy e) {   // 攻撃呪文で行う処理
         if (point == 0) {
@@ -601,7 +510,7 @@ public class Brave {
         }
         e.setHp(e.getHp() - point);
         Text.attackSpell(e.getName(), point);
-        this.turnCount += 1;
+        this.turnCount++;
     }
     public Map currentLocation() {  // 現在地を返す
         if (this.forestMap.getThereIs()) {
@@ -626,30 +535,6 @@ public class Brave {
         return bossKillCount;
     }
 
-    public Item createItemInstance(String itemName) throws IOException {
-        Item item = new Herb();
-        this.itemBag.setItem(new Herb());
-        switch(itemName) {
-            case "やくそう":
-                return new Herb();
-            case "まりょくのみず":
-                return new MagicWater();
-            case "かいふくやく":
-                return new MedicineLiquid();
-            case "まほうのせいすい":
-                return new MagicHolyWater();
-            case "せいめいそう":
-                return new LifeHerb();
-            case "いにしえのまどうしょ":
-                return new AncientMagicBook();
-            case "だいちのしゅくふく":
-                return new BlessingOfGround();
-            case "めがみのしゅくふく":
-                return new BlessingOfVenus();
-        }
-
-        return item;
-    }
     public void hpHeal(int healPoint) {      // 勇者の体力を回復する際に呼び出すメソッド
         if (healPoint > (this.maxHp - this.hp)) {
             this.hp = this.maxHp;
@@ -665,27 +550,6 @@ public class Brave {
             this.mp += healPoint;
         }
         System.out.println(this.name + "のMPが" + healPoint + "ポイントかいふくした！");
-    }
-    public String itemIdToItemName(int itemId) throws IOException {
-        // csvファイルから入力値(識別番号)を検索し、その行の名前をString変数に格納する処理
-        String itemName = "";
-        BufferedReader br = new BufferedReader(new FileReader("..\\data\\ItemId_data.csv"));
-        String str = br.readLine();
-        while(str != null) {
-            if (str.contains(Integer.toString(itemId))) {
-                Object[] objArray = str.split(",");
-                itemName = (String)objArray[0];
-            }
-            str = br.readLine();
-        }
-        return itemName;
-    }
-    public void putInItemBag(int itemId) {
-        if (this.itemBag.getItem()[itemId][0] == null) {
-            Item herb = new herb();
-        } else {
-            this.itemBag.getItem()[itemId][herb.haveCount] = new herb;
-        }
     }
     // アクセサ
     public String getName() { return this.name; }

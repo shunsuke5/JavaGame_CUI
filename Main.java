@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.LinkedHashMap;
+import java.util.WeakHashMap;
 import java.util.Map;
 import java.io.FilterOutputStream;
 
@@ -32,19 +32,15 @@ public class Main {
         
         */
         
-        if(a()) {
-            System.out.println("a()でtrueが返されました");
-        } else {
-            System.out.println("a()でfalseが返されました");
+        WeakHashMap<Integer,Integer> a = new WeakHashMap<>();
+        a.put(0, 3);
+        a.put(1, 2);
+        System.out.println(a.get(0));
+
+        if (a.containsKey(0)) {
+            a.put(0, a.get(0) + 5);
         }
-    }
-    public static boolean a() {
-        System.out.print("数字を入力してください：");
-        int num = new java.util.Scanner(System.in).nextInt();
-        if (num == 0) {
-            return true;
-        } else {
-            return false;
-        }
+
+        System.out.println(a.get(0));
     }
 }

@@ -24,16 +24,20 @@ public class ItemShop {
             System.out.println("なにをかいますか？(-1でもどる)\n");
             displayMenu(bossKillCount);
             int itemId = Text.inputChoice();
-            if (itemId == -1) {  // -1を選んだ場合マップアクションへ
+            if (itemId == -1) {                 // -1を選んだ場合マップアクションへ
                 this.leaveFlag = true;
                 continue;
             }
             System.out.println("いくつかいますか？(-1でこうにゅうがめんにもどる)");
             int count = Text.inputChoice();
-            if (count == -1) {   // -1を選んだ場合ショップのアイテム一覧へ
+            if (count == -1) {                  // -1を選んだ場合ショップのアイテム一覧へ
                 continue;
             }
-            buyList.put(itemId, count);
+            if (buyList.containsKey(itemId)) {  // 既に同じアイテムを買っていた場合の処理
+                buyList.put(itemId,( buyList.get(itemId) + count ));
+            } else {
+                buyList.put(itemId, count);
+            }
             System.out.println("おかいあげありがとうございます。");
             System.out.println("ほかにもなにかかいますか？");
             System.out.println("かう：0　かわない：-1");
@@ -46,6 +50,13 @@ public class ItemShop {
             }
         }
         return buyList;
+    }
+    public int payment(HashMap<Integer,Integer> buyList) {
+        int total = 0;
+        // ファイルからアイテムIDに対応する値段を読み込む処理が必要
+        for (int itemId : buyList.keySet()) {
+
+        }
     }
     public void displayMenu(int bossKillCount) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("..\\..\\data\\ItemId_data.csv"));

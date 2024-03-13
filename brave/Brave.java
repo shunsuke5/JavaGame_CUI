@@ -188,6 +188,7 @@ public class Brave {
     public void shopping() throws IOException {        // アイテム購入
         ItemShop itemShop = new ItemShop();
         HashMap<Integer,Integer> buyList = itemShop.sell(this.bossKillCount);
+        // ここに購入処理を入れたい、またはsell()内にお金の処理を追加する
         for (int itemId : buyList.keySet()) {
             this.itemBag.increase(itemId, buyList.get(itemId));
         }

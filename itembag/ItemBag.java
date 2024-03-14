@@ -12,7 +12,7 @@ public class ItemBag {
 
     // コンストラクタ
     public ItemBag() throws IOException {   // Item[][]の要素数をデータファイルから読み込んで初期化する処理
-        int i = 0;
+        int i = 1;
 
         BufferedReader br = new BufferedReader(new FileReader("..\\data\\ItemId_data.csv"));
         String str = br.readLine();

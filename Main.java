@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.WeakHashMap;
+import java.util.HashMap;
 import java.util.Map;
 import java.io.FilterOutputStream;
 
@@ -31,16 +31,8 @@ public class Main {
         Event.congratulations();
         
         */
-        
-        WeakHashMap<Integer,Integer> a = new WeakHashMap<>();
-        a.put(0, 3);
-        a.put(1, 2);
-        System.out.println(a.get(0));
 
-        if (a.containsKey(0)) {
-            a.put(0, a.get(0) + 5);
-        }
-
-        System.out.println(a.get(0));
+        A a = new A();
+        a.test();
     }
 }

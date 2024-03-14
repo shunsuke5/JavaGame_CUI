@@ -1,7 +1,7 @@
 package shop.itemshop;
 import text.Text;
+import brave.Brave;
 
-import java.util.HashMap;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,15 +14,14 @@ public class ItemShop {
         
     }
     // メソッド
-    public HashMap<Integer,Integer> sell(int bossKillCount) throws IOException {
+    public void sell(Brave b) throws IOException {
         // 購入するアイテムとその購入数をHashMapの形で返す
         this.leaveFlag = false;
-        HashMap<Integer,Integer> buyList = new HashMap<Integer,Integer>();
         System.out.println("ショップへようこそ。");
 
         while (!leaveFlag) {
-            System.out.println("なにをかいますか？(-1でもどる)\n");
-            displayMenu(bossKillCount);
+            System.out.println("なにをかいますか？(-1でマップにもどる)\n");
+            displayMenu(b.getBossKillCount());
             int itemId = Text.inputChoice();
             if (itemId == -1) {                 // -1を選んだ場合マップアクションへ
                 this.leaveFlag = true;
@@ -33,30 +32,42 @@ public class ItemShop {
             if (count == -1) {                  // -1を選んだ場合ショップのアイテム一覧へ
                 continue;
             }
-            if (buyList.containsKey(itemId)) {  // 既に同じアイテムを買っていた場合の処理
-                buyList.put(itemId,( buyList.get(itemId) + count ));
-            } else {
-                buyList.put(itemId, count);
+            int price = payment(itemId, count); // 金額の計算
+            if (b.getMoney() < price) {
+                System.out.println("おかねがたりません！");
+                continue;
             }
+            System.out.println("おかいけい" + price + "マネーです。よろしいですか？");
+            System.out.println("かう：0　かわない：-1");
+            if (Text.inputChoice() == -1) {
+                System.out.println("いやひやかしかーーーーい");
+                continue;
+            }
+            b.setMoney(b.getMoney() - price);
+            b.getItemBag().increase(itemId, count);
+            
             System.out.println("おかいあげありがとうございます。");
             System.out.println("ほかにもなにかかいますか？");
             System.out.println("かう：0　かわない：-1");
-            int choice = Text.inputChoice();
-            if (choice == -1) {
+            if (Text.inputChoice() == -1) {
                 this.leaveFlag = true;
                 continue;
             } else {
                 continue;
             }
         }
-        return buyList;
     }
-    public int payment(HashMap<Integer,Integer> buyList) {
-        int total = 0;
-        // ファイルからアイテムIDに対応する値段を読み込む処理が必要
-        for (int itemId : buyList.keySet()) {
-
+    public int payment(int itemId, int count) throws IOException {  // 金額を返す
+        BufferedReader br = new BufferedReader(new FileReader("..\\..\\data\\ItemId_data.csv"));
+        String str = br.readLine();
+        while(str != null) {
+            if (str.contains(Integer.toString(itemId))) {
+                String[] itemArray = str.split(",");
+                return Integer.parseInt(itemArray[3]) * count;
+            }
+            br.readLine();
         }
+        return -1;
     }
     public void displayMenu(int bossKillCount) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("..\\..\\data\\ItemId_data.csv"));
@@ -64,7 +75,8 @@ public class ItemShop {
         while(str != null) {
             String[] itemArray = str.split(",");
             if (bossKillCount <= Integer.parseInt(itemArray[4])) {
-                return;
+                br.readLine();
+                continue;
             }
             System.out.println(itemArray[0] + "：" + itemArray[3] + "m -> " + Integer.parseInt(itemArray[1]));
             str = br.readLine();

@@ -65,9 +65,7 @@ public class Brave {
     private int spellIndex = 0;         // checkSpellUpメソッドでのみ使用、アクセサ不要
     private String spellFormat;         // たたかいの呪文テキスト
     private int spellChoiceNumber = 1;  // 呪文選択時の番号
-    private int itemIndex = 0;          // addShopItem()でのみ使用、アクセサ不要
-    private int itemChoiceNumber = 3;   // ショップのアイテム選択番号
-    private String itemFormat;          // ショップのアイテムテキスト
+    private boolean itemShopLeave;      // ショップを出る時にtrue
     private boolean battleWin;          // バトルに勝った時にtrue
     private boolean battleLose;         // バトルに負けた時にtrue
     private boolean escapeFlag;         // バトルから逃げた時にtrue
@@ -88,11 +86,6 @@ public class Brave {
         this.attack = 10;
         this.defense = 10;
         this.agility = 5;
-
-        this.itemFormat = """
-                　　　　　　やくそう：1
-                　　　まりょくのみず：2
-                """;
 
     }
     // メソッド
@@ -187,11 +180,7 @@ public class Brave {
     }
     public void shopping() throws IOException {        // アイテム購入
         ItemShop itemShop = new ItemShop();
-        HashMap<Integer,Integer> buyList = itemShop.sell(this.bossKillCount);
-        // ここに購入処理を入れたい、またはsell()内にお金の処理を追加する
-        for (int itemId : buyList.keySet()) {
-            this.itemBag.increase(itemId, buyList.get(itemId));
-        }
+        itemShop.sell(this);
     }
     public void checkItemBag() throws IOException {   // アイテムリスト確認
         int itemId = 0;
@@ -565,11 +554,14 @@ public class Brave {
     public int getAttack() { return this.attack; }
     public int getDefense() { return this.defense; }
     public int getAgility() { return this.agility; }
+    public int getMoney() { return this.money; }
     public int getTurnCount() { return this.turnCount; }
     public Sword getSword() { return this.sword; }
     public Helmet getHelmet() { return this.helmet; }
     public Armor getArmor() { return this.armor; }
+    public ItemBag getItemBag() { return this.itemBag; }
     public Spell getSpell() { return this.spell; }
+    public int getBossKillCount() { return this.bossKillCount; }
 
     public void setName(String name) { this.name = name; }
     public void setLevel(int level) { this.level = level; }
@@ -583,6 +575,7 @@ public class Brave {
     public void setAttack(int attack) { this.attack = attack; }
     public void setDefense(int defense) { this.defense = defense; }
     public void setAgility(int agility) { this.agility = agility; }
+    public void setMoney(int money) { this.money = money; }
     public void setTurnCount(int turnCount) { this.turnCount = turnCount; }
     public void setSword(Sword sword) { this.sword = sword; }
     public void setHelmet(Helmet helmet) { this.helmet = helmet; }

@@ -386,12 +386,7 @@ public class Brave {
         if (this.itemBag.checkStorage(itemId) == 0) {
             return false;
         }
-        String[] itemArray = this.itemBag.itemLookUp(itemId);
-        if (itemArray[2].equals("HP")) {
-            hpHeal(this.itemBag.getItem()[itemId][0].use());
-        } else {
-            mpHeal(this.itemBag.getItem()[itemId][0].use());
-        }
+        this.itemBag.getItem()[itemId][0].use(this);
         return true;
     }
     public void run() {     // 戦闘において逃げるメソッド
@@ -486,21 +481,6 @@ public class Brave {
         } else {
             return damage;
         }
-    }
-    public void healSpell(int point) {              // 回復呪文で行う処理
-        if (point == 0) {
-            return;
-        }
-        hpHeal(point);
-        this.turnCount++;
-    }
-    public void attackSpell(int point, Enemy e) {   // 攻撃呪文で行う処理
-        if (point == 0) {
-            return;
-        }
-        e.setHp(e.getHp() - point);
-        Text.attackSpell(e.getName(), point);
-        this.turnCount++;
     }
     public Map currentLocation() {  // 現在地を返す
         if (this.forestMap.getThereIs()) {

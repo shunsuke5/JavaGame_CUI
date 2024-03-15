@@ -1,4 +1,4 @@
-package spell;
+package spell.healspell;
 import brave.*;
 
 public class HealSpell extends Spell {

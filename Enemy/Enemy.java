@@ -1,4 +1,5 @@
 package enemy;
+import brave.*;
 
 public abstract class Enemy {
     private String name;        // モンスター名
@@ -15,28 +16,28 @@ public abstract class Enemy {
     private int enemyCount;     // 敵の数、今回は使わない予定
 
     // 抽象メソッド
-    public abstract int turn(String braveName, int braveDefense);    // 敵の行動をランダムに決めるメソッド
+    public abstract void turn(Brave b);                         // 敵の行動をランダムに決めるメソッド
     
     // メソッド
-    public int attack(String braveName, int braveDefense) {
+    public int attack(Brave b) {
         // ミス、通常攻撃、痛恨の一撃のどれが出るかをランダムに決定する
         int result = new java.util.Random().nextInt(100) + 1;
 
-        if (1 <= result && result <= 10) {  // 1から10が出たらミス
-            System.out.println("ミス！" + braveName + "はダメージをうけない！");
+        if (1 <= result && result <= 10) {                      // 1から10が出たらミス
+            System.out.println("ミス！" + b.getName() + "はダメージをうけない！");
             return 0;
-        } else if (95 <= result && result >= 100) {     // 95から100が出たら痛恨の一撃
-            int damage = calculateDamage(braveDefense) * 2;
+        } else if (95 <= result && result >= 100) {             // 95から100が出たら痛恨の一撃
+            int damage = calculateDamage(b.getDefense()) * 2;
             System.out.println("つうこんのいちげき！");
-            System.out.println(braveName + "に" + damage + "ポイントのダメージ！");
+            System.out.println(b.getName() + "に" + damage + "ポイントのダメージ！");
             return damage;
-        } else {    // それ以外は通常攻撃
-            int damage = calculateDamage(braveDefense);
-            System.out.println(braveName + "に" + damage + "ポイントのダメージ！");
+        } else {                                                // それ以外は通常攻撃
+            int damage = calculateDamage(b.getDefense());
+            System.out.println(b.getName() + "に" + damage + "ポイントのダメージ！");
             return damage;
         }
     }
-    public int calculateDamage(int braveDefense) {      // ダメージ値を計算して返す
+    public int calculateDamage(int braveDefense) {              // ダメージ値を計算して返す
         final int DEFAULT_RANGE = 1;
         int attackRange = (this.attack % 4) + DEFAULT_RANGE;    // 攻撃力が4増える毎にダメージ範囲を +1
         int enemyAttack = new java.util.Random().nextInt(attackRange) + this.attack;
@@ -44,7 +45,7 @@ public abstract class Enemy {
         damage = adjustDamage(damage);
         return damage;
     }
-    public int adjustDamage(int damage) {   // ダメージ値がマイナス値だった場合に0に変換する
+    public int adjustDamage(int damage) {                       // ダメージ値がマイナス値だった場合に0に変換する
         if (damage < 0) {
             return 0;
         } else {
@@ -55,11 +56,10 @@ public abstract class Enemy {
         System.out.println(this.name + "はにげだした！");
         this.escapeFlag = true;
     }
-    public boolean runJadgement(int braveLevel) {
+    public boolean runJadgement(int braveLevel) {               // trueであれば逃げる、falseであれば逃げない
         // 勇者と自身のレベルを比較し、相手の方が大きければ大きいほど逃げる確率を高くする
-        // trueであれば逃げる、falseであれば逃げない
         int levelGap = braveLevel - this.level;
-        if (levelGap < 0) {     // levelGapが負の値なら0に変換
+        if (levelGap < 0) {                                     // levelGapが負の値なら0に変換
             levelGap = 0;
         }
         int runProbability = levelGap * 5;

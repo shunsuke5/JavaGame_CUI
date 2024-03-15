@@ -1,4 +1,5 @@
 package enemy.forestenemy;
+import brave.Brave;
 import enemy.Enemy;
 
 public class Slime extends Enemy {
@@ -16,21 +17,17 @@ public class Slime extends Enemy {
         setTurnCount();
     }
     // メソッド
-    public int turn(String braveName, int braveDefense) {
-        // ランダムで自分の行動を決め、ダメージを返す
-        int turn = new java.util.Random().nextInt(2);
+    public void turn(Brave b) {     // ランダムで自分の行動を決める
+        int action = new java.util.Random().nextInt(2);
 
-        switch (turn) {
+        switch (action) {
             case 0:
-                return attack(braveName, braveDefense);
+                attack(b);
             case 1:
-                return purupuru();
-            default:
-                // 余裕があればなんか例外処理みたいなの挟みたい、0か1しか返ってくるはずないんだけれども
-                return 0;
+                purupuru();
         }
     }
-    public int purupuru() {
+    public int purupuru() {         // スライムの特殊行動
         // ぷるぷるするだけの行動
         System.out.println(getName() + "はぷるぷるしている。");
         return 0;

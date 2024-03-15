@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import item.Item;
+import brave.*;
 
 public class HpItem extends Item {
     private int minHealPoint;
@@ -17,18 +18,28 @@ public class HpItem extends Item {
         String str = br.readLine();
         while(str != null) {
             if (str.contains(getName())) {
-                Object[] objArray = str.split(",");
-                setItemId((int)objArray[1]);
-                setPrice((int)objArray[2]);
-                this.minHealPoint = (int)objArray[3];
-                this.healRange = (int)objArray[4];
-                setExplanation((String)objArray[5]);
+                String[] itemArray = str.split(",");
+                setItemId(Integer.parseInt(itemArray[1]));
+                setPrice((Integer.parseInt(itemArray[2])));
+                this.minHealPoint = Integer.parseInt(itemArray[3]);
+                this.healRange = Integer.parseInt(itemArray[4]);
+                setExplanation(itemArray[5]);
             }
             str = br.readLine();
         }
     }
     // メソッド
-    public int use() {
-        return new java.util.Random().nextInt(this.healRange) + this.minHealPoint;
+    public void use(Brave b) {
+        System.out.println(b.getName() + "は" + this.getName() + "をつかった！");
+        int healPoint = new java.util.Random().nextInt(this.healRange) + this.minHealPoint;
+        controlHp(b, healPoint);
+        System.out.println(b.getName() + "のHPを" + healPoint + "ポイントかいふくした！");
+    }
+    public void controlHp(Brave b, int healPoint) {
+        if (healPoint > (b.getMaxHp() - b.getHp())) {
+            b.setHp(b.getMaxHp());
+        } else {
+            b.setHp(b.getHp() + healPoint);
+        }
     }
 }

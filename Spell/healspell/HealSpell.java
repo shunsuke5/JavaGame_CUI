@@ -1,30 +1,32 @@
 package spell.healspell;
+import java.io.IOException;
+
 import brave.*;
+import spell.Spell;
+import enemy.Enemy;
 
 public class HealSpell extends Spell {
-    // 回復呪文一覧
-    public static int pyoimi() {    // ピョイミ
-        int healPoint = createPoint(7,8);
-        return healPoint;
-    }
-    public static int bepyoimi(int level) {  // ベピョイミ
-        if (checkLevel(level, 9)) {
-            int healPoint = createPoint(20, 16);
-            return healPoint;
-        } else {
-            return 0;
-        }
+
+    // コンストラクタ
+    public HealSpell(String name) throws IOException {
+        super(name);
     }
     // メソッド
-    private static int createPoint(int minimum, int range) {     // 指定した範囲からランダムにポイントを生成
-        int point = new java.util.Random().nextInt(range) + minimum;
-        return point;
+    public void resite(Brave b, Enemy e) {                       // 指定した範囲からランダムにポイントを生成
+        if (b.getMp() < getConsumptionMp()) {
+            System.out.println("MPがたりない！");
+            return;
+        }
+        System.out.println(b.getName() + "は" + getName() + "をとなえた！");
+        int healPoint = new java.util.Random().nextInt(getPointRange()) + getMinPoint();
+        controlHeal(b, healPoint);
+        System.out.println(b.getName() + "のHPを" + healPoint + "ポイントかいふくした！");
     }
-    private static boolean checkLevel(int level, int border) {   // 呪文を使えるレベルならtrueを返す
-        if (level > border) {
-            return true;
+    public void controlHeal(Brave b, int healPoint) {     // 回復量が最大HPを超えないように調整
+        if (healPoint > (b.getMaxHp() - b.getHp())) {
+            b.setHp(b.getMaxHp());
         } else {
-            return false;
+            b.setHp(b.getHp() + healPoint);
         }
     }
 }

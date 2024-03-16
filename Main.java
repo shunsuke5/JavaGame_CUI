@@ -31,8 +31,10 @@ public class Main {
         Event.congratulations();
         
         */
-
-        A a = new A();
-        a.test();
+        int num = 0;
+        for (int i = 0; i < 20; i++) {
+            num += new java.util.Random().nextInt(3) + 1;
+            System.out.println(num);
+        }
     }
 }

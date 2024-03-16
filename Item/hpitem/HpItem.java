@@ -14,7 +14,7 @@ public class HpItem extends Item {
     public HpItem(String name) throws IOException {
         super(name);
         
-        BufferedReader br = new BufferedReader(new FileReader("HpItem_Data.csv"));
+        BufferedReader br = new BufferedReader(new FileReader("HpItem_data.csv"));
         String str = br.readLine();
         while(str != null) {
             if (str.contains(getName())) {

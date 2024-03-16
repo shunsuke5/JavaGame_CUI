@@ -14,7 +14,7 @@ public class ItemBag {
     public ItemBag() throws IOException {   // Item[][]の要素数をデータファイルから読み込んで初期化する処理
         int i = 1;
 
-        BufferedReader br = new BufferedReader(new FileReader("..\\data\\ItemId_data.csv"));
+        BufferedReader br = new BufferedReader(new FileReader("..\\item\\ItemId_data.csv"));
         String str = br.readLine();
         while(str != null) {
             i++;
@@ -39,12 +39,12 @@ public class ItemBag {
         int itemId;
         String itemName;
 
-        BufferedReader br = new BufferedReader(new FileReader("..\\data\\ItemId_data.csv"));
+        BufferedReader br = new BufferedReader(new FileReader("..\\item\\ItemId_data.csv"));
         String str = br.readLine();
         while(str != null) {
-            String[] itemArray = str.split(",");
-            itemName = itemArray[0];
-            itemId = Integer.parseInt(itemArray[1]);
+            String[] dataArray = str.split(",");
+            itemName = dataArray[0];
+            itemId = Integer.parseInt(dataArray[1]);
             if (checkStorage(itemId) == 0) {
                 str = br.readLine();
             } else {
@@ -62,8 +62,8 @@ public class ItemBag {
         return i;
     }
     public Item createItem(int itemId) throws IOException {
-        String[] itemArray = itemLookUp(itemId);
-        String itemName = itemArray[0];
+        String[] dataArray = itemLookUp(itemId);
+        String itemName = dataArray[0];
         switch(itemName) {
             case "やくそう":
                 return new Herb();
@@ -89,8 +89,8 @@ public class ItemBag {
         String str = br.readLine();
         while(str != null) {
             if (str.contains(Integer.toString(itemId))) {
-                String[] itemArray = str.split(",");
-                return itemArray;
+                String[] dataArray = str.split(",");
+                return dataArray;
             }
             str = br.readLine();
         }

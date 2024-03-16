@@ -14,7 +14,7 @@ public class MpItem extends Item {
     public MpItem(String name) throws IOException {
         super(name);
         
-        BufferedReader br = new BufferedReader(new FileReader("MpItem_Data.csv"));
+        BufferedReader br = new BufferedReader(new FileReader("MpItem_data.csv"));
         String str = br.readLine();
         while(str != null) {
             if (str.contains(getName())) {

@@ -12,6 +12,8 @@ import java.util.List;
 import map.*;
 import shop.itemshop.ItemShop;
 import spell.*;
+import spell.attackspell.*;
+import spell.healspell.*;
 import enemy.Enemy;
 import equipment.*;
 import text.Text;
@@ -63,9 +65,7 @@ public class Brave {
     // プログラム用変数
     private int levelIndex = 0;         // checkLevelUpメソッドでのみ使用、アクセサ不要
     private int spellIndex = 0;         // checkSpellUpメソッドでのみ使用、アクセサ不要
-    private String spellFormat;         // たたかいの呪文テキスト
     private int spellChoiceNumber = 1;  // 呪文選択時の番号
-    private boolean itemShopLeave;      // ショップを出る時にtrue
     private boolean battleWin;          // バトルに勝った時にtrue
     private boolean battleLose;         // バトルに負けた時にtrue
     private boolean escapeFlag;         // バトルから逃げた時にtrue
@@ -325,41 +325,16 @@ public class Brave {
             this.turnCount++;
         }
     }
-    public void spell(Enemy e) {    // 戦闘において呪文を使用するメソッド
-        // まだ1つも呪文を習得していなかった場合、battleメソッドに戻す
+    public void spell(Enemy e) throws IOException {    // 戦闘において呪文を使用するメソッド
         if (this.level < 3) {
             System.out.println("つかえるじゅもんがない！");
             return;
         }
-        // 呪文一覧を表示して選択させる
-        int point = 0;
-        System.out.println("どのじゅもんをつかう？(0でもどる)");
-        Text.chooseChangedText(spellFormat);
-        int spellNumber = new java.util.Scanner(System.in).nextInt();
-        switch(spellNumber) {
-            case 1:
-                point = HealSpell.pyoimi();                 // ピョイミ
-                healSpell(point);
-                break;
-            case 2:
-                point = HealSpell.bepyoimi(this.level);     // ベピョイミ
-                healSpell(point);
-                break;
-            case 3:
-                point = AttackSpell.myora(this.level);      // ミョラ
-                attackSpell(point, e);
-                break;
-            case 4:
-                point = AttackSpell.myorami(this.level);    // ミョラミ
-                attackSpell(point, e);
-                break;
-            case 5:
-                point = AttackSpell.myorazoma(this.level);  // ミョラゾマ
-                attackSpell(point, e);
-                break;
-            default:
-                break;
-        }
+        System.out.println("どのじゅもんをつかう？(-1でもどる)");
+        displaySpell();
+        int spellId = new java.util.Scanner(System.in).nextInt();
+        useSpell(spellId).resite(this, e);
+        this.turnCount++;
     }
     public void defense() { // 戦闘において防御するメソッド
         int strongDefense = (int) (this.defense * 1.5);
@@ -382,7 +357,7 @@ public class Brave {
         }
     }
     public boolean useItem(int itemId) throws IOException {    // アイテムを使用するメソッド
-        // 使用したいアイテムがあれば使用してtrue、なければfalseを返す
+        // アイテムを使用すればtrue、使用しなければfalseを返す
         if (this.itemBag.checkStorage(itemId) == 0) {
             return false;
         }
@@ -394,12 +369,12 @@ public class Brave {
         // if (自分と相手のレベルと素早さの合計を比べてなんやかんや計算) → 逃げられるか無理かを決める
     }
 
-    public void win(Enemy e) {  // 戦いに勝利
+    public void win(Enemy e) throws IOException {  // 戦いに勝利
         this.battleWin = true;
         System.out.println(e.getName() + "をたおした！");
         System.out.println(e.getPoint() + "ポイントのけいけんちをかくとく！");
         checkLevelUp(e);
-        checkSpellUp();
+        checkSpellUp(this.level);
     }
 
     public void die() {         // 戦いに敗北
@@ -407,65 +382,46 @@ public class Brave {
         System.out.println(this.name + "はしんでしまった！");
     }
 
-    public void checkLevelUp(Enemy e) { // レベルが上がっているかチェックする
-        this.levelPoint += e.getPoint();
-        List<Integer> levelList = createLevelList();
-        int upLevel = 0;
-        if (this.levelPoint >= levelList.get(this.levelIndex)) {
-             do {
-                this.level += 1;
-                this.levelIndex += 1;
-                upLevel += 1;
-            } while (this.getLevelPoint() >= levelList.get(this.levelIndex));
-            System.out.println(this.name + "のレベルが" + (this.level - upLevel) + "から" + 
-                            this.level + "にあがった！");
+    public void checkLevelUp(Enemy enemy) {     // レベルが上がっているかチェックする
+        this.levelPoint += enemy.getPoint();
+        int beforeLevel = this.level;
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("LevelUp_data.csv"));
+            String str = br.readLine();
+            while(str != null) {
+                String[] dataArray = str.split(",");
+                if (this.level + 1 == Integer.parseInt(dataArray[0])) {
+                    while(this.levelPoint >= Integer.parseInt(dataArray[1])) {
+                        this.level++;
+                        str = br.readLine();
+                        str.split(",");
+                    }
+                    if (beforeLevel < this.level) {
+                        System.out.println(this.name + "のレベルが" + beforeLevel + 
+                                            "から" + this.level + "にあがった！");
+                    }
+                }
+                str = br.readLine();
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
-    public void levelUp(int beforeLevel, int afterLevel) {
+    public void upStatus(int beforeLevel, int afterLevel) {
         // レベルアップによるステータス上昇の処理
     }
-    public void checkSpellUp() {        // 呪文を習得できるかチェックする
-        List<Integer> getSpellLevelList = createGetSpellLevelList();
-        List<String> spellNameList = createSpellNameList();
-        if (this.level >= getSpellLevelList.get(this.spellIndex)) {
-            do {
-                this.spellFormat += "\n" + spellNameList.get(this.spellIndex) + this.spellChoiceNumber;
-                System.out.println(this.name + "は" + spellNameList.get(this.spellIndex) + 
-                                    "のじゅもんがつかえるようになった！");
-                this.spellIndex++;
-                this.spellChoiceNumber++;
-            } while (this.getLevel() >= getSpellLevelList.get(spellIndex));
+    public void checkSpellUp(int afterLevel) throws IOException {        // 呪文を習得できるかチェックする
+        BufferedReader br = new BufferedReader(new FileReader("..\\spell\\Spell_data.csv"));
+        String str = br.readLine();
+        while(str != null) {
+            String[] dataArray = str.split(",");
+            if (dataArray[2] == (Integer.toString(afterLevel))) {
+                System.out.println(this.name + "は" + dataArray[0] + "のじゅもんがつかえるようになった！");
+                return;
+            }
+            str = br.readLine();
         }
-    }
-    public List<Integer> createLevelList() {    // レベルアップに必要な経験値リストを作成して返す
-        List<Integer> levelList = new ArrayList<Integer>();
-        int levelCount = 1;
-        int needLevelPoint = 4;
-
-        while (levelCount < 21) {
-            levelList.add(needLevelPoint);
-            levelPoint = (int)( (needLevelPoint + levelCount ) * 1.25);
-            levelCount++;
-        }
-        return java.util.Collections.unmodifiableList(levelList);
-    }
-    public List<Integer> createGetSpellLevelList() {  // 呪文習得レベルリストを作成する
-        List<Integer> spellLevelList = new ArrayList<Integer>();
-        spellLevelList.add(3);
-        spellLevelList.add(5);
-        spellLevelList.add(9);
-        spellLevelList.add(14);
-        spellLevelList.add(17);
-        return java.util.Collections.unmodifiableList(spellLevelList);
-    }
-    public List<String> createSpellNameList() {    // 呪文名リストを作成する
-        List<String> spellNameList = new ArrayList<String>();
-        spellNameList.add("　　ピョイミ：");
-        spellNameList.add("　　　ミョラ：");
-        spellNameList.add("　ベピョイミ：");
-        spellNameList.add("　　ミョラミ：");
-        spellNameList.add("ミョラゾーマ：");
-        return java.util.Collections.unmodifiableList(spellNameList);
     }
     public int calculateDamage(Enemy e) {   // ダメージ値を計算して返す
         final int DEFAULT_RANGE = 1;
@@ -504,7 +460,54 @@ public class Brave {
         }
         return bossKillCount;
     }
+    public void displaySpell() throws IOException {     // 習得した呪文を表示する
+        String spellName;
+        int spellId;
+        int needLevel;
 
+        BufferedReader br = new BufferedReader(new FileReader("..\\spell\\Spell_data.csv"));
+        String str = br.readLine();
+        while(str != null) {
+            String[] dataArray = str.split(",");
+            spellName = dataArray[0];
+            spellId = Integer.parseInt(dataArray[1]);
+            needLevel = Integer.parseInt(dataArray[2]);
+            if (this.level < needLevel) {
+                return;
+            }
+            System.out.println(spellName + "：" + spellId);
+            str = br.readLine();
+        }
+    }
+    public Spell useSpell(int spellId) throws IOException {
+        String[] dataArray = spellLookUp(spellId);
+        String spellName = dataArray[0];
+        switch(spellName) {
+            case "ピョイミ":
+                return new Pyoimi();
+            case "ミョラ":
+                return new Myora();
+            case "ベピョイミ":
+                return new Bepyoimi();
+            case "ミョラミ":
+                return new Myorami();
+            case "ミョラゾーマ":
+                return new Myorazoma();
+        }
+        return null;
+    }
+    public String[] spellLookUp(int spellId) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader("..\\spell\\Spell_data.csv"));
+        String str = br.readLine();
+        while(str != null) {
+            if (str.contains(Integer.toString(spellId))) {
+                String[] dataArray = str.split(",");
+                return dataArray;
+            }
+            str = br.readLine();
+        }
+        return null;
+    }
     public void hpHeal(int healPoint) {      // 勇者の体力を回復する際に呼び出すメソッド
         if (healPoint > (this.maxHp - this.hp)) {
             this.hp = this.maxHp;

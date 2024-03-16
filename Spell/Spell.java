@@ -1,4 +1,6 @@
 package spell;
+import brave.Brave;
+import enemy.Enemy;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -30,19 +32,20 @@ public abstract class Spell{
             str = br.readLine();
         }
     }
-
+    // 抽象メソッド
+    public abstract void resite(Brave b, Enemy e);
     // アクセサ
     public String getName() { return this.name; }
     public int getNeedLevel() { return this.needLevel; }
     public int getConsumptionMp() { return this.consumptionMp; }
-    public int getPoint() { return this.minpoint; }
+    public int getMinPoint() { return this.minpoint; }
     public int getPointRange() { return this.pointRange; }
     public String getExplanation() { return this.explanation; }
 
     public void setName(String name) { this.name = name; }
     public void setNeedLevel(int needLevel) { this.needLevel = needLevel; }
     public void setConsumptionMp(int consumptionMp) { this.consumptionMp = consumptionMp; }
-    public void setPoint(int minpoint) { this.minpoint = minpoint; }
+    public void setMinPoint(int minpoint) { this.minpoint = minpoint; }
     public void setPointRange(int pointRange) { this.pointRange = pointRange; }
     public void setExplanation(String explanation) { this.explanation = explanation; }
 }

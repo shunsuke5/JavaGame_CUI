@@ -1,46 +1,32 @@
 package spell.attackspell;
+import java.io.IOException;
+
+import brave.Brave;
+import enemy.Enemy;
+import spell.Spell;
 
 public class AttackSpell extends Spell {
-    private int attackPoint;
+    // コンストラクタ
+    public AttackSpell(String name) throws IOException {
+        super(name);
+    }
 
-    // 攻撃呪文
-    public static int myora(int level) {        // ミョラ
-        if (checkLevel(level, 5)) {
-            int attackPoint = createPoint(6, 6);
-            return attackPoint;
-        } else {
-            return 0;
-        }
-    }
-    public static int myorami(int level) {      // ミョラミ
-        if (checkLevel(level, 14)) {
-            int attackPoint = createPoint(16, 11);
-            return attackPoint;
-        } else {
-            return 0;
-        }
-    }
-    public static int myorazoma(int level) {    // ミョラゾーマ
-        if (checkLevel(level, 17)) {
-            int attackPoint = createPoint(28, 16);
-            return attackPoint;
-        } else {
-            return 0;
-        }
-    }
     // メソッド
-    public static int createPoint(int minimum, int range) {     // 指定した範囲からランダムにポイントを生成
-        int point = new java.util.Random().nextInt(range) + minimum;
-        return point;
+    public void resite(Brave b, Enemy e) {              // 指定した範囲からランダムにポイントを生成
+        if (b.getMp() < getConsumptionMp()) {
+            System.out.println("MPがたりない！");
+            return;
+        }
+        System.out.println(b.getName() + "は" + getName() + "をとなえた！");
+        int attackPoint = new java.util.Random().nextInt(getPointRange()) + getMinPoint();
+        controlDamage(e, attackPoint);
+        System.out.println(e.getName() + "に" + attackPoint + "のダメージ！");
     }
-    public static boolean checkLevel(int level, int border) {
-        if (level > border) {
-            return true;
+    public void controlDamage(Enemy e, int attackPoint) {     // 回復量が最大HPを超えないように調整
+        if (attackPoint > e.getHp()) {
+            e.setHp(0);
         } else {
-            return false;
+            e.setHp(e.getHp() - attackPoint);
         }
     }
-    // アクセサ
-    public int getAttackPoint() { return this.attackPoint; }
-    public void setAttackPoint(int attackPoint) { this.attackPoint = attackPoint; }
 }

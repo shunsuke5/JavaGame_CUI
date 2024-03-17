@@ -11,21 +11,26 @@ public class MpItem extends Item {
     private int healRange;
 
     // コンストラクタ
-    public MpItem(String name) throws IOException {
+    public MpItem(String name) {
         super(name);
         
-        BufferedReader br = new BufferedReader(new FileReader("MpItem_data.csv"));
-        String str = br.readLine();
-        while(str != null) {
-            if (str.contains(getName())) {
-                String[] itemArray = str.split(",");
-                setItemId(Integer.parseInt(itemArray[1]));
-                setPrice((Integer.parseInt(itemArray[2])));
-                this.minHealPoint = Integer.parseInt(itemArray[3]);
-                this.healRange = Integer.parseInt(itemArray[4]);
-                setExplanation(itemArray[5]);
-            }
-            str = br.readLine();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("MpItem_data.csv"));
+            String str = br.readLine();
+            while(str != null) {
+                if (str.contains(getName())) {
+                    String[] itemArray = str.split(",");
+                    setItemId(Integer.parseInt(itemArray[1]));
+                    setPrice((Integer.parseInt(itemArray[2])));
+                    this.minHealPoint = Integer.parseInt(itemArray[3]);
+                    this.healRange = Integer.parseInt(itemArray[4]);
+                    setExplanation(itemArray[5]);
+                }
+                str = br.readLine();
+            }    
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            e.getStackTrace();
         }
     }
     // メソッド

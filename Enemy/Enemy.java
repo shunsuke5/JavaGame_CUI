@@ -12,7 +12,7 @@ public abstract class Enemy {
     private int point;          // 経験値
     private int dropMoney;      // 落とすお金
     private int turnCount;      // ターン経過数
-    private boolean escapeFlag; // 敵が逃げた時にtrue
+    private boolean isEscape; // 敵が逃げた時にtrue
     private int enemyCount;     // 敵の数、今回は使わない予定
 
     // 抽象メソッド
@@ -42,10 +42,10 @@ public abstract class Enemy {
         int attackRange = (this.attack % 4) + DEFAULT_RANGE;    // 攻撃力が4増える毎にダメージ範囲を +1
         int enemyAttack = new java.util.Random().nextInt(attackRange) + this.attack;
         int damage = enemyAttack - braveDefense;
-        damage = adjustDamage(damage);
+        damage = controlDamage(damage);
         return damage;
     }
-    public int adjustDamage(int damage) {                       // ダメージ値がマイナス値だった場合に0に変換する
+    public int controlDamage(int damage) {                      // ダメージ値がマイナス値だった場合に0に変換する
         if (damage < 0) {
             return 0;
         } else {
@@ -54,9 +54,9 @@ public abstract class Enemy {
     }
     public void run() {
         System.out.println(this.name + "はにげだした！");
-        this.escapeFlag = true;
+        this.isEscape = true;
     }
-    public boolean runJadgement(int braveLevel) {               // trueであれば逃げる、falseであれば逃げない
+    public boolean isRun(int braveLevel) {               // trueであれば逃げる、falseであれば逃げない
         // 勇者と自身のレベルを比較し、相手の方が大きければ大きいほど逃げる確率を高くする
         int levelGap = braveLevel - this.level;
         if (levelGap < 0) {                                     // levelGapが負の値なら0に変換
@@ -84,7 +84,7 @@ public abstract class Enemy {
     public int getPoint() { return this.point; }
     public int getMoney() { return this.dropMoney; }
     public int getEnemyCount() { return this.enemyCount; }
-    public boolean getEscapeFlag() { return this.escapeFlag; }
+    public boolean getIsEscape() { return this.isEscape; }
     public int getTurnCount() { return this.turnCount; }
 
     public void setName(String name) { this.name = name; }
@@ -97,7 +97,8 @@ public abstract class Enemy {
     public void setPoint(int point) { this.point = point; }
     public void setMoney(int dropMoney) { this.dropMoney = dropMoney; }
     public void setEnemyCount(int enemyCount) { this.enemyCount = enemyCount; }
-    public void setEscapeFlag(boolean escapeFlag) { this.escapeFlag = escapeFlag; }
+    public void setIsEscape(boolean isEscape) { this.isEscape = isEscape; }
     public void setTurnCount() { this.turnCount = 0; }
+
     public void plusTurnCount() { this.turnCount++; }
 }

@@ -1,10 +1,10 @@
-package equipment;
+package armor;
 
-public class Helmet extends Equipment {
+public class Armor extends Equipment {
     private int defense;
 
     // コンストラクタ
-    public Helmet(String name, String explanation, int defense) {
+    public Armor(String name, String explanation, int defense) {
         super(name,explanation);
         this.defense = defense;
     }

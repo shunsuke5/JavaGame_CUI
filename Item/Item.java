@@ -1,11 +1,6 @@
 package item;
 import brave.*;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-
 public abstract class Item {
     private String name;          // 名前
     private int itemId;           // 識別番号
@@ -13,7 +8,7 @@ public abstract class Item {
     private String explanation;   // 説明
 
     // コンストラクタ
-    public Item(String name) throws IOException {
+    public Item(String name) {
         this.name = name;
     }
     // 抽象メソッド

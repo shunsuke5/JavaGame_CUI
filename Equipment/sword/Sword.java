@@ -1,4 +1,5 @@
-package equipment;
+package equipment.sword;
+import equipment.Equipment;
 
 public class Sword extends Equipment {
     private int attack;

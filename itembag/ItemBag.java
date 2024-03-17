@@ -11,19 +11,24 @@ public class ItemBag {
     private Item[][] item;      // アイテムインスタンス
 
     // コンストラクタ
-    public ItemBag() throws IOException {   // Item[][]の要素数をデータファイルから読み込んで初期化する処理
+    public ItemBag() {   // Item[][]の要素数をデータファイルから読み込んで初期化する処理
         int i = 1;
 
-        BufferedReader br = new BufferedReader(new FileReader("..\\item\\ItemId_data.csv"));
-        String str = br.readLine();
-        while(str != null) {
-            i++;
-            br.readLine();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("..\\item\\ItemId_data.csv"));
+            String str = br.readLine();
+            while(str != null) {
+                i++;
+                br.readLine();
+            }
+            item = new Item[i][99];    
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            e.getStackTrace();
         }
-        item = new Item[i][99];
     }
     // メソッド
-    public void increase(int itemId, int add) throws IOException {  // アイテムが増える動作
+    public void increase(int itemId, int add) {  // アイテムが増える動作
         int itemCount = checkStorage(itemId);
         int total = itemCount + add;    // アイテムの合計所持数 = 現在のアイテム所持数 + 増えるアイテム数
 
@@ -34,24 +39,29 @@ public class ItemBag {
     public void decrease(int itemId) {           // アイテムが減る動作
         this.item[itemId][checkStorage(itemId)] = null;
     }
-    public void displayItemBag() throws IOException {
+    public void displayItemBag() {
         // ItemId_data.csvファイルから各アイテムの識別番号を取得していく
         int itemId;
         String itemName;
 
-        BufferedReader br = new BufferedReader(new FileReader("..\\item\\ItemId_data.csv"));
-        String str = br.readLine();
-        while(str != null) {
-            String[] dataArray = str.split(",");
-            itemName = dataArray[0];
-            itemId = Integer.parseInt(dataArray[1]);
-            if (checkStorage(itemId) == 0) {
-                str = br.readLine();
-            } else {
-                int itemCount = checkStorage(itemId);
-                System.out.println(itemName + "：" + itemCount + "こ");
-                str = br.readLine();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("..\\item\\ItemId_data.csv"));
+            String str = br.readLine();
+            while(str != null) {
+                String[] dataArray = str.split(",");
+                itemName = dataArray[0];
+                itemId = Integer.parseInt(dataArray[1]);
+                if (checkStorage(itemId) == 0) {
+                    str = br.readLine();
+                } else {
+                    int itemCount = checkStorage(itemId);
+                    System.out.println(itemName + "：" + itemCount + "こ");
+                    str = br.readLine();
+                }
             }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            e.getStackTrace();
         }
     }
     public int checkStorage(int itemId) {       // 配列の要素がどこまで入っているかを調べる
@@ -61,7 +71,7 @@ public class ItemBag {
         }
         return i;
     }
-    public Item createItem(int itemId) throws IOException {
+    public Item createItem(int itemId) {
         String[] dataArray = itemLookUp(itemId);
         String itemName = dataArray[0];
         switch(itemName) {
@@ -84,17 +94,23 @@ public class ItemBag {
         }
         return null;
     }
-    public String[] itemLookUp(int itemId) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader("..\\data\\ItemId_data.csv"));
-        String str = br.readLine();
-        while(str != null) {
-            if (str.contains(Integer.toString(itemId))) {
-                String[] dataArray = str.split(",");
-                return dataArray;
+    public String[] itemLookUp(int itemId) {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("..\\data\\ItemId_data.csv"));
+            String str = br.readLine();
+            while(str != null) {
+                if (str.contains(Integer.toString(itemId))) {
+                    String[] dataArray = str.split(",");
+                    return dataArray;
+                }
+                str = br.readLine();
             }
-            str = br.readLine();
+            return null;
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            e.getStackTrace();
+            return null;
         }
-        return null;
     }
     // アクセサ
     public Item[][] getItem() { return this.item; }

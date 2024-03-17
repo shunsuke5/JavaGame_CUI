@@ -11,21 +11,25 @@ public class HpItem extends Item {
     private int healRange;
 
     // コンストラクタ
-    public HpItem(String name) throws IOException {
+    public HpItem(String name) {
         super(name);
-        
-        BufferedReader br = new BufferedReader(new FileReader("HpItem_data.csv"));
-        String str = br.readLine();
-        while(str != null) {
-            if (str.contains(getName())) {
-                String[] itemArray = str.split(",");
-                setItemId(Integer.parseInt(itemArray[1]));
-                setPrice((Integer.parseInt(itemArray[2])));
-                this.minHealPoint = Integer.parseInt(itemArray[3]);
-                this.healRange = Integer.parseInt(itemArray[4]);
-                setExplanation(itemArray[5]);
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("HpItem_data.csv"));
+            String str = br.readLine();
+            while(str != null) {
+                if (str.contains(getName())) {
+                    String[] itemArray = str.split(",");
+                    setItemId(Integer.parseInt(itemArray[1]));
+                    setPrice((Integer.parseInt(itemArray[2])));
+                    this.minHealPoint = Integer.parseInt(itemArray[3]);
+                    this.healRange = Integer.parseInt(itemArray[4]);
+                    setExplanation(itemArray[5]);
+                }
+                str = br.readLine();
             }
-            str = br.readLine();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            e.getStackTrace();
         }
     }
     // メソッド

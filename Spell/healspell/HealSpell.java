@@ -1,6 +1,4 @@
 package spell.healspell;
-import java.io.IOException;
-
 import brave.*;
 import spell.Spell;
 import enemy.Enemy;
@@ -8,7 +6,7 @@ import enemy.Enemy;
 public class HealSpell extends Spell {
 
     // コンストラクタ
-    public HealSpell(String name) throws IOException {
+    public HealSpell(String name) {
         super(name);
     }
     // メソッド

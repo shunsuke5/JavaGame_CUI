@@ -15,21 +15,26 @@ public abstract class Spell{
     private String explanation;
 
     // コンストラクタ
-    public Spell(String name) throws IOException {
+    public Spell(String name) {
         this.name = name;
 
-        BufferedReader br = new BufferedReader(new FileReader("Spell_data.csv"));
-        String str = br.readLine();
-        while(str != null) {
-            if (str.contains(this.name)) {
-                String[] itemArray = str.split(",");
-                this.needLevel = Integer.parseInt(itemArray[1]);
-                this.consumptionMp = Integer.parseInt(itemArray[2]);
-                this.minpoint = Integer.parseInt(itemArray[3]);
-                this.pointRange = Integer.parseInt(itemArray[4]);
-                this.explanation = itemArray[5];
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("Spell_data.csv"));
+            String str = br.readLine();
+            while(str != null) {
+                if (str.contains(this.name)) {
+                    String[] itemArray = str.split(",");
+                    this.needLevel = Integer.parseInt(itemArray[1]);
+                    this.consumptionMp = Integer.parseInt(itemArray[2]);
+                    this.minpoint = Integer.parseInt(itemArray[3]);
+                    this.pointRange = Integer.parseInt(itemArray[4]);
+                    this.explanation = itemArray[5];
+                }
+                str = br.readLine();
             }
-            str = br.readLine();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            e.getStackTrace();
         }
     }
     // 抽象メソッド

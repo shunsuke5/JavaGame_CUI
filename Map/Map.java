@@ -19,12 +19,12 @@ public abstract class Map {
     public String getName() { return this.name; }
     public Enemy getEnemy() { return this.enemy; }
     public int getEnemyKillCount() { return this.enemyKillCount; }
-    public boolean getBossKill() { return this.bossKill; }
-    public boolean getThereIs() { return this.thereIs; }
+    public boolean isBossKill() { return this.bossKill; }
+    public boolean isThereIs() { return this.thereIs; }
 
     public void setName(String name) { this.name = name; }
     public void setEnemy(Enemy enemy) { this.enemy = enemy; }
     public void setEnemyKillCount(int enemyKillCount) { this.enemyKillCount = enemyKillCount; }
-    public void setBossFlag(boolean bossKill) { this.bossKill = bossKill; }
+    public void setBossKill(boolean bossKill) { this.bossKill = bossKill; }
     public void setThereIs(boolean thereIs) { this.thereIs = thereIs; }
 }

@@ -1,15 +1,20 @@
 package enemy.forestenemy;
+import brave.Brave;
 import enemy.Enemy;
 
-public class Goblin extends Enemy {
+public class Goblin extends ForestEnemy {
     // コンストラクタ
     public Goblin() {
-        setHp(16);
-        setMp(0);
-        setAttack(4);
-        setDefense(3);
-        setAgility(3);
-        setPoint(4);
-        setMoney(3);
+        super("ゴブリン");
+    }
+    public void turn(Brave b) {     // ランダムで自分の行動を決める
+        int action = new java.util.Random().nextInt(2);
+
+        switch (action) {
+            case 0:
+                attack(b);
+            case 1:
+                purupuru();
+        }
     }
 }

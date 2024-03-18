@@ -3,6 +3,7 @@ import brave.*;
 
 public abstract class Enemy {
     private String name;        // モンスター名
+    private int enemyId;        // 敵ID
     private int level;          // レベル、これを用いて逃げるかの判断をする
     private int hp;             // 体力
     private int mp;             // 魔力
@@ -15,8 +16,13 @@ public abstract class Enemy {
     private boolean isEscape; // 敵が逃げた時にtrue
     private int enemyCount;     // 敵の数、今回は使わない予定
 
+    // コンストラクタ
+    public Enemy(String name) {
+        this.name = name;
+    }
+
     // 抽象メソッド
-    public abstract void turn(Brave b);                         // 敵の行動をランダムに決めるメソッド
+    public abstract void turn(Brave brave);                         // 敵の行動をランダムに決めるメソッド
     
     // メソッド
     public int attack(Brave b) {
@@ -75,6 +81,7 @@ public abstract class Enemy {
 
     // アクセサ
     public String getName() { return this.name; }
+    public int getEnemyId() { return this.enemyId; }
     public int getLevel() { return this.level; }
     public int getHp() { return this.hp; }
     public int getMp() { return this.mp; }
@@ -88,6 +95,7 @@ public abstract class Enemy {
     public int getTurnCount() { return this.turnCount; }
 
     public void setName(String name) { this.name = name; }
+    public void setEnemyId(int enemyId) { this.enemyId = enemyId; }
     public void setLevel(int level) { this.level = level; }
     public void setHp(int hp) { this.hp = hp; }
     public void setMp(int mp) { this.mp = mp; }

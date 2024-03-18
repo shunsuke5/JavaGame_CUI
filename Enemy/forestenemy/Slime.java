@@ -1,20 +1,10 @@
 package enemy.forestenemy;
 import brave.Brave;
-import enemy.Enemy;
 
-public class Slime extends Enemy {
+public class Slime extends ForestEnemy {
     // コンストラクタ
     public Slime() {
-        setName("スライム");
-        setLevel(2);
-        setHp(10);
-        setMp(2);
-        setAttack(2);
-        setDefense(2);
-        setAgility(1);
-        setPoint(2);
-        setMoney(2);
-        setTurnCount();
+        super("スライム");
     }
     // メソッド
     public void turn(Brave b) {     // ランダムで自分の行動を決める

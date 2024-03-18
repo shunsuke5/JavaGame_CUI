@@ -5,9 +5,8 @@ public abstract class Equipment {
     private String explanation;
 
     // コンストラクタ
-    public Equipment(String name, String explanation) {
+    public Equipment(String name) {
         this.name = name;
-        this.explanation = explanation;
     }
     // アクセサ
     public String getName() { return this.name; }

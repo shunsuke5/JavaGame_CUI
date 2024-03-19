@@ -1,6 +1,6 @@
 package shop.itemshop;
 import text.Text;
-import brave.Brave;
+import battlechar.brave.Brave;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

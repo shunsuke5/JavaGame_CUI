@@ -1,7 +1,7 @@
 package spell.healspell;
-import brave.*;
+import battlechar.brave.*;
 import spell.Spell;
-import enemy.Enemy;
+import battlechar.enemy.Enemy;
 
 public class HealSpell extends Spell {
 

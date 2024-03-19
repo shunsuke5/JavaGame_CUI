@@ -1,6 +1,6 @@
 package spell;
-import brave.Brave;
-import enemy.Enemy;
+import battlechar.brave.Brave;
+import battlechar.enemy.Enemy;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

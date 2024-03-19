@@ -1,4 +1,4 @@
-package brave;
+package battlechar.brave;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -10,28 +10,25 @@ import shop.itemshop.ItemShop;
 import spell.*;
 import spell.attackspell.*;
 import spell.healspell.*;
-import enemy.Enemy;
+import battlechar.BattleChar;
+import battlechar.enemy.Enemy;
 import equipment.*;
+import equipment.sword.*;
+import equipment.helmet.*;
+import equipment.armor.*;
 import text.Text;
 import item.Item;
 import item.hpitem.*;
 import item.mpitem.*;
 import itembag.ItemBag;
 
-public class Brave {
+public class Brave extends BattleChar {
     // 基礎ステータス
     private String name;    // 名前
     private int level;      // レベル、上限は20
     private int levelPoint; // 経験値
-    private int hp;         // 体力
-    private int maxHp;      // 最大体力
-    private int mp;         // 魔力
-    private int maxMp;      // 最大魔力
     private int power;      // ちから
     private int protect;    // みのまもり
-    private int attack;     // 総攻撃力
-    private int defense;    // 総防御力
-    private int agility;    // すばやさ
     private int turnCount;  // 経過ターン数
 
     // 所持金
@@ -66,16 +63,17 @@ public class Brave {
         System.out.println("勇者" + this.name + "の冒険が幕を開けた…");
 
         this.level = 1;
-        this.hp = 20;
-        this.maxHp = 20;
-        this.mp = 5;
-        this.maxMp = 5;
-        this.attack = 10;
-        this.defense = 10;
-        this.agility = 5;
+        setHp(20);
+        setMaxHp(20);
+        setMp(5);
+        setMaxMp(5);
+        setPower(10);
+        setProtect(10);
+        setDefaultAgility(10);
 
         // 装備の初期化もここで行いたい
         // へいしのけん、へいしのかぶと、へいしのよろい　などを装備させる
+        // 装備 + ステータスでdefaultAttack,defaultDefenseをセットする
 
     }
     // メソッド
@@ -162,8 +160,8 @@ public class Brave {
         int choose = new java.util.Scanner(System.in).nextInt();
         if (choose == 1) {
             this.money -= 20;
-            this.hp = this.maxHp;
-            this.mp = this.maxMp;
+            setHp(getMaxHp());
+            setMp(getMaxMp());
         } else {
             return;
         }
@@ -189,8 +187,8 @@ public class Brave {
                 ちから：%d　まもり：%d
                 すばやさ：%d
                 """;
-        System.out.printf(str,this.name,this.level,this.hp,this.maxHp,this.mp,this.maxMp,
-                            this.attack,this.defense,this.agility);
+        System.out.printf(str,this.name,this.level,getHp(),getMaxHp(),getMp(),getMaxMp(),
+                            getDefaultAttack(),getDefaultDefense(),getDefaultAgility());
     }
 
     public void battleBoss() {      // マップボス戦
@@ -202,14 +200,15 @@ public class Brave {
     public void searchHikyou() {    // 秘境探索(中ボス)
         // 秘境が解放されているかのチェック
     }
-    public void battle(Enemy e) {   // 敵とエンカウントする
-        System.out.println(e.getName() + "があらわれた！");
+    public void battle(Enemy enemy) {   // 敵とエンカウントする
+        System.out.println(enemy.getName() + "があらわれた！");
         this.turnCount = 0;
 
-        while (!this.winBattle || !this.loseBattle || !this.isEscape || !e.getIsEscape()) {
+        while (!this.winBattle || !this.loseBattle || !this.isEscape || !enemy.getIsEscape()) {
             // じゅもんやアイテム画面から「0」で戻った時、ここに戻りたい
-            if (this.agility >= e.getAgility()) {               // 勇者が先攻の場合
-                do {                                            // 勇者ターン
+            if (getDefaultAgility() >= enemy.getDefaultAgility()) { // 勇者が先攻の場合
+                getState().effect(this);                            // 状態異常判定処理
+                do {                                                // 勇者ターン
                     System.out.println(this.name + "はどうする？");
                     System.out.println("攻撃：１　呪文：２　防御：３　アイテム：４　逃げる：５");
                     System.out.print("\n\s->\s");
@@ -217,10 +216,10 @@ public class Brave {
 
                     switch (action) {
                         case 1:
-                            attack(e);
+                            attack(enemy);
                             break;
                         case 2:
-                            spell(e);
+                            spell(enemy);
                             break;
                         case 3:
                             defense();
@@ -234,33 +233,34 @@ public class Brave {
                         default:
                             break;
                     }
-                } while(this.turnCount == e.getTurnCount());
-                if (e.getHp() <= 0) {                           // 勇者ターン終了、敵HPチェック
-                    win(e);
+                } while(this.turnCount == enemy.getTurnCount());
+                if (enemy.getHp() <= 0) {                           // 勇者ターン終了、敵HPチェック
+                    win(enemy);
                     continue;
                 }
-                if (e.isRun(this.level)) {               // 敵の逃げ判定
-                    e.run();
+                if (enemy.isRun(this.level)) {                      // 敵の逃げ判定
+                    enemy.run();
                     continue;
                 }
-                e.turn(this);                                   // 敵ターン
-                e.plusTurnCount();
-                if (this.hp <= 0) {                             // 敵ターン終了、勇者HPチェック
+                enemy.getState().effect(enemy);                     // 状態異常判定処理
+                enemy.turn(this);                                   // 敵ターン
+                if (getHp() <= 0) {                                 // 敵ターン終了、勇者HPチェック
                     die();
                     continue;
                 }
-            } else {                                            // 敵が先攻の場合
-                if (e.isRun(this.level)) {
-                    e.run();
+            } else {                                                // 敵が先攻の場合
+                if (enemy.isRun(this.level)) {
+                    enemy.run();
                     continue;
                 }
-                e.turn(this);                                   // 敵ターン
-                e.plusTurnCount();
-                if (this.hp <= 0) {                             // 敵ターン終了、勇者HPチェック
+                // ここに状態異常判定処理を入れたい
+                enemy.turn(this);                                   // 敵ターン
+                if (getHp() <= 0) {                                 // 敵ターン終了、勇者HPチェック
                     die();
                     continue;
                 }
-                do {                                            // 勇者ターン
+                // ここに状態異常判定処理を入れたい
+                do {                                                // 勇者ターン
                     System.out.println(this.name + "はどうする？");
                     System.out.println("攻撃：１　呪文：２　防御：３　アイテム：４　逃げる：５");
                     System.out.print("\n\s->\s");
@@ -268,10 +268,10 @@ public class Brave {
 
                     switch (action) {
                         case 1:
-                            attack(e);
+                            attack(enemy);
                             break;
                         case 2:
-                            spell(e);
+                            spell(enemy);
                             break;
                         case 3:
                             defense();
@@ -285,35 +285,35 @@ public class Brave {
                         default:
                             break;
                     }
-                } while(this.turnCount != e.getTurnCount());
-                if (e.getHp() <= 0) {                           // 勇者ターン終了、敵HPチェック
-                    win(e);
+                } while(this.turnCount != enemy.getTurnCount());
+                if (enemy.getHp() <= 0) {                           // 勇者ターン終了、敵HPチェック
+                    win(enemy);
                     continue;
                 }
             }
         }
     }
-    public void attack(Enemy e) {
+    public void attack(Enemy enemy) {
         // ミス、通常攻撃、痛恨の一撃のどれが出るかをランダムに決定する
         int result = new java.util.Random().nextInt(100) + 1;
 
         if (1 <= result && result <= 10) {              // 1から10が出たらミス
-            System.out.println("ミス！" + e.getName() + "はダメージをうけない！");
+            System.out.println("ミス！" + enemy.getName() + "はダメージをうけない！");
             this.turnCount++;
         } else if (95 <= result && result >= 100) {     // 95から100が出たら痛恨の一撃
-            int damage = calculateDamage(e) * 2;
+            int damage = calculateDamage(enemy) * 2;
             System.out.println("かいしんのいちげき！");
-            System.out.println(e.getName() + "に" + damage + "ポイントのダメージ！");
-            e.setHp(e.getHp() - damage);
+            System.out.println(enemy.getName() + "に" + damage + "ポイントのダメージ！");
+            enemy.setHp(enemy.getHp() - damage);
             this.turnCount++;
         } else {                                        // それ以外は通常攻撃
-            int damage = calculateDamage(e);
-            System.out.println(e.getName() + "に" + damage + "ポイントのダメージ！");
-            e.setHp(e.getHp() - damage);
+            int damage = calculateDamage(enemy);
+            System.out.println(enemy.getName() + "に" + damage + "ポイントのダメージ！");
+            enemy.setHp(enemy.getHp() - damage);
             this.turnCount++;
         }
     }
-    public void spell(Enemy e) {    // 戦闘において呪文を使用するメソッド
+    public void spell(Enemy enemy) {    // 戦闘において呪文を使用するメソッド
         if (this.level < 3) {
             System.out.println("つかえるじゅもんがない！");
             return;
@@ -321,11 +321,11 @@ public class Brave {
         System.out.println("どのじゅもんをつかう？(-1でもどる)");
         displaySpell();
         int spellId = new java.util.Scanner(System.in).nextInt();
-        useSpell(spellId).resite(this, e);
+        useSpell(spellId).resite(this, enemy);
         this.turnCount++;
     }
     public void defense() { // 戦闘において防御するメソッド
-        int strongDefense = (int) (this.defense * 1.5);
+        int strongDefense = (int) (getDefaultDefense() * 1.5);
         // この行動は素早さ関係なく勇者が先攻となる
         // そしてこのターン終了時には防御力を元に戻さなければならない
         this.turnCount++;
@@ -435,8 +435,8 @@ public class Brave {
             }
             // ステータス上昇処理
             this.power = (int)afterArray[2];
-            this.defense = (int)afterArray[3];
-            this.agility = (int)afterArray[4];
+            this.protect = (int)afterArray[3];
+            setDefaultAgility((int)afterArray[4]);
             // 上がった分のステータス値を変数に格納
             int upPower = (int)afterArray[2] - (int)beforeArray[2];
             int upDefense = (int)afterArray[3] - (int)beforeArray[3];
@@ -467,11 +467,11 @@ public class Brave {
             e.getStackTrace();
         }
     }
-    public int calculateDamage(Enemy e) {   // ダメージ値を計算して返す
+    public int calculateDamage(Enemy enemy) {   // ダメージ値を計算して返す
         final int DEFAULT_RANGE = 1;
-        int attackRange = (this.attack % 4) + DEFAULT_RANGE;    // 攻撃力が4増える毎にダメージ範囲を +1
-        int braveAttack = new java.util.Random().nextInt(attackRange) + this.attack;
-        int damage = braveAttack - e.getDefense();
+        int attackRange = (getInBattleAttack() % 4) + DEFAULT_RANGE;    // 攻撃力が4増える毎にダメージ範囲を +1
+        int braveAttack = new java.util.Random().nextInt(attackRange) + getInBattleAttack();
+        int damage = braveAttack - enemy.getInBattleDefense();
         damage = controlDamage(damage);
         return damage;
     }
@@ -563,19 +563,21 @@ public class Brave {
             return null;
         }
     }
+    public void equipSword() {      // 剣を装備する
+
+    }
+    public void equipHelmet() {     // 兜を装備する
+
+    }
+    public void equipArmor() {      // 鎧を装備する
+
+    }
     // アクセサ
     public String getName() { return this.name; }
     public int getLevel() { return this.level; }
     public int getLevelPoint() { return this.levelPoint; }
-    public int getHp() { return this.hp; }
-    public int getMaxHp() { return this.maxHp; }
-    public int getMp() { return this.mp; }
-    public int getMaxMp() { return this.maxMp; }
     public int getPower() { return this.power; }
     public int getProtect() { return this.protect; }
-    public int getAttack() { return this.attack; }
-    public int getDefense() { return this.defense; }
-    public int getAgility() { return this.agility; }
     public int getMoney() { return this.money; }
     public int getTurnCount() { return this.turnCount; }
     public Sword getSword() { return this.sword; }
@@ -588,15 +590,8 @@ public class Brave {
     public void setName(String name) { this.name = name; }
     public void setLevel(int level) { this.level = level; }
     public void setLevelPoint(int levelPoint) { this.levelPoint = levelPoint; }
-    public void setHp(int hp) { this.hp = hp; }
-    public void setMaxHp(int maxHp) { this.maxHp = maxHp; }
-    public void setMp(int mp) { this.mp = mp; }
-    public void setMaxMp(int maxMp) { this.maxMp = maxMp; }
     public void setPower(int power) { this.power = power; }
     public void setProtect(int protect) { this.protect = protect; }
-    public void setAttack(int attack) { this.attack = attack; }
-    public void setDefense(int defense) { this.defense = defense; }
-    public void setAgility(int agility) { this.agility = agility; }
     public void setMoney(int money) { this.money = money; }
     public void setTurnCount(int turnCount) { this.turnCount = turnCount; }
     public void setSword(Sword sword) { this.sword = sword; }

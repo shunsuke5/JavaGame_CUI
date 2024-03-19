@@ -3,7 +3,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import brave.Brave;
+import battlechar.brave.Brave;
 import item.Item;
 
 public class MpItem extends Item {

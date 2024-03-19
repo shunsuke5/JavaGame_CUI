@@ -1,5 +1,5 @@
 package item;
-import brave.*;
+import battlechar.brave.*;
 
 public abstract class Item {
     private String name;          // 名前

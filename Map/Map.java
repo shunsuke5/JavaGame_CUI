@@ -1,5 +1,5 @@
 package map;
-import enemy.Enemy;
+import battlechar.enemy.Enemy;
 
 public abstract class Map {
     private String name;            // マップ名

@@ -1,7 +1,7 @@
 package map;
 
-import enemy.Enemy;
-import enemy.seaenemy.*;
+import battlechar.enemy.Enemy;
+import battlechar.enemy.seaenemy.*;
 
 public class Sea extends Map {
     // コンストラクタ
@@ -10,19 +10,14 @@ public class Sea extends Map {
     }
     // メソッド
     public Enemy createEnemy() {
-        setEnemy(returnEnemy());
-        return getEnemy();
-    }
-    public Enemy returnEnemy() {
         int enemyNumber = new java.util.Random().nextInt(3);
         switch(enemyNumber) {
             case 0:
-                return new 
+                return new ManEaterShark();
             case 1:
-                return new 
+                return new Pirate();
             default:
-                return new 
-            // 敵の実装を考える
+                return new CorpsFish();
         }
     }
 }

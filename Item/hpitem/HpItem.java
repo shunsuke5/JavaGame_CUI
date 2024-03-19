@@ -4,7 +4,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import item.Item;
-import brave.*;
+import battlechar.brave.*;
 
 public class HpItem extends Item {
     private int minHealPoint;

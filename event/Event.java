@@ -1,6 +1,6 @@
 package event;
 
-import enemy.Enemy;
+import battlechar.enemy.Enemy;
 
 public class Event {
 

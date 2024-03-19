@@ -1,11 +1,11 @@
-package enemy.forestenemy;
+package battlechar.enemy.forestenemy;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import enemy.Enemy;
-import brave.Brave;
+import battlechar.enemy.Enemy;
+import battlechar.brave.Brave;
 
 public abstract class ForestEnemy extends Enemy {
     // コンストラクタ
@@ -21,9 +21,9 @@ public abstract class ForestEnemy extends Enemy {
                     setLevel((int)(dataArray[2]));
                     setHp((int)(dataArray[3]));
                     setMp((int)(dataArray[4]));
-                    setAttack((int)dataArray[5]);
-                    setDefense((int)dataArray[6]);
-                    setAgility((int)dataArray[7]);
+                    setDefaultAttack((int)dataArray[5]);
+                    setDefaultDefense((int)dataArray[6]);
+                    setDefaultAgility((int)dataArray[7]);
                     setPoint((int)dataArray[8]);
                     setMoney((int)dataArray[9]);
                 }

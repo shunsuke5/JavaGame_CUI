@@ -1,17 +1,17 @@
-package enemy.seaenemy;
+package battlechar.enemy.mountainenemy;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import brave.Brave;
-import enemy.Enemy;
+import battlechar.brave.Brave;
+import battlechar.enemy.Enemy;
 
-public abstract class SeaEnemy extends Enemy {
-    public SeaEnemy(String name) {
+public abstract class MountainEnemy extends Enemy {
+    public MountainEnemy(String name) {
         super(name);
         try {
-            BufferedReader br = new BufferedReader(new FileReader("SeaEnemy_data.csv"));
+            BufferedReader br = new BufferedReader(new FileReader("MountainEnemy_data.csv"));
             String str = br.readLine();
             while(str != null) {
                 if (str.contains(getName())) {
@@ -20,9 +20,9 @@ public abstract class SeaEnemy extends Enemy {
                     setLevel((int)(dataArray[2]));
                     setHp((int)(dataArray[3]));
                     setMp((int)(dataArray[4]));
-                    setAttack((int)dataArray[5]);
-                    setDefense((int)dataArray[6]);
-                    setAgility((int)dataArray[7]);
+                    setDefaultAttack((int)dataArray[5]);
+                    setDefaultDefense((int)dataArray[6]);
+                    setDefaultAgility((int)dataArray[7]);
                     setPoint((int)dataArray[8]);
                     setMoney((int)dataArray[9]);
                 }

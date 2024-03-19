@@ -1,6 +1,6 @@
 package spell.attackspell;
-import brave.Brave;
-import enemy.Enemy;
+import battlechar.brave.Brave;
+import battlechar.enemy.Enemy;
 import spell.Spell;
 
 public class AttackSpell extends Spell {

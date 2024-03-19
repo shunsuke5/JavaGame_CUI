@@ -1,7 +1,7 @@
 package map;
 
-import enemy.Enemy;
-import enemy.forestenemy.*;
+import battlechar.enemy.Enemy;
+import battlechar.enemy.forestenemy.*;
 
 public class Forest extends Map {
     // コンストラクタ

@@ -11,12 +11,15 @@ public class Slime extends ForestEnemy {
         switch (decideAction(2)) {
             case 0:
                 attack(b);
+                break;
             case 1:
                 purupuru();
+                break;
         }
     }
     public void purupuru() {         // スライムの特殊行動
         // ぷるぷるするだけの行動
         System.out.println(getName() + "はぷるぷるしている。");
+        plusTurnCount();
     }
 }

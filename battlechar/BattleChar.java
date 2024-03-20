@@ -3,6 +3,8 @@ package battlechar;
 import battlechar.state.*;
 
 public abstract class BattleChar {
+    private String name;            // 名前
+
     private int hp;                 // 体力
     private int maxHp;              // 最大体力
     private int mp;                 // 魔力
@@ -17,16 +19,30 @@ public abstract class BattleChar {
     private int inBattleAgility;    // バトル時のすばやさ(状態によって変化)
     private int defaultAgility;     // 通常の素早さ
 
+    private int turnCount;          // 経過ターン数
     private State state;            // 状態
+    private boolean isUsually;
+    private boolean isPoison;
+    private boolean isParalysis;
+    private boolean isCursed;
+    private boolean isSleep;
 
     // メソッド
-    public void setIsUsually() { this.state = new IsUsually(); }
-    public void setIsPoison() { this.state = new IsPoison(); }
-    public void setIsCursed() { this.state = new IsCursed(); }
-    public void setIsSleep() { this.state = new IsSleep(); }
-    public void setIsParalysis() { this.state = new IsParalysis(); }
+    public boolean isNotAction() {
+        return (isSleep || isParalysis);
+    }
+
+    public void stateEffect() {
+        if (isUsually) {
+            return;
+        }
+        if (isPoison) {
+
+        }
+    }
 
     // アクセサ
+    public String getName() { return this.name; }
     public int getHp() { return this.hp; }
     public int getMaxHp() { return this.maxHp; }
     public int getMp() { return this.mp; }
@@ -37,8 +53,10 @@ public abstract class BattleChar {
     public int getDefaultDefense() { return this.defaultDefense; }
     public int getInBattleAgility() { return this.inBattleAgility; }
     public int getDefaultAgility() { return this.defaultAgility; }
+    public int getTurnCount() { return this.turnCount; }
     public State getState() { return this.state; }
 
+    public void setName(String name) { this.name = name; }
     public void setHp(int hp) { this.hp = hp; }
     public void setMaxHp(int maxHp) { this.maxHp = maxHp; }
     public void setMp(int mp) { this.mp = mp; }
@@ -49,5 +67,13 @@ public abstract class BattleChar {
     public void setDefaultDefense(int defaultDefense) { this.defaultDefense = defaultDefense; }
     public void setInBattleAgility(int inBattleAgility) { this.inBattleAgility = inBattleAgility; }
     public void setDefaultAgility(int defaultAgility) { this.defaultAgility = defaultAgility; }
+    public void initializationTurnCount() { this.turnCount = 0;}
+    public void plusTurnCount() { this.turnCount++;}
     public void setState(State state) { this.state = state; }
+
+    public void setIsUsually() { this.isUsually = true; }
+    public void setIsPoison() { this.isPoison = true; }
+    public void setIsCursed() { this.isCursed = true; }
+    public void setIsSleep() { this.isSleep = true; }
+    public void setIsParalysis() { this.isParalysis = true; }
 }

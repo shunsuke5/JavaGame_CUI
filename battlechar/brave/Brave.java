@@ -24,12 +24,10 @@ import itembag.ItemBag;
 
 public class Brave extends BattleChar {
     // 基礎ステータス
-    private String name;    // 名前
     private int level;      // レベル、上限は20
     private int levelPoint; // 経験値
     private int power;      // ちから
     private int protect;    // みのまもり
-    private int turnCount;  // 経過ターン数
 
     // 所持金
     private int money;
@@ -52,15 +50,15 @@ public class Brave extends BattleChar {
     // プログラム用変数
     private boolean winBattle;          // バトルに勝った時にtrue
     private boolean loseBattle;         // バトルに負けた時にtrue
-    private boolean isEscape;         // バトルから逃げた時にtrue
+    private boolean isEscape;           // バトルから逃げた時にtrue
     private int bossKillCount;          // ボスを倒した数
     
     // コンストラクタ
     public Brave() {
         System.out.print("主人公の名前を入力してください。:");
         String name = new java.util.Scanner(System.in).nextLine();
-        this.name = name;
-        System.out.println("勇者" + this.name + "の冒険が幕を開けた…");
+        setName(name);
+        System.out.println("勇者" + getName() + "の冒険が幕を開けた…");
 
         this.level = 1;
         setHp(20);
@@ -77,30 +75,30 @@ public class Brave extends BattleChar {
 
     }
     // メソッド
-    public void chooseMap() {   // どのマップに行くかの選択
+    public void chooseMap() {               // どのマップに行くかの選択
         Text.chooseMap();
         // 現在いるマップを選択したらもう一度マップアクションをやりなおさせたい、whileを追加
         // そのマップに最初に行く場合、そのマップのインスタンスを生成したい
         int number = new java.util.Scanner(System.in).nextInt();
         switch(number) {
             case 1:
-                System.out.println(this.name + "は" + "森へむかった！");
+                System.out.println(getName() + "は" + "森へむかった！");
                 currentLocation().setThereIs(false);
                 this.forestMap.setThereIs(true);
                 break;
             case 2:
-                System.out.println(this.name + "は" + "海へむかった！");
+                System.out.println(getName() + "は" + "海へむかった！");
                 currentLocation().setThereIs(false);
                 this.seaMap.setThereIs(true);
                 break;
             case 3:
-                System.out.println(this.name + "は" + "山へむかった！");
+                System.out.println(getName() + "は" + "山へむかった！");
                 currentLocation().setThereIs(false);
                 this.mountainMap.setThereIs(true);
                 break;
         }
     }
-    public void chooseMapAction() {   // マップにおいてどの行動をするか選ぶメソッド
+    public void chooseMapAction() {         // マップにおいてどの行動をするか選ぶメソッド
         // 違った選択肢を選ばれたら繰り返したいのでwhileを追加する
         // というか、chooseMapActionはラスボス戦まで続くので
         // while (ラスボス戦フラグ == off) のような形？
@@ -124,38 +122,38 @@ public class Brave extends BattleChar {
 
         switch(number) {
             case 1:
-                searchEnemy();      // 敵と戦う
+                searchEnemy();              // 敵と戦う
                 break;
             case 2:
-                rest();             // 休んでHPとMP回復
+                rest();                     // 休んでHPとMP回復
                 break;
             case 3:
-                shopping();         // アイテム購入
+                shopping();                 // アイテム購入
                 break;
             case 4:
-                checkItemBag();    // アイテムリスト確認
+                checkItemBag();             // アイテムリスト確認
                 break;
             case 5:
-                checkStatus();      // ステータス確認
+                checkStatus();              // ステータス確認
                 break;
             case 6:
-                chooseMap();        // 他のマップへ移動
+                chooseMap();                // 他のマップへ移動
                 break;
             case 7:
-                battleBoss();       // マップボス戦
+                battleBoss();               // マップボス戦
                 break;
             case 8:
-                searchHikyou();     // 秘境探索(中ボス)
+                searchHikyou();             // 秘境探索(中ボス)
                 break;
             default:
-                break;              // 想定外の選択肢の場合、もう一度選ばせる
+                break;                      // 想定外の選択肢の場合、もう一度選ばせる
         }
     }
-    public void searchEnemy() {     // 敵と戦う
-        System.out.println(this.name + "はてきをみつけた！");
+    public void searchEnemy() {             // 敵と戦う
+        System.out.println(getName() + "はてきをみつけた！");
         battle(currentLocation().createEnemy());
     }
-    public void rest() {            // 休んで体力と魔力を回復する
+    public void rest() {                    // 休んで体力と魔力を回復する
         Text.rest();
         int choose = new java.util.Scanner(System.in).nextInt();
         if (choose == 1) {
@@ -166,11 +164,11 @@ public class Brave extends BattleChar {
             return;
         }
     }
-    public void shopping() {        // アイテム購入
+    public void shopping() {                // アイテム購入
         ItemShop itemShop = new ItemShop();
         itemShop.sell(this);
     }
-    public void checkItemBag() {   // アイテムリスト確認
+    public void checkItemBag() {            // アイテムリスト確認
         int itemId = 0;
 
         do {
@@ -180,36 +178,37 @@ public class Brave extends BattleChar {
             isUseItem(itemId);
         } while(itemId != -1);
     }
-    public void checkStatus() {     // ステータス確認
+    public void checkStatus() {             // ステータス確認
         String str = """
                 なまえ：%s　レベル：%d
                 HP：%d / %d　MP：%d / %d
                 ちから：%d　まもり：%d
                 すばやさ：%d
                 """;
-        System.out.printf(str,this.name,this.level,getHp(),getMaxHp(),getMp(),getMaxMp(),
+        System.out.printf(str,getName(),this.level,getHp(),getMaxHp(),getMp(),getMaxMp(),
                             getDefaultAttack(),getDefaultDefense(),getDefaultAgility());
     }
 
-    public void battleBoss() {      // マップボス戦
+    public void battleBoss() {              // マップボス戦
         // ボスとのバトル
         // 勝ったら以下のようにボスキルカウントに+1する
         this.bossKillCount++;
         // ショップのアイテムを増やす処理を以下に記述
     }
-    public void searchHikyou() {    // 秘境探索(中ボス)
+    public void searchHikyou() {            // 秘境探索(中ボス)
         // 秘境が解放されているかのチェック
     }
-    public void battle(Enemy enemy) {   // 敵とエンカウントする
+    public void battle(Enemy enemy) {       // 敵とエンカウントする
         System.out.println(enemy.getName() + "があらわれた！");
-        this.turnCount = 0;
+        initializationTurnCount();
 
         while (!this.winBattle || !this.loseBattle || !this.isEscape || !enemy.getIsEscape()) {
-            // じゅもんやアイテム画面から「0」で戻った時、ここに戻りたい
             if (getDefaultAgility() >= enemy.getDefaultAgility()) { // 勇者が先攻の場合
                 getState().effect(this);                            // 状態異常判定処理
-                do {                                                // 勇者ターン
-                    System.out.println(this.name + "はどうする？");
+                while (getTurnCount() == enemy.getTurnCount()) {    // 勇者ターン]
+                    System.out.printf("HP：%d / %d\nMP：%d / %d",
+                                        getHp(),getMaxHp(),getMp(),getMaxMp());
+                    System.out.println(getName() + "はどうする？");
                     System.out.println("攻撃：１　呪文：２　防御：３　アイテム：４　逃げる：５");
                     System.out.print("\n\s->\s");
                     int action = new java.util.Scanner(System.in).nextInt();
@@ -233,7 +232,7 @@ public class Brave extends BattleChar {
                         default:
                             break;
                     }
-                } while(this.turnCount == enemy.getTurnCount());
+                }
                 if (enemy.getHp() <= 0) {                           // 勇者ターン終了、敵HPチェック
                     win(enemy);
                     continue;
@@ -243,7 +242,9 @@ public class Brave extends BattleChar {
                     continue;
                 }
                 enemy.getState().effect(enemy);                     // 状態異常判定処理
-                enemy.turn(this);                                   // 敵ターン
+                if (!(enemy.getState().getStateDetail() == "cannotAction")) {
+                    enemy.turn(this);                               // 敵ターン
+                }
                 if (getHp() <= 0) {                                 // 敵ターン終了、勇者HPチェック
                     die();
                     continue;
@@ -253,15 +254,19 @@ public class Brave extends BattleChar {
                     enemy.run();
                     continue;
                 }
-                // ここに状態異常判定処理を入れたい
-                enemy.turn(this);                                   // 敵ターン
+                enemy.getState().effect(enemy);                     // 状態異常判定処理
+                if (!(enemy.getState().getStateDetail() == "cannotAction")) {
+                    enemy.turn(this);                               // 敵ターン
+                }
                 if (getHp() <= 0) {                                 // 敵ターン終了、勇者HPチェック
                     die();
                     continue;
                 }
-                // ここに状態異常判定処理を入れたい
-                do {                                                // 勇者ターン
-                    System.out.println(this.name + "はどうする？");
+                getState().effect(this);                            // 状態異常判定処理
+                while(getTurnCount() != enemy.getTurnCount()) {                                                // 勇者ターン
+                    System.out.printf("HP：%d / %d\nMP：%d / %d",
+                                        getHp(),getMaxHp(),getMp(),getMaxMp());
+                    System.out.println(getName() + "はどうする？");
                     System.out.println("攻撃：１　呪文：２　防御：３　アイテム：４　逃げる：５");
                     System.out.print("\n\s->\s");
                     int action = new java.util.Scanner(System.in).nextInt();
@@ -285,7 +290,7 @@ public class Brave extends BattleChar {
                         default:
                             break;
                     }
-                } while(this.turnCount != enemy.getTurnCount());
+                }
                 if (enemy.getHp() <= 0) {                           // 勇者ターン終了、敵HPチェック
                     win(enemy);
                     continue;
@@ -293,27 +298,24 @@ public class Brave extends BattleChar {
             }
         }
     }
-    public void attack(Enemy enemy) {
-        // ミス、通常攻撃、痛恨の一撃のどれが出るかをランダムに決定する
+    public void attack(Enemy enemy) {       // ミス、通常攻撃、痛恨の一撃のどれが出るかをランダムに決定する
         int result = new java.util.Random().nextInt(100) + 1;
 
         if (1 <= result && result <= 10) {              // 1から10が出たらミス
             System.out.println("ミス！" + enemy.getName() + "はダメージをうけない！");
-            this.turnCount++;
         } else if (95 <= result && result >= 100) {     // 95から100が出たら痛恨の一撃
             int damage = calculateDamage(enemy) * 2;
             System.out.println("かいしんのいちげき！");
             System.out.println(enemy.getName() + "に" + damage + "ポイントのダメージ！");
             enemy.setHp(enemy.getHp() - damage);
-            this.turnCount++;
         } else {                                        // それ以外は通常攻撃
             int damage = calculateDamage(enemy);
             System.out.println(enemy.getName() + "に" + damage + "ポイントのダメージ！");
             enemy.setHp(enemy.getHp() - damage);
-            this.turnCount++;
         }
+        plusTurnCount();
     }
-    public void spell(Enemy enemy) {    // 戦闘において呪文を使用するメソッド
+    public void spell(Enemy enemy) {        // 戦闘において呪文を使用するメソッド
         if (this.level < 3) {
             System.out.println("つかえるじゅもんがない！");
             return;
@@ -322,16 +324,16 @@ public class Brave extends BattleChar {
         displaySpell();
         int spellId = new java.util.Scanner(System.in).nextInt();
         useSpell(spellId).resite(this, enemy);
-        this.turnCount++;
+        plusTurnCount();
     }
-    public void defense() { // 戦闘において防御するメソッド
+    public void defense() {                 // 戦闘において防御するメソッド
         int strongDefense = (int) (getDefaultDefense() * 1.5);
         // この行動は素早さ関係なく勇者が先攻となる
         // そしてこのターン終了時には防御力を元に戻さなければならない
-        this.turnCount++;
+        plusTurnCount();
     }
 
-    public void battleUseItem() {    // 戦闘においてアイテムを使用するメソッド
+    public void battleUseItem() {           // 戦闘においてアイテムを使用するメソッド
         System.out.println("どのアイテムをつかう？(-1でもどる)");
         this.itemBag.displayItemBag();
         int itemId = new java.util.Scanner(System.in).nextInt();
@@ -339,17 +341,17 @@ public class Brave extends BattleChar {
             return;
         }
         if (isUseItem(itemId)) {
-            this.turnCount++;
+            plusTurnCount();
         } else {
             return;
         }
     }
-    public boolean isUseItem(int itemId) {    // アイテムを使用するメソッド
-        // アイテムを使用すればtrue、使用しなければfalseを返す
+    public boolean isUseItem(int itemId) {  // アイテムを使用すればtrue、使用しなければfalseを返す
         if (this.itemBag.checkStorage(itemId) == 0) {
             return false;
         }
         this.itemBag.getItem()[itemId][0].use(this);
+        this.itemBag.decrease(itemId);
         return true;
     }
     public void run() {     // 戦闘において逃げるメソッド
@@ -357,7 +359,7 @@ public class Brave extends BattleChar {
         // if (自分と相手のレベルと素早さの合計を比べてなんやかんや計算) → 逃げられるか無理かを決める
     }
 
-    public void win(Enemy enemy) {  // 戦いに勝利
+    public void win(Enemy enemy) {          // 戦いに勝利
         this.winBattle = true;
         System.out.println(enemy.getName() + "をたおした！");
         System.out.println(enemy.getPoint() + "ポイントのけいけんちをかくとく！");
@@ -369,9 +371,9 @@ public class Brave extends BattleChar {
         System.out.println(enemy.getMoney() + "マネーをてにいれた！");
     }
 
-    public void die() {         // 戦いに敗北
+    public void die() {                     // 戦いに敗北
         this.loseBattle = true;
-        System.out.println(this.name + "はしんでしまった！");
+        System.out.println(getName() + "はしんでしまった！");
     }
 
     public boolean isLevelUp(Enemy enemy) {
@@ -406,7 +408,7 @@ public class Brave extends BattleChar {
                         str.split(",");
                     }
                     if (beforeLevel < this.level) {
-                        System.out.println(this.name + "のレベルが" + beforeLevel + 
+                        System.out.println(getName() + "のレベルが" + beforeLevel + 
                                             "から" + this.level + "にあがった！");
                         upStatus(beforeLevel, this.level);
                     }
@@ -457,7 +459,7 @@ public class Brave extends BattleChar {
             while(str != null) {
                 String[] dataArray = str.split(",");
                 if (dataArray[2] == (Integer.toString(afterLevel))) {
-                    System.out.println(this.name + "は" + dataArray[0] + "のじゅもんがつかえるようになった！");
+                    System.out.println(getName() + "は" + dataArray[0] + "のじゅもんがつかえるようになった！");
                     return;
                 }
                 str = br.readLine();
@@ -573,13 +575,11 @@ public class Brave extends BattleChar {
 
     }
     // アクセサ
-    public String getName() { return this.name; }
     public int getLevel() { return this.level; }
     public int getLevelPoint() { return this.levelPoint; }
     public int getPower() { return this.power; }
     public int getProtect() { return this.protect; }
     public int getMoney() { return this.money; }
-    public int getTurnCount() { return this.turnCount; }
     public Sword getSword() { return this.sword; }
     public Helmet getHelmet() { return this.helmet; }
     public Armor getArmor() { return this.armor; }
@@ -587,13 +587,11 @@ public class Brave extends BattleChar {
     public Spell getSpell() { return this.spell; }
     public int getBossKillCount() { return this.bossKillCount; }
 
-    public void setName(String name) { this.name = name; }
     public void setLevel(int level) { this.level = level; }
     public void setLevelPoint(int levelPoint) { this.levelPoint = levelPoint; }
     public void setPower(int power) { this.power = power; }
     public void setProtect(int protect) { this.protect = protect; }
     public void setMoney(int money) { this.money = money; }
-    public void setTurnCount(int turnCount) { this.turnCount = turnCount; }
     public void setSword(Sword sword) { this.sword = sword; }
     public void setHelmet(Helmet helmet) { this.helmet = helmet; }
     public void setArmor(Armor armor) { this.armor = armor; }

@@ -1,0 +1,6 @@
+状態,ID,状態の詳細
+つうじょう,0,default
+どく,1,contHpDamage
+ねむり,2,cannotAction
+まひ,3,cannotAction
+のろい,4,contMpDamage

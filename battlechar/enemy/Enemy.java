@@ -3,19 +3,17 @@ import battlechar.BattleChar;
 import battlechar.brave.*;
 
 public abstract class Enemy extends BattleChar {
-    private String name;        // モンスター名
     private int enemyId;        // 敵ID
     private int level;          // レベル、これを用いて逃げるかの判断をする
     private int point;          // 経験値
     private int dropMoney;      // 落とすお金
-    private int turnCount;      // ターン経過数
     private boolean isEscape;   // 逃げた時にtrue
     private int enemyCount;     // 敵の数、今回は使わない予定
 
     // コンストラクタ
     public Enemy(String name) {
-        this.name = name;
-        this.turnCount = 0;
+        setName(name);
+        initializationTurnCount();
     }
 
     // 抽象メソッド
@@ -56,7 +54,7 @@ public abstract class Enemy extends BattleChar {
         }
     }
     public void run() {
-        System.out.println(this.name + "はにげだした！");
+        System.out.println(getName() + "はにげだした！");
         this.isEscape = true;
     }
     public boolean isRun(int braveLevel) {                      // trueであれば逃げる、falseであれば逃げない
@@ -81,23 +79,17 @@ public abstract class Enemy extends BattleChar {
         return new java.util.Random().nextInt(range) + min;
     }
     // アクセサ
-    public String getName() { return this.name; }
     public int getEnemyId() { return this.enemyId; }
     public int getLevel() { return this.level; }
     public int getPoint() { return this.point; }
     public int getMoney() { return this.dropMoney; }
     public int getEnemyCount() { return this.enemyCount; }
     public boolean getIsEscape() { return this.isEscape; }
-    public int getTurnCount() { return this.turnCount; }
 
-    public void setName(String name) { this.name = name; }
     public void setEnemyId(int enemyId) { this.enemyId = enemyId; }
     public void setLevel(int level) { this.level = level; }
     public void setPoint(int point) { this.point = point; }
     public void setMoney(int dropMoney) { this.dropMoney = dropMoney; }
     public void setEnemyCount(int enemyCount) { this.enemyCount = enemyCount; }
     public void setIsEscape(boolean isEscape) { this.isEscape = isEscape; }
-    public void setTurnCount() { this.turnCount = 0; }
-
-    public void plusTurnCount() { this.turnCount++; }
 }

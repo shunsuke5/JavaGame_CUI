@@ -14,10 +14,10 @@ public class KillerBee extends ForestEnemy{
                 contStub(brave);
         }
     }
-    public void contStub(Brave brave) {
-        System.out.println(getName() + "は連続で刺してきた！");
-        attack(brave);
-        attack(brave);
+    public void poisonNeedle(Brave brave) {
+        System.out.println(getName() + "はどくばりでさしてきた！");
+        // 状態異常は絶対ではなく、確率でなるようにしたいのでその処理を入れる
+        System.out.println();
         plusTurnCount();
     }
 }

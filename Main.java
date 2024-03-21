@@ -31,18 +31,6 @@ public class Main {
         Event.congratulations();
         
         */
-        int[] a = returnLevelDataIndex();
-        for (int i = 0; i < 5; i++) {
-            System.out.println(a[i]);
-        }
-    }
-    public static final int[] returnLevelDataIndex() {
-        final int LEVEL = 0;
-        final int NEED_LEVEL_POINT = 1;
-        final int POWER = 2;
-        final int DEFENSE = 3;
-        final int AGILITY = 4;
-        final int[] DATA_ARRAY_INDEX = {LEVEL,NEED_LEVEL_POINT,POWER,DEFENSE,AGILITY};
-        return DATA_ARRAY_INDEX;
+        System.out.println(10 / 4);
     }
 }

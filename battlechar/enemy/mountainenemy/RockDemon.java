@@ -11,8 +11,9 @@ public class RockDemon extends MountainEnemy {
         switch (decideAction(2)) {
             case 0:
                 attack(b);
+                break;
             case 1:
-                purupuru();
+                break;
         }
     }
 }

@@ -1,12 +1,13 @@
 package battlechar.enemy.forestenemy;
 import battlechar.brave.Brave;
+import text.Text;
 
 public class Goblin extends ForestEnemy {
     // コンストラクタ
     public Goblin() {
         super("ゴブリン");
     }
-    public void turn(Brave brave) {         // ランダムで自分の行動を決める
+    public void turn(Brave brave) {             // ランダムで自分の行動を決める
         switch (decideAction(2)) {
             case 0:
                 attack(brave);
@@ -16,11 +17,11 @@ public class Goblin extends ForestEnemy {
                 break;
         }
     }
-    public void stealAttack(Brave brave) {  // 攻撃しつつ勇者からマネーを少し奪う
+    public void stealAttack(Brave brave) {      // 攻撃しつつ勇者からマネーを少し奪う
         System.out.println(getName() + "のぬすむこうげき！");
         int damage = calculateDamage(brave.getInBattleDefense());
         brave.setHp(brave.getHp() - damage);
-        System.out.println(brave.getName() + "に" + damage + "ポイントのダメージ！");
+        Text.attack(brave.getName(), damage);
         int stealMoney = returnRandomNum(2, 3);
         setMoney(getMoney() + stealMoney);
         brave.setMoney(brave.getMoney() - stealMoney);

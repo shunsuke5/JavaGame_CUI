@@ -40,7 +40,7 @@ public abstract class Enemy extends BattleChar {
     }
     public int calculateDamage(int braveDefense) {              // ダメージ値を計算して返す
         final int DEFAULT_RANGE = 1;
-        int attackRange = (getInBattleAttack() % 4) + DEFAULT_RANGE;    // 攻撃力が4増える毎にダメージ範囲を +1
+        int attackRange = (getInBattleAttack() / 4) + DEFAULT_RANGE;    // 攻撃力が4増える毎にダメージ範囲を +1
         int enemyAttack = new java.util.Random().nextInt(attackRange) + getInBattleAttack();
         int damage = enemyAttack - braveDefense;
         damage = controlDamage(damage);
@@ -77,6 +77,10 @@ public abstract class Enemy extends BattleChar {
     }
     public int returnRandomNum(int min, int range) {            // 各敵行動で乱数を使いたい時に使用
         return new java.util.Random().nextInt(range) + min;
+    }
+    public boolean isSuccessGiveAbnormality(int probability) {  // 状態異常を相手に付与する時にtrue
+        int result = new java.util.Random().nextInt(100);
+        return 0 < result && result < probability;
     }
     // アクセサ
     public int getEnemyId() { return this.enemyId; }

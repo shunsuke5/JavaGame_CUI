@@ -2,6 +2,8 @@ package battlechar.enemy.forestenemy.boss;
 
 import battlechar.brave.Brave;
 import battlechar.enemy.forestenemy.ForestEnemy;
+import battlechar.state.IsCursed;
+import text.Text;
 
 public class CursedBigTree extends ForestEnemy {
     public CursedBigTree() {
@@ -12,16 +14,21 @@ public class CursedBigTree extends ForestEnemy {
         switch (decideAction(2)) {
             case 0:
                 attack(brave);
+                break;
             case 1:
                 curse(brave);
+                break;
             case 2:
                 suffer();
+                break;
         }
     }
     public void curse(Brave brave) {
-        System.out.println(getName() + "は" + brave.getName() + "をのろった！");
+        Text.isCursed(getName(), brave.getName());
+        brave.setState(new IsCursed());
     }
     public void suffer() {
         System.out.println(getName() + "はのろいにくるしんでいる。");
+        setState(new IsCursed());
     }
 }

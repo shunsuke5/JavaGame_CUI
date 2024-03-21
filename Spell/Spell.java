@@ -1,6 +1,5 @@
 package spell;
-import battlechar.brave.Brave;
-import battlechar.enemy.Enemy;
+import battlechar.BattleChar;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -37,8 +36,6 @@ public abstract class Spell{
             e.getStackTrace();
         }
     }
-    // 抽象メソッド
-    public abstract void resite(Brave b, Enemy e);
     // アクセサ
     public String getName() { return this.name; }
     public int getNeedLevel() { return this.needLevel; }

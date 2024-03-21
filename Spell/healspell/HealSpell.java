@@ -1,7 +1,6 @@
 package spell.healspell;
-import battlechar.brave.*;
+import battlechar.BattleChar;
 import spell.Spell;
-import battlechar.enemy.Enemy;
 
 public class HealSpell extends Spell {
 
@@ -10,21 +9,21 @@ public class HealSpell extends Spell {
         super(name);
     }
     // メソッド
-    public void resite(Brave b, Enemy e) {                       // 指定した範囲からランダムにポイントを生成
-        if (b.getMp() < getConsumptionMp()) {
+    public void resite(BattleChar user, BattleChar receiver) {                       // 指定した範囲からランダムにポイントを生成
+        if (user.getMp() < getConsumptionMp()) {
             System.out.println("MPがたりない！");
             return;
         }
-        System.out.println(b.getName() + "は" + getName() + "をとなえた！");
+        System.out.println(user.getName() + "は" + getName() + "をとなえた！");
         int healPoint = new java.util.Random().nextInt(getPointRange()) + getMinPoint();
-        controlHeal(b, healPoint);
-        System.out.println(b.getName() + "のHPを" + healPoint + "ポイントかいふくした！");
+        controlHeal(user, healPoint);
+        System.out.println(user.getName() + "のHPを" + healPoint + "ポイントかいふくした！");
     }
-    public void controlHeal(Brave b, int healPoint) {     // 回復量が最大HPを超えないように調整
-        if (healPoint > (b.getMaxHp() - b.getHp())) {
-            b.setHp(b.getMaxHp());
+    public void controlHeal(BattleChar user, int healPoint) {     // 回復量が最大HPを超えないように調整
+        if (healPoint > (user.getMaxHp() - user.getHp())) {
+            user.setHp(user.getMaxHp());
         } else {
-            b.setHp(b.getHp() + healPoint);
+            user.setHp(user.getHp() + healPoint);
         }
     }
 }

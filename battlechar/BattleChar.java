@@ -21,25 +21,8 @@ public abstract class BattleChar {
 
     private int turnCount;          // 経過ターン数
     private State state;            // 状態
-    private boolean isUsually;
-    private boolean isPoison;
-    private boolean isParalysis;
-    private boolean isCursed;
-    private boolean isSleep;
 
     // メソッド
-    public boolean isNotAction() {
-        return (isSleep || isParalysis);
-    }
-
-    public void stateEffect() {
-        if (isUsually) {
-            return;
-        }
-        if (isPoison) {
-
-        }
-    }
 
     // アクセサ
     public String getName() { return this.name; }
@@ -70,10 +53,4 @@ public abstract class BattleChar {
     public void initializationTurnCount() { this.turnCount = 0;}
     public void plusTurnCount() { this.turnCount++;}
     public void setState(State state) { this.state = state; }
-
-    public void setIsUsually() { this.isUsually = true; }
-    public void setIsPoison() { this.isPoison = true; }
-    public void setIsCursed() { this.isCursed = true; }
-    public void setIsSleep() { this.isSleep = true; }
-    public void setIsParalysis() { this.isParalysis = true; }
 }

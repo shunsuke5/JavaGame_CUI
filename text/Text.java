@@ -33,4 +33,19 @@ public abstract class Text {
     public static void attackSpell(String name, int attackPoint) {  // 攻撃呪文使用時テキスト
         System.out.println(name + "に" + attackPoint + "ポイントのダメージ！");
     }
+    public static void attack(String damagedChar, int damage) {     // 通常攻撃時など使用テキスト
+        System.out.println(damagedChar + "に" + damage + "ポイントのダメージ！");
+    }
+    public static void isPoison(String poisonedChar) {
+        System.out.println(poisonedChar + "はどくにおかされた！");
+    }
+    public static void isCursed(String cursingChar, String cursedChar) {
+        System.out.println(cursingChar + "は" + cursedChar + "をのろった！");
+    }
+    public static void isSleep(String sleepingChar) {
+        System.out.println(sleepingChar + "はねてしまった！");
+    }
+    public static void isParalysis(String paralysisChar) {
+        System.err.println(paralysisChar + "はまひしてしまった！");
+    }
 }

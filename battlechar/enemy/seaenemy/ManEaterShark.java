@@ -9,10 +9,9 @@ public class ManEaterShark extends SeaEnemy {
     // メソッド
     public void turn(Brave b) {     // ランダムで自分の行動を決める
         switch (decideAction(2)) {
-            case 0:
+            default:
                 attack(b);
-            case 1:
-                purupuru();
+                break;
         }
     }
 }

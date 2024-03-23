@@ -82,6 +82,9 @@ public abstract class Enemy extends BattleChar {
         int result = new java.util.Random().nextInt(100);
         return 0 < result && result < probability;
     }
+    public String toString() {
+        return "Enemy";
+    }
     // アクセサ
     public int getEnemyId() { return this.enemyId; }
     public int getLevel() { return this.level; }

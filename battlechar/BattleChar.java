@@ -1,6 +1,6 @@
 package battlechar;
 
-import battlechar.state.*;
+import state.*;
 
 public abstract class BattleChar {
     private String name;            // 名前
@@ -22,6 +22,8 @@ public abstract class BattleChar {
     private int turnCount;          // 経過ターン数
     private State state;            // 状態
 
+    // 抽象メソッド
+    public abstract String toString();
     // メソッド
 
     // アクセサ

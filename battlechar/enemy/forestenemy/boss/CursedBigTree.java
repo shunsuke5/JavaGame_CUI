@@ -2,7 +2,7 @@ package battlechar.enemy.forestenemy.boss;
 
 import battlechar.brave.Brave;
 import battlechar.enemy.forestenemy.ForestEnemy;
-import battlechar.state.IsCursed;
+import state.IsCursed;
 import text.Text;
 
 public class CursedBigTree extends ForestEnemy {

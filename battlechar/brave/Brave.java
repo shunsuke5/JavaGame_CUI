@@ -574,6 +574,9 @@ public class Brave extends BattleChar {
     public void equipArmor() {      // 鎧を装備する
 
     }
+    public String toString() {
+        return "brave";
+    }
     // アクセサ
     public int getLevel() { return this.level; }
     public int getLevelPoint() { return this.levelPoint; }

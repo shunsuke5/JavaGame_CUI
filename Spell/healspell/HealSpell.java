@@ -12,6 +12,10 @@ public class HealSpell extends Spell {
     public void resite(BattleChar user, BattleChar receiver) {                       // 指定した範囲からランダムにポイントを生成
         if (user.getMp() < getConsumptionMp()) {
             System.out.println("MPがたりない！");
+            // MPがたりないのが敵ならターンカウントをプラスする処理を入れる
+            if (user.toString().equals("Enemy")) {
+                user.plusTurnCount();
+            }
             return;
         }
         System.out.println(user.getName() + "は" + getName() + "をとなえた！");

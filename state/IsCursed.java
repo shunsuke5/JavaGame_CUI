@@ -1,4 +1,4 @@
-package battlechar.state;
+package state;
 
 import battlechar.BattleChar;
 

@@ -6,11 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import battlechar.BattleChar;
-import battlechar.state.IsCursed;
-import battlechar.state.IsParalysis;
-import battlechar.state.IsPoison;
-import battlechar.state.IsSleep;
-import battlechar.state.State;
+import state.*;
+import text.Text;
 
 public class AbnormalitySpell extends Spell {
     // コンストラクタ
@@ -18,13 +15,17 @@ public class AbnormalitySpell extends Spell {
         super("name");
     }
     // メソッド
-    public void resite(BattleChar user, BattleChar receiver, State state) {
+    public void resite(BattleChar user, BattleChar receiver, State state, int probability) {
         if (user.getMp() < getConsumptionMp()) {
             System.out.println("MPがたりない！");
             return;
         }
         System.out.println(user.getName() + "は" + getName() + "をとなえた！");
-
+        if (isSuccessGiveAbnormality(probability)) {
+            switchAbnormalityText(receiver, state.getStateName());
+        } else {
+            System.out.println("ミス！じゅもんはあたらなかった！");
+        }
     }
     public boolean isSuccessGiveAbnormality(int probability) {  // 状態異常を相手に付与する時にtrue
         int result = new java.util.Random().nextInt(100);
@@ -61,4 +62,22 @@ public class AbnormalitySpell extends Spell {
         }
         return null;
     }
+    public void switchAbnormalityText(BattleChar receiver, String stateName) {
+        switch(stateName) {
+            case "どく":
+                Text.makePoison(receiver.getName());
+                break;
+            case "まひ":
+                Text.makeParalysis(receiver.getName());
+                break;
+            case "のろい":
+                Text.makeCurse(receiver.getName());
+                break;
+            case "ねむり":
+                Text.makeSleep(receiver.getName());
+                break;
+                
+        }
+    }
+    public void resite(BattleChar user, BattleChar receiver) {}
 }

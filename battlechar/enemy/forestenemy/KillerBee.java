@@ -1,6 +1,6 @@
 package battlechar.enemy.forestenemy;
 import battlechar.brave.Brave;
-import battlechar.state.IsPoison;
+import state.IsPoison;
 import text.Text;
 
 public class KillerBee extends ForestEnemy{
@@ -24,7 +24,7 @@ public class KillerBee extends ForestEnemy{
         Text.attack(brave.getName(), damage);
         if (isSuccessGiveAbnormality(10)) {
             brave.setState(new IsPoison());
-            Text.isPoison(brave.getName());
+            Text.makePoison(brave.getName());
         }
         plusTurnCount();
     }

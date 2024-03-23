@@ -1,5 +1,6 @@
 package spell;
 import battlechar.BattleChar;
+import state.State;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -36,6 +37,9 @@ public abstract class Spell{
             e.getStackTrace();
         }
     }
+    // 抽象メソッド
+    public abstract void resite(BattleChar user, BattleChar receiver);
+    public abstract void resite(BattleChar user, BattleChar receiver, State state, int probability);
     // アクセサ
     public String getName() { return this.name; }
     public int getNeedLevel() { return this.needLevel; }

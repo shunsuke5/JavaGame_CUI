@@ -17,7 +17,12 @@ public class AbnormalitySpell extends Spell {
     // メソッド
     public void resite(BattleChar user, BattleChar receiver, State state, int probability) {
         if (user.getMp() < getConsumptionMp()) {
-            System.out.println("MPがたりない！");
+            if (user.toString().equals("Brave")) {
+                System.out.println("MPがたりない！");
+            } else {
+                System.out.println("しかしMPがたりなかった！");
+                user.plusTurnCount();
+            }
             return;
         }
         System.out.println(user.getName() + "は" + getName() + "をとなえた！");

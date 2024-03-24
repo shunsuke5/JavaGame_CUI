@@ -575,7 +575,7 @@ public class Brave extends BattleChar {
 
     }
     public String toString() {
-        return "brave";
+        return "Brave";
     }
     // アクセサ
     public int getLevel() { return this.level; }

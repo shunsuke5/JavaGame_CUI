@@ -1,6 +1,7 @@
 package spell.healspell;
 import battlechar.BattleChar;
 import spell.Spell;
+import state.State;
 
 public class HealSpell extends Spell {
 
@@ -11,9 +12,10 @@ public class HealSpell extends Spell {
     // メソッド
     public void resite(BattleChar user, BattleChar receiver) {                       // 指定した範囲からランダムにポイントを生成
         if (user.getMp() < getConsumptionMp()) {
-            System.out.println("MPがたりない！");
-            // MPがたりないのが敵ならターンカウントをプラスする処理を入れる
-            if (user.toString().equals("Enemy")) {
+            if (user.toString().equals("Brave")) {
+                System.out.println("MPがたりない！");
+            } else {
+                System.out.println("しかしMPがたりなかった！");
                 user.plusTurnCount();
             }
             return;
@@ -30,4 +32,5 @@ public class HealSpell extends Spell {
             user.setHp(user.getHp() + healPoint);
         }
     }
+    public void resite(BattleChar user, BattleChar receiver, State state, int probability) {}
 }

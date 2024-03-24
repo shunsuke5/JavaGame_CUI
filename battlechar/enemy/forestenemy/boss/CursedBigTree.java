@@ -24,11 +24,12 @@ public class CursedBigTree extends ForestEnemy {
         }
     }
     public void curse(Brave brave) {
-        Text.isCursed(getName(), brave.getName());
         brave.setState(new IsCursed());
+        Text.makeCurse(brave.getName());
     }
     public void suffer() {
         System.out.println(getName() + "はのろいにくるしんでいる。");
         setState(new IsCursed());
+        Text.selfAbnormalityState(this, "のろい");
     }
 }

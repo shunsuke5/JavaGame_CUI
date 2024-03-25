@@ -1,4 +1,4 @@
-public class DecimalToHexadecimal {                         // 10進数を16進数に変換するプログラム
+public abstract class DecimalToHexadecimal {                // 10進数を16進数に変換するプログラム
 
     public static void decimalToHexadecimal(int decimal) {  // 10進数を16進数に変換し表示する
         int a = (int) ( decimal / 16 );                     // 1桁目の計算

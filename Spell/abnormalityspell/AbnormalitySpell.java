@@ -54,16 +54,16 @@ public class AbnormalitySpell extends Spell {
             return null;
         }
     }
-    public State returnGiveAbnormality(String abnormalityName) {
+    public State returnGiveAbnormality(String abnormalityName, BattleChar anyone) {
         switch(abnormalityName) {
             case "どく":
-                return new IsPoison();
+                return new IsPoison(anyone);
             case "まひ":
-                return new IsParalysis();
+                return new IsParalysis(anyone);
             case "ねむり":
-                return new IsSleep();
+                return new IsSleep(anyone);
             case "のろい":
-                return new IsCursed();
+                return new IsCursed(anyone);
         }
         return null;
     }

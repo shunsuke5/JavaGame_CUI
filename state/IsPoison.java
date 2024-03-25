@@ -4,8 +4,9 @@ import battlechar.BattleChar;
 
 public class IsPoison extends State {   // HPが徐々に減っていく
     // コンストラクタ
-    public IsPoison() {
+    public IsPoison(BattleChar anyone) {
         super("どく");
+        anyone.decideAbnormalTurnPeriod();
     }
 
     public void effect(BattleChar anyone) {

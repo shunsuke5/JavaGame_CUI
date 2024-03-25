@@ -3,8 +3,9 @@ package state;
 import battlechar.BattleChar;
 
 public class IsCursed extends State {   // MPが徐々に減っていく
-    public IsCursed() {
+    public IsCursed(BattleChar anyone) {
         super("のろい");
+        anyone.decideAbnormalTurnPeriod();
     }
 
     public void effect(BattleChar anyone) {

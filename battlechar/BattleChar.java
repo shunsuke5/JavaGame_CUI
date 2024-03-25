@@ -21,11 +21,18 @@ public abstract class BattleChar {
 
     private int turnCount;          // 経過ターン数
     private State state;            // 状態
+    private int abnormalTurnPeriod; // 状態異常持続ターン上限
 
     // 抽象メソッド
     public abstract String toString();
     // メソッド
-
+    public void decideAbnormalTurnPeriod() {
+        int abnormalTurnCount = new java.util.Random().nextInt(3) + 2;
+        this.abnormalTurnPeriod = this.turnCount + abnormalTurnCount;
+    }
+    public void healAbnormalState() {
+        System.out.println(this.name + "の\s" + state.getStateName() + "\sじょうたいがなおった！");
+    }
     // アクセサ
     public String getName() { return this.name; }
     public int getHp() { return this.hp; }
@@ -40,6 +47,7 @@ public abstract class BattleChar {
     public int getDefaultAgility() { return this.defaultAgility; }
     public int getTurnCount() { return this.turnCount; }
     public State getState() { return this.state; }
+    public int getAbnormalTurnPeriod() { return this.abnormalTurnPeriod; }
 
     public void setName(String name) { this.name = name; }
     public void setHp(int hp) { this.hp = hp; }
@@ -54,5 +62,13 @@ public abstract class BattleChar {
     public void setDefaultAgility(int defaultAgility) { this.defaultAgility = defaultAgility; }
     public void initializationTurnCount() { this.turnCount = 0;}
     public void plusTurnCount() { this.turnCount++;}
-    public void setState(State state) { this.state = state; }
+    public void setState(State state) {
+        if (this.state.getStateName().equals(state.getStateName())) {
+            System.out.println(this.name + "はすでに\s" + state.getStateName() + "\sじょうたいだ。");
+            return;
+        }
+        this.state = state;
+    }
+    public void setAbnormalTurnPeriod(int abnormalTurnPeriod) { this.abnormalTurnPeriod = abnormalTurnPeriod; }
+    public void plusAbnormalTurnPeriod() { this.abnormalTurnPeriod++; }
 }

@@ -23,7 +23,7 @@ public class KillerBee extends ForestEnemy{
         int damage = calculateDamage(brave.getInBattleDefense());
         Text.attack(brave.getName(), damage);
         if (isSuccessGiveAbnormality(10)) {
-            brave.setState(new IsPoison());
+            brave.setState(new IsPoison(brave));
             Text.makePoison(brave.getName());
         }
         plusTurnCount();

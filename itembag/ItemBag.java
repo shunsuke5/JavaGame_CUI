@@ -15,7 +15,7 @@ public class ItemBag {
         int i = 1;
 
         try {
-            BufferedReader br = new BufferedReader(new FileReader("..\\item\\ItemId_data.csv"));
+            BufferedReader br = new BufferedReader(new FileReader("..\\item\\Item_data.csv"));
             String str = br.readLine();
             while(str != null) {
                 i++;
@@ -40,12 +40,12 @@ public class ItemBag {
         this.item[itemId][checkStorage(itemId)] = null;
     }
     public void displayItemBag() {
-        // ItemId_data.csvファイルから各アイテムの識別番号を取得していく
+        // Item_data.csvファイルから各アイテムの識別番号を取得していく
         int itemId;
         String itemName;
 
         try {
-            BufferedReader br = new BufferedReader(new FileReader("..\\item\\ItemId_data.csv"));
+            BufferedReader br = new BufferedReader(new FileReader("..\\item\\Item_data.csv"));
             String str = br.readLine();
             while(str != null) {
                 String[] dataArray = str.split(",");
@@ -96,7 +96,7 @@ public class ItemBag {
     }
     public String[] itemLookUp(int itemId) {
         try {
-            BufferedReader br = new BufferedReader(new FileReader("..\\data\\ItemId_data.csv"));
+            BufferedReader br = new BufferedReader(new FileReader("..\\item\\Item_data.csv"));
             String str = br.readLine();
             while(str != null) {
                 if (str.contains(Integer.toString(itemId))) {

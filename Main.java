@@ -31,12 +31,6 @@ public class Main {
         Event.congratulations();
         
         */
-        B b = new B();
-        A aa = new AA();
-        b.setA(aa);
-        System.out.println(b.getA().getStr());
-
-        b.setA(null);
-        System.out.println(b.getA().getStr());
+        
     }
 }

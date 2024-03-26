@@ -8,10 +8,10 @@ public class Kraken extends SeaEnemy {
         super("クラーケン");
     }
     // メソッド
-    public void turn(Brave b) {     // ランダムで自分の行動を決める
+    public void turn(Brave brave) {     // ランダムで自分の行動を決める
         switch (decideAction(2)) {
             case 0:
-                attack(b);
+                attack(brave);
                 break;
             case 1:
             break;

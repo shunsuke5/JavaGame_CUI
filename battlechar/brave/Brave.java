@@ -176,7 +176,9 @@ public class Brave extends BattleChar {
             this.itemBag.displayItemBag();
             System.out.println("つかいたいアイテムはありますか？(-1でマップへ)");
             itemId = new java.util.Random().nextInt();
-            isUseItem(itemId);
+            if (canUseItem(itemId)) {
+                useItem(itemId);
+            }
         } while(itemId != -1);
     }
     public void checkStatus() {             // ステータス確認
@@ -360,19 +362,20 @@ public class Brave extends BattleChar {
         if (itemId == -1) {
             return;
         }
-        if (isUseItem(itemId)) {
-            plusTurnCount();
+        if (canUseItem(itemId)) {
+            useItem(itemId);
         } else {
             return;
         }
     }
-    public boolean isUseItem(int itemId) {  // アイテムを使用すればtrue、使用しなければfalseを返す
-        if (this.itemBag.checkStorage(itemId) == 0) {
-            return false;
+    public boolean canUseItem(int itemId) { // アイテムが使用可能か返す
+        return this.itemBag.checkStorage(itemId) == 0;
+    }
+    public void useItem(int itemId) {       // アイテムを使用する
+        if (canUseItem(itemId)) {
+            this.itemBag.getItem()[itemId][0].use(this);
+            this.itemBag.decrease(itemId);
         }
-        this.itemBag.getItem()[itemId][0].use(this);
-        this.itemBag.decrease(itemId);
-        return true;
     }
     public void run() {     // 戦闘において逃げるメソッド
         // if (相手がボスの場合) 逃げられない

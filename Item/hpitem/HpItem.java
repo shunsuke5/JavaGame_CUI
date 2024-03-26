@@ -1,49 +1,29 @@
 package item.hpitem;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-
 import item.Item;
 import battlechar.brave.*;
 
 public class HpItem extends Item {
-    private int minHealPoint;
-    private int healRange;
-
     // コンストラクタ
     public HpItem(String name) {
         super(name);
-        try {
-            BufferedReader br = new BufferedReader(new FileReader("HpItem_data.csv"));
-            String str = br.readLine();
-            while(str != null) {
-                if (str.contains(getName())) {
-                    Object[] dataArray = str.split(",");
-                    setItemId((int)(dataArray[1]));
-                    setPrice((int)(dataArray[2]));
-                    this.minHealPoint = (int)(dataArray[3]);
-                    this.healRange = (int)(dataArray[4]);
-                    setExplanation((String)(dataArray[5]));
-                }
-                str = br.readLine();
-            }
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            e.getStackTrace();
-        }
     }
     // メソッド
-    public void use(Brave b) {
-        System.out.println(b.getName() + "は" + this.getName() + "をつかった！");
-        int healPoint = new java.util.Random().nextInt(this.healRange) + this.minHealPoint;
-        controlHp(b, healPoint);
-        System.out.println(b.getName() + "のHPを" + healPoint + "ポイントかいふくした！");
-    }
-    public void controlHp(Brave b, int healPoint) {
-        if (healPoint > (b.getMaxHp() - b.getHp())) {
-            b.setHp(b.getMaxHp());
+    public void use(Brave brave) {
+        if (brave.getHp() == brave.getMaxHp()) {
+            System.out.println("しかし" + brave.getName() + "のHPはまんたんだ！");
         } else {
-            b.setHp(b.getHp() + healPoint);
+            System.out.println(brave.getName() + "は" + this.getName() + "をつかった！");
+            int healPoint = new java.util.Random().nextInt(getHealRange()) + getMinHealPoint();
+            controlHp(brave, healPoint);
+            System.out.println(brave.getName() + "のHPを" + healPoint + "ポイントかいふくした！");
+            brave.plusTurnCount();
+        }
+    }
+    public void controlHp(Brave brave, int healPoint) {
+        if (healPoint > (brave.getMaxHp() - brave.getHp())) {
+            brave.setHp(brave.getMaxHp());
+        } else {
+            brave.setHp(brave.getHp() + healPoint);
         }
     }
 }

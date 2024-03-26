@@ -14,7 +14,7 @@ public class ItemShop {
         
     }
     // メソッド
-    public void sell(Brave b) {
+    public void sell(Brave brave) {
         // 購入するアイテムとその購入数をHashMapの形で返す
         this.isLeave = false;
         System.out.println("ショップへようこそ。");
@@ -59,7 +59,7 @@ public class ItemShop {
     }
     public int payment(int itemId, int count) {  // 金額を返す
         try {
-            BufferedReader br = new BufferedReader(new FileReader("..\\..\\data\\ItemId_data.csv"));
+            BufferedReader br = new BufferedReader(new FileReader("..\\..\\item\\Item_data.csv"));
             String str = br.readLine();
             while(str != null) {
                 if (str.contains(Integer.toString(itemId))) {
@@ -77,7 +77,7 @@ public class ItemShop {
     }
     public void displayMenu(int bossKillCount) {
         try {
-            BufferedReader br = new BufferedReader(new FileReader("..\\..\\data\\ItemId_data.csv"));
+            BufferedReader br = new BufferedReader(new FileReader("..\\..\\item\\Item_data.csv"));
             String str = br.readLine();
             while(str != null) {
                 String[] itemArray = str.split(",");

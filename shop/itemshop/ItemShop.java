@@ -15,13 +15,12 @@ public class ItemShop {
     }
     // メソッド
     public void sell(Brave brave) {
-        // 購入するアイテムとその購入数をHashMapの形で返す
         this.isLeave = false;
         System.out.println("ショップへようこそ。");
 
         while (!isLeave) {
             System.out.println("なにをかいますか？(-1でマップにもどる)\n");
-            displayMenu(b.getBossKillCount());
+            displayMenu(brave.getBossKillCount());
             int itemId = Text.inputChoice();
             if (itemId == -1) {                 // -1を選んだ場合マップアクションへ
                 this.isLeave = true;
@@ -33,7 +32,7 @@ public class ItemShop {
                 continue;
             }
             int price = payment(itemId, count); // 金額の計算
-            if (b.getMoney() < price) {
+            if (brave.getMoney() < price) {
                 System.out.println("おかねがたりません！");
                 continue;
             }
@@ -43,8 +42,8 @@ public class ItemShop {
                 System.out.println("いやひやかしかーーーーい");
                 continue;
             }
-            b.setMoney(b.getMoney() - price);
-            b.getItemBag().increase(itemId, count);
+            brave.setMoney(brave.getMoney() - price);
+            brave.getItemBag().increase(itemId, count);
             
             System.out.println("おかいあげありがとうございます。");
             System.out.println("ほかにもなにかかいますか？");
@@ -60,11 +59,11 @@ public class ItemShop {
     public int payment(int itemId, int count) {  // 金額を返す
         try {
             BufferedReader br = new BufferedReader(new FileReader("..\\..\\item\\Item_data.csv"));
-            String str = br.readLine();
-            while(str != null) {
-                if (str.contains(Integer.toString(itemId))) {
-                    String[] itemArray = str.split(",");
-                    return Integer.parseInt(itemArray[3]) * count;
+            String data = br.readLine();
+            while(data != null) {
+                if (data.contains(Integer.toString(itemId))) {
+                    Object[] dataArray = data.split(",");
+                    return (int)(dataArray[3]) * count;
                 }
                 br.readLine();
             }
@@ -78,15 +77,15 @@ public class ItemShop {
     public void displayMenu(int bossKillCount) {
         try {
             BufferedReader br = new BufferedReader(new FileReader("..\\..\\item\\Item_data.csv"));
-            String str = br.readLine();
-            while(str != null) {
-                String[] itemArray = str.split(",");
-                if (bossKillCount <= Integer.parseInt(itemArray[4])) {
+            String data = br.readLine();
+            while(data != null) {
+                Object[] dataArray = data.split(",");
+                if (bossKillCount <= (int)(dataArray[4])) {
                     br.readLine();
                     continue;
                 }
-                System.out.println(itemArray[0] + "：" + itemArray[3] + "m -> " + Integer.parseInt(itemArray[1]));
-                str = br.readLine();
+                System.out.println(dataArray[0] + "：" + dataArray[3] + "m -> " + (int)(dataArray[1]));
+                data = br.readLine();
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());

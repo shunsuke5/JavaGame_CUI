@@ -1,8 +1,6 @@
 package item.stateitem;
 import battlechar.brave.Brave;
 import item.Item;
-import state.IsUsually;
-import state.State;
 
 public class StateItem extends Item {
     // コンストラクタ
@@ -12,7 +10,7 @@ public class StateItem extends Item {
     public void use(Brave brave) {
         if (isRightItem(brave)) {
             System.out.println(brave.getName() + "は" + this.getName() + "をつかった！");
-            System.out.println(brave.getName() + "の\s" + brave.getState().getStateName() +
+            System.out.println(brave.getName() + "の\s" + brave.getState().getName() +
                                 "\sじょうたいがなおった！");
             brave.setAbnormalTurnPeriod(brave.getTurnCount() + 1);
             brave.plusTurnCount();
@@ -20,10 +18,10 @@ public class StateItem extends Item {
             System.out.println("いまはこのアイテムはこうかがないようだ…");
         }
     }
-    public State knowBraveStatus(Brave brave) {
-        return brave.getState();
+    public String knowBraveStatus(Brave brave) {
+        return brave.getState().getName();
     }
     public boolean isRightItem(Brave brave) {
-        return this.getTargetAbnormal().equals(knowBraveStatus(brave).getStateName());
+        return this.getTargetAbnormal().equals(knowBraveStatus(brave));
     }
 }

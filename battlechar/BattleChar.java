@@ -30,8 +30,22 @@ public abstract class BattleChar {
         int abnormalTurnCount = new java.util.Random().nextInt(3) + 2;
         this.abnormalTurnPeriod = this.turnCount + abnormalTurnCount;
     }
-    public void healAbnormalState() {
-        System.out.println(this.name + "の\s" + state.getStateName() + "\sじょうたいがなおった！");
+    public void damaged(int damage) {
+        setHp(getHp() - damage);
+    }
+    public void healHp(BattleChar user, int healPoint) {     // 回復量が最大HPを超えないように調整
+        if (healPoint > (user.getMaxHp() - user.getHp())) {
+            user.setHp(user.getMaxHp());
+        } else {
+            user.setHp(user.getHp() + healPoint);
+        }
+    }
+    public void healMp(BattleChar user, int healPoint) {     // 回復量が最大MPを超えないように調整
+        if (healPoint > (user.getMaxMp() - user.getMp())) {
+            user.setMp(user.getMaxMp());
+        } else {
+            user.setMp(user.getMp() + healPoint);
+        }
     }
     // アクセサ
     public String getName() { return this.name; }
@@ -63,8 +77,8 @@ public abstract class BattleChar {
     public void initializationTurnCount() { this.turnCount = 0;}
     public void plusTurnCount() { this.turnCount++;}
     public void setState(State state) {
-        if (this.state.getStateName().equals(state.getStateName())) {
-            System.out.println(this.name + "はすでに\s" + state.getStateName() + "\sじょうたいだ。");
+        if (this.state.getName().equals(state.getName())) {
+            System.out.println(this.name + "はすでに\s" + state.getName() + "\sじょうたいだ。");
             return;
         }
         this.state = state;

@@ -28,12 +28,12 @@ public abstract class Enemy extends BattleChar {
             System.out.println("ミス！" + brave.getName() + "はダメージをうけない！");
         } else if (95 <= result && result >= 100) {             // 95から100が出たら痛恨の一撃
             int damage = calculateDamage(brave.getInBattleDefense()) * 2;
-            brave.setHp(brave.getHp() - damage);
+            brave.damaged(damage);
             System.out.println("つうこんのいちげき！");
             System.out.println(brave.getName() + "に" + damage + "ポイントのダメージ！");
         } else {                                                // それ以外は通常攻撃
             int damage = calculateDamage(brave.getInBattleDefense());
-            brave.setHp(brave.getHp() - damage);
+            brave.damaged(damage);
             System.out.println(brave.getName() + "に" + damage + "ポイントのダメージ！");
         }
         plusTurnCount();

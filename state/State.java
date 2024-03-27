@@ -7,17 +7,17 @@ import java.io.IOException;
 import battlechar.BattleChar;
 
 public abstract class State {
-    private String stateName;
+    private String name;
     private int stateId;
     private String stateDetail;
     // コンストラクタ
     public State(String stateName) {
-        this.stateName = stateName;
+        this.name = stateName;
         try {
             BufferedReader br = new BufferedReader(new FileReader("State_data.csv"));
             String data = br.readLine();
             while(data != null) {
-                if (data.contains(this.stateName)) {
+                if (data.contains(this.name)) {
                     Object[] dataArray = data.split(",");
                     this.stateId = (int)dataArray[1];
                     this.stateDetail = (String)dataArray[2];
@@ -36,7 +36,7 @@ public abstract class State {
         return new java.util.Random().nextInt(range) + min;
     }
     // アクセサ
-    public String getStateName() { return this.stateName; }
+    public String getName() { return this.name; }
     public int getStateId() { return this.stateId; }
     public String getStateDetail() { return this.stateDetail; }
 }

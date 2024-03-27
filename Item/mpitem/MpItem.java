@@ -14,16 +14,9 @@ public class MpItem extends Item {
         } else {
             System.out.println(brave.getName() + "は" + this.getName() + "をつかった！");
             int healPoint = new java.util.Random().nextInt(getHealRange()) + getMinHealPoint();
-            controlMp(brave, healPoint);
+            brave.healMp(brave, healPoint);
             System.out.println(brave.getName() + "のMPを" + healPoint + "ポイントかいふくした！");
             brave.plusTurnCount();
-        }
-    }
-    public void controlMp(Brave brave, int healPoint) {
-        if (healPoint > (brave.getMaxMp() - brave.getMp())) {
-            brave.setMp(brave.getMaxMp());
-        } else {
-            brave.setMp(brave.getMp() + healPoint);
         }
     }
 }

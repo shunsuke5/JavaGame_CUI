@@ -14,16 +14,9 @@ public class HpItem extends Item {
         } else {
             System.out.println(brave.getName() + "は" + this.getName() + "をつかった！");
             int healPoint = new java.util.Random().nextInt(getHealRange()) + getMinHealPoint();
-            controlHp(brave, healPoint);
+            brave.healHp(brave, healPoint);
             System.out.println(brave.getName() + "のHPを" + healPoint + "ポイントかいふくした！");
             brave.plusTurnCount();
-        }
-    }
-    public void controlHp(Brave brave, int healPoint) {
-        if (healPoint > (brave.getMaxHp() - brave.getHp())) {
-            brave.setHp(brave.getMaxHp());
-        } else {
-            brave.setHp(brave.getHp() + healPoint);
         }
     }
 }

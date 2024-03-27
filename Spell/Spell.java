@@ -8,10 +8,12 @@ import java.io.IOException;
 
 public abstract class Spell{
     private String name;
+    private int spellId;
     private int needLevel;
     private int consumptionMp;
     private int minpoint;
     private int pointRange;
+    private String giveAbnormal;
     private String explanation;
 
     // コンストラクタ
@@ -20,17 +22,19 @@ public abstract class Spell{
 
         try {
             BufferedReader br = new BufferedReader(new FileReader("Spell_data.csv"));
-            String str = br.readLine();
-            while(str != null) {
-                if (str.contains(this.name)) {
-                    String[] itemArray = str.split(",");
-                    this.needLevel = Integer.parseInt(itemArray[1]);
-                    this.consumptionMp = Integer.parseInt(itemArray[2]);
-                    this.minpoint = Integer.parseInt(itemArray[3]);
-                    this.pointRange = Integer.parseInt(itemArray[4]);
-                    this.explanation = itemArray[5];
+            String data = br.readLine();
+            while(data != null) {
+                if (data.contains(this.name)) {
+                    Object[] dataArray = data.split(",");
+                    this.spellId = (int)(dataArray[1]);
+                    this.needLevel = (int)(dataArray[2]);
+                    this.consumptionMp = (int)(dataArray[3]);
+                    this.minpoint = (int)(dataArray[4]);
+                    this.pointRange = (int)(dataArray[5]);
+                    this.giveAbnormal = (String)(dataArray[6]);
+                    this.explanation = (String)(dataArray[7]);
                 }
-                str = br.readLine();
+                data = br.readLine();
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());

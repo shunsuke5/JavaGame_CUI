@@ -74,4 +74,7 @@ public abstract class Text {
            makeAbnormalityToEnemy(paralyzedChar, "まひ");
         }
     }
+    public static void healAbnormalState(BattleChar anyone) {
+        System.out.println(anyone.getName() + "の\s" + anyone.getState().getName() + "\sじょうたいがなおった！");
+    }
 }

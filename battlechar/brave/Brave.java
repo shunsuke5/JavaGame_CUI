@@ -207,12 +207,11 @@ public class Brave extends BattleChar {
 
         while (!this.winBattle || !this.loseBattle || !this.isEscape || !enemy.getIsEscape()) {
             if (getDefaultAgility() >= enemy.getDefaultAgility()) { // 勇者が先攻の場合
-                getState().effect(this);                            // 状態異常効果
                 if (getTurnCount() == getAbnormalTurnPeriod()) {    // 状態異常終了判定
-                    // 状態異常が治ったことをテキストで表示する
+                    Text.healAbnormalState(this);
                     setState(new IsUsually());
-                    healAbnormalState();
                 }
+                getState().effect(this);                            // 状態異常効果
                 while (getTurnCount() == enemy.getTurnCount()) {    // 勇者ターン
                     System.out.printf("HP：%d / %d\nMP：%d / %d",
                                         getHp(),getMaxHp(),getMp(),getMaxMp());
@@ -249,11 +248,11 @@ public class Brave extends BattleChar {
                     enemy.run();
                     continue;
                 }
-                enemy.getState().effect(enemy);                     // 状態異常効果
                 if (enemy.getTurnCount() == enemy.getAbnormalTurnPeriod()) {    // 状態異常終了判定
+                    Text.healAbnormalState(enemy);
                     enemy.setState(new IsUsually());
-                    enemy.healAbnormalState();
                 }
+                enemy.getState().effect(enemy);                     // 状態異常効果
                 if (!(enemy.getState().getStateDetail() == "cannotAction")) {
                     enemy.turn(this);                               // 敵ターン
                 }
@@ -266,12 +265,11 @@ public class Brave extends BattleChar {
                     enemy.run();
                     continue;
                 }
-                enemy.getState().effect(enemy);                     // 状態異常効果
                 if (enemy.getTurnCount() == enemy.getAbnormalTurnPeriod()) {    // 状態異常終了判定
-                    enemy.healAbnormalState();
+                    Text.healAbnormalState(enemy);
                     enemy.setState(new IsUsually());
-                    enemy.healAbnormalState();
                 }
+                enemy.getState().effect(enemy);                     // 状態異常効果
                 if (!(enemy.getState().getStateDetail() == "cannotAction")) {
                     enemy.turn(this);                               // 敵ターン
                 }
@@ -279,12 +277,11 @@ public class Brave extends BattleChar {
                     die();
                     continue;
                 }
-                // ここにアイテムで状態異常を治したか(状態異常がつうじょうか)の判定処理を入れる
-                getState().effect(this);                            // 状態異常効果
                 if (getTurnCount() == getAbnormalTurnPeriod()) {    // 状態異常終了判定
+                    Text.healAbnormalState(this);
                     setState(new IsUsually());
-                    healAbnormalState();
                 }
+                getState().effect(this);                            // 状態異常効果
                 while(getTurnCount() != enemy.getTurnCount()) {                                                // 勇者ターン
                     System.out.printf("HP：%d / %d\nMP：%d / %d",
                                         getHp(),getMaxHp(),getMp(),getMaxMp());
@@ -392,6 +389,9 @@ public class Brave extends BattleChar {
         }
         this.money += enemy.getMoney();
         System.out.println(enemy.getMoney() + "マネーをてにいれた！");
+        setInBattleAttack(getDefaultAttack());
+        setInBattleDefense(getDefaultDefense());
+        setInBattleAgility(getDefaultAgility());
     }
 
     public void die() {                     // 戦いに敗北

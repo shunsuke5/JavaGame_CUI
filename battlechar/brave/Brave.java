@@ -389,9 +389,9 @@ public class Brave extends BattleChar {
         }
         this.money += enemy.getMoney();
         System.out.println(enemy.getMoney() + "マネーをてにいれた！");
-        setInBattleAttack(getDefaultAttack());
-        setInBattleDefense(getDefaultDefense());
-        setInBattleAgility(getDefaultAgility());
+        restoreBattleAttack();
+        restoreBattleDefense();
+        restoreBattleAgility();
     }
 
     public void die() {                     // 戦いに敗北
@@ -494,9 +494,9 @@ public class Brave extends BattleChar {
     }
     public int calculateDamage(Enemy enemy) {   // ダメージ値を計算して返す
         final int DEFAULT_RANGE = 1;
-        int attackRange = (getInBattleAttack() % 4) + DEFAULT_RANGE;    // 攻撃力が4増える毎にダメージ範囲を +1
-        int braveAttack = new java.util.Random().nextInt(attackRange) + getInBattleAttack();
-        int damage = braveAttack - enemy.getInBattleDefense();
+        int attackRange = (getBattleAttack() % 4) + DEFAULT_RANGE;    // 攻撃力が4増える毎にダメージ範囲を +1
+        int braveAttack = new java.util.Random().nextInt(attackRange) + getBattleAttack();
+        int damage = braveAttack - enemy.getBattleDefense();
         damage = controlDamage(damage);
         return damage;
     }

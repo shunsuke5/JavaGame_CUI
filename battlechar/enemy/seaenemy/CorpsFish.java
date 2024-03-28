@@ -23,7 +23,7 @@ public class CorpsFish extends SeaEnemy {
     }
     public void gather() {
         System.out.println(getName() + "はなかまをあつめ、きょだいなさかなのようになった！");
-        setInBattleAttack((int)(getInBattleAttack() * 1.25));
+        upBattleAttack(1.25);
         System.out.println(getName() + "のこうげきりょくがすこしあがった！");
     }
 }

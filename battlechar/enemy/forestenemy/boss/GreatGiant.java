@@ -25,8 +25,13 @@ public class GreatGiant extends ForestEnemy{
     }
     public void stamp(Brave brave) {
         System.out.println(getName() + "はおおきなあしでふみつぶしてきた！");
-        int damage = (int)(calculateDamage(brave.getInBattleDefense()) * 1.5);
+        int damage = (int)(calculateDamage(brave.getBattleDefense()) * 1.5);
         Text.attack(brave.getName(), damage);
         brave.damaged(damage);
+        int defenseDown = returnRandomNum(1, 100);
+        if (defenseDown < 20) {
+            System.out.println(brave.getName() + "のぼうぎょりょくがすこしさがってしまった！");
+            brave.downBattleDefense(0.75);
+        }
     }
 }

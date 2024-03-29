@@ -31,8 +31,11 @@ public abstract class BattleChar {
         int abnormalTurnCount = new java.util.Random().nextInt(3) + 2;
         this.abnormalTurnPeriod = this.turnCount + abnormalTurnCount;
     }
-    public void damaged(int damage) {
+    public void damagedHp(int damage) {
         setHp(getHp() - damage);
+    }
+    public void declineMp(int decline) {
+        setMp(getMp() - decline);
     }
     // 回復時に使用するメソッド
     public void healHp(BattleChar user, int healPoint) {     // 回復量が最大HPを超えないように調整
@@ -112,7 +115,7 @@ public abstract class BattleChar {
             System.out.println(e.getMessage());
             e.getStackTrace();
         }
-        this.battleAttack = (int)(this.defaultAttack * magnification);
+        this.battleDefense = (int)(this.defaultDefense * magnification);
     }
     public void downBattleAgility(double magnification) {
         try {
@@ -123,7 +126,9 @@ public abstract class BattleChar {
             System.out.println(e.getMessage());
             e.getStackTrace();
         }
-        this.battleAttack = (int)(this.defaultAttack * magnification);
+        // ここにbattleステータスが0.5かどうかのチェック
+        if ((getBattleAgility() * 2) < getDefaultAgility())
+        this.battleAgility = (int)(this.defaultAgility * magnification);
     }
     // アクセサ
     public String getName() { return this.name; }

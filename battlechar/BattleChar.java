@@ -130,6 +130,9 @@ public abstract class BattleChar {
         if ((getBattleAgility() * 2) < getDefaultAgility())
         this.battleAgility = (int)(this.defaultAgility * magnification);
     }
+    public void upOneStepStatus() {
+
+    }
     // アクセサ
     public String getName() { return this.name; }
     public int getHp() { return this.hp; }

@@ -1,5 +1,6 @@
 package battlechar;
 
+import battlechar.battlestatus.BattleStatus;
 import exception.StatusUpDownException;
 import state.*;
 
@@ -19,6 +20,8 @@ public abstract class BattleChar {
 
     private int battleAgility;    // バトル時のすばやさ(状態によって変化)
     private int defaultAgility;     // 通常の素早さ
+
+    private BattleStatus battlestatus;
 
     private int turnCount;          // 経過ターン数
     private State state;            // 状態

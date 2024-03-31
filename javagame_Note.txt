@@ -1428,8 +1428,24 @@ if (this.turnCount == abnormalityTurnCount) {
 　しかしそうすると、レベルアップのステータス上昇処理などはどうなる？
 　フィールドとしては　this.status.attack　のような感じになる。
 　「デフォルトのステータス値をフィールドとして持ち、バトル内のステータスをクラスで作成する」
-　というのはどうか？そうすればこのクラス内でboolean型などを持ったりすれば
-　ステータス変化のターン終わり計算などもできるかもしれない。
+　というのはどうか？そうすれば現段階で存在するデフォルトステータスの処理は変えないことができる。
+　このクラス内でboolean型などを持ったりすればステータス変化のターン終わり計算などもできるかもしれない。
+
+　twoDownValue,oneDownValue,defaultValue,oneUpValue,twoUpValue　のように
+　それぞれの値をあらかじめフィールドに定義してしまった方が良いだろうか？
+　それとも、BattleStateクラスのcheckValue()内で変数を定義して
+　それと比較する形の方が良いだろうか？
+　BattleStatus battleAttack = new BattleAttack(getDefaultAttack());
+　BattleStatus battleDefense = new BattleDefense(getDefaultDefense());
+　BattleStatus battleAgility = new BattleAgility(getDefaultAgility());
+
+　上の処理をバトル開始時にいちいちやる必要がある？
+　現段階ではtwoUpValue(),oneUpValue()…のように計5つ実装しようとしているが
+　例えば2ダウン時に2アップするのと2アップ時に2ダウンするのは処理的には全く同じとなる。
+　処理内容が重複しているため、もっと簡単にできるはず。それについて考えたい。
+　例えば、changeStatus(int chengeNum) のようにし、引数には-2,-1,0,1,2のどれかを取る。
+　その引数を用いて計算をするなど。まあその場合changeStatus()を呼び出す側で引数にミスタイプしてしまったら
+　意味ないのだが。changeStatus(brave.getBattleAttack.twoUp) のようにするか？
 
 ・ステータス上下について、BattleCharのsetterでいちいちbrave.setInBattleDefense(brave.getInBattleDefense…)
 　のようにするのは長ったらしいので、上下したステータスを元に戻すメソッドとしてrestoreAttack()のようなもの、
@@ -1443,7 +1459,7 @@ if (this.turnCount == abnormalityTurnCount) {
 　　　　全ての敵ファイルを実装する
 　　　　ステータスアップ、ダウン系の状態異常を実装する
 　　　　ステータス上下を実装する
-　　　　「バトル内で変化するステータスのクラス」を作成する(こうげき、ぼうぎょ、すばやさ)
+　　　　「バトル内で変化するステータスのクラス」を作成する(こうげき、ぼうぎょ、すばやさ) → 取組中
 
 =========================================================================================================
 
@@ -1489,6 +1505,15 @@ if (this.turnCount == abnormalityTurnCount) {
 　　　vscode側でファイルの移動が反映されていないことによるエラーだと推測される。
 　　　正しい位置で新しいファイルを作成することで解決。(本来はequipmentフォルダ配下に置きたい
 　　　Equipment.javaファイルをその位置で作り直す、のような感じ)
+
+・BattleStatusクラスのcheckValue()で現在のステータスがどの状態(2ダウン、1アップなど)にあるのかを
+　調べる処理を書くため、以下のようにすると3行目で「case expressions must be constant expressions」
+　のエラーが出た。
+        final int TWO_DOWN_VALUE = (int)(value * 0.5);
+        switch(this.value) {
+            case TWO_DOWN_VALUE:
+　　→ どうやらswitch文内でフィールドを使用できないらしい。なのでif-elseに変えるのが解決法となる。
+　　　case節に
 
 ・
 

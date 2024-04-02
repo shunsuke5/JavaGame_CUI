@@ -5,27 +5,27 @@ import exception.StatusUpDownException;
 import state.*;
 
 public abstract class BattleChar {
-    private String name;            // 名前
+    private String name;                // 名前
 
-    private int hp;                 // 体力
-    private int maxHp;              // 最大体力
-    private int mp;                 // 魔力
-    private int maxMp;              // 最大魔力
+    private int hp;                     // 体力
+    private int maxHp;                  // 最大体力
+    private int mp;                     // 魔力
+    private int maxMp;                  // 最大魔力
 
-    private int battleAttack;     // バトル時の攻撃力(状態によって変化)
-    private int defaultAttack;      // 通常の攻撃力
+    private int battleAttack;           // バトル時の攻撃力(状態によって変化)
+    private int defaultAttack;          // 通常の攻撃力
 
-    private int battleDefense;    // バトル時の防御力(状態によって変化)
-    private int defaultDefense;     // 通常の防御力
+    private int battleDefense;          // バトル時の防御力(状態によって変化)
+    private int defaultDefense;         // 通常の防御力
 
-    private int battleAgility;    // バトル時のすばやさ(状態によって変化)
-    private int defaultAgility;     // 通常の素早さ
+    private int battleAgility;          // バトル時のすばやさ(状態によって変化)
+    private int defaultAgility;         // 通常の素早さ
 
-    private BattleStatus battlestatus;
-
-    private int turnCount;          // 経過ターン数
-    private State state;            // 状態
-    private int abnormalTurnPeriod; // 状態異常持続ターン上限
+    private int turnCount;              // 経過ターン数
+    private State state;                // 状態
+    private int abnormalTurnPeriod;     // 状態異常持続ターン上限
+    private BattleStatus battleStatus;  // バトル時ステータス
+    private int statusTurnPeriod;       // ステータス上下持続ターン上限
 
     // 抽象メソッド
     public abstract String toString();
@@ -151,6 +151,8 @@ public abstract class BattleChar {
     public int getTurnCount() { return this.turnCount; }
     public State getState() { return this.state; }
     public int getAbnormalTurnPeriod() { return this.abnormalTurnPeriod; }
+    public BattleStatus getBattleStatus() { return this.battleStatus;}
+    public int getStatusTurnPeriod() { return this.statusTurnPeriod; }
 
     public void setName(String name) { this.name = name; }
     public void setHp(int hp) { this.hp = hp; }

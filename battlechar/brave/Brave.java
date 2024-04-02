@@ -212,6 +212,8 @@ public class Brave extends BattleChar {
                     setState(new IsUsually());
                 }
                 getState().effect(this);                            // 状態異常効果
+                // ここにステータス上下終了判定を入れたい
+                
                 while (getTurnCount() == enemy.getTurnCount()) {    // 勇者ターン
                     System.out.printf("HP：%d / %d\nMP：%d / %d",
                                         getHp(),getMaxHp(),getMp(),getMaxMp());

@@ -4,6 +4,7 @@ public class BattleStatus {
     private String name;        // ステータス名
     private int value;          // 現在のステータス
     private int turnPeriod;     // ステータス上下のターン上限
+    private boolean isChanged;  // ステータスが上下している場合true
 
     private final int TWO_DOWN_VALUE;   // 2ダウン
     private final int ONE_DOWN_VALUE;   // 1ダウン
@@ -20,6 +21,9 @@ public class BattleStatus {
         this.TWO_UP_VALUE = (int)(value * 1.5);
     }
     // メソッド
+    public void changedDefault() {
+        this.value = DEFAULT_VALUE;
+    }
     public int checkValue() {
         if (this.value == TWO_DOWN_VALUE) {
             return -2;
@@ -109,6 +113,7 @@ public class BattleStatus {
     // アクセサ
     public String getName() { return this.name; }
     public int getTurnPeriod() { return this.turnPeriod; }
+    public boolean getIsChanged() { return this.isChanged; }
     public int getCurrentValue() { return this.value; }
     public int getTwoDownValue() { return this.TWO_DOWN_VALUE; }
     public int getOneDownValue() { return this.ONE_DOWN_VALUE; }
@@ -118,4 +123,5 @@ public class BattleStatus {
 
     public void setValue(int value) { this.value = value; }
     public void setTurnPeriod(int turnPeriod) { this.turnPeriod = turnPeriod; }
+    public void setIsChanged(boolean isChanged) { this.isChanged = isChanged; }
 }

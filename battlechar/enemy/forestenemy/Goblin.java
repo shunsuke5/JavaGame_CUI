@@ -19,7 +19,7 @@ public class Goblin extends ForestEnemy {
     }
     public void stealAttack(Brave brave) {      // 攻撃しつつ勇者からマネーを少し奪う
         System.out.println(getName() + "のぬすむこうげき！");
-        int damage = calculateDamage(brave.getBattleDefense());
+        int damage = calculateDamage(brave.getBattleDefense().getCurrentValue());
         brave.damagedHp(damage);
         Text.attack(brave.getName(), damage);
         int stealMoney = returnRandomNum(2, 3);

@@ -27,12 +27,12 @@ public abstract class Enemy extends BattleChar {
         if (1 <= result && result <= 10) {                      // 1から10が出たらミス
             System.out.println("ミス！" + brave.getName() + "はダメージをうけない！");
         } else if (95 <= result && result >= 100) {             // 95から100が出たら痛恨の一撃
-            int damage = calculateDamage(brave.getBattleDefense()) * 2;
+            int damage = calculateDamage(brave.getBattleDefense().getCurrentValue()) * 2;
             brave.damagedHp(damage);
             System.out.println("つうこんのいちげき！");
             System.out.println(brave.getName() + "に" + damage + "ポイントのダメージ！");
         } else {                                                // それ以外は通常攻撃
-            int damage = calculateDamage(brave.getBattleDefense());
+            int damage = calculateDamage(brave.getBattleDefense().getCurrentValue());
             brave.damagedHp(damage);
             System.out.println(brave.getName() + "に" + damage + "ポイントのダメージ！");
         }
@@ -40,8 +40,8 @@ public abstract class Enemy extends BattleChar {
     }
     public int calculateDamage(int braveDefense) {              // ダメージ値を計算して返す
         final int DEFAULT_RANGE = 1;
-        int attackRange = (getBattleAttack() / 4) + DEFAULT_RANGE;    // 攻撃力が4増える毎にダメージ範囲を +1
-        int enemyAttack = new java.util.Random().nextInt(attackRange) + getBattleAttack();
+        int attackRange = (getBattleAttack().getCurrentValue() / 4) + DEFAULT_RANGE;    // 攻撃力が4増える毎にダメージ範囲を +1
+        int enemyAttack = new java.util.Random().nextInt(attackRange) + getBattleAttack().getCurrentValue();
         int damage = enemyAttack - braveDefense;
         damage = controlDamage(damage);
         return damage;

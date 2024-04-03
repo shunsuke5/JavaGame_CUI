@@ -203,7 +203,11 @@ public class Brave extends BattleChar {
     }
     public void battle(Enemy enemy) {       // 敵とエンカウントする
         System.out.println(enemy.getName() + "があらわれた！");
+        // バトルステータスとターンカウント初期化
         initializationTurnCount();
+        initializationBattleStatus();
+        enemy.initializationTurnCount();
+        enemy.initializationBattleStatus();
 
         while (!this.winBattle || !this.loseBattle || !this.isEscape || !enemy.getIsEscape()) {
             if (getDefaultAgility() >= enemy.getDefaultAgility()) { // 勇者が先攻の場合
@@ -212,8 +216,8 @@ public class Brave extends BattleChar {
                     setState(new IsUsually());
                 }
                 getState().effect(this);                            // 状態異常効果
+                // そもそもステータスのどれかが通常状態から上下しているかを判別する処理が必要
                 // ここにステータス上下終了判定を入れたい
-                
                 while (getTurnCount() == enemy.getTurnCount()) {    // 勇者ターン
                     System.out.printf("HP：%d / %d\nMP：%d / %d",
                                         getHp(),getMaxHp(),getMp(),getMaxMp());
@@ -391,9 +395,7 @@ public class Brave extends BattleChar {
         }
         this.money += enemy.getMoney();
         System.out.println(enemy.getMoney() + "マネーをてにいれた！");
-        restoreBattleAttack();
-        restoreBattleDefense();
-        restoreBattleAgility();
+        restoreBattleStatus();
     }
 
     public void die() {                     // 戦いに敗北
@@ -496,9 +498,9 @@ public class Brave extends BattleChar {
     }
     public int calculateDamage(Enemy enemy) {   // ダメージ値を計算して返す
         final int DEFAULT_RANGE = 1;
-        int attackRange = (getBattleAttack() % 4) + DEFAULT_RANGE;    // 攻撃力が4増える毎にダメージ範囲を +1
-        int braveAttack = new java.util.Random().nextInt(attackRange) + getBattleAttack();
-        int damage = braveAttack - enemy.getBattleDefense();
+        int attackRange = (getBattleAttack().getCurrentValue() % 4) + DEFAULT_RANGE;    // 攻撃力が4増える毎にダメージ範囲を +1
+        int braveAttack = new java.util.Random().nextInt(attackRange) + getBattleAttack().getCurrentValue();
+        int damage = braveAttack - enemy.getBattleDefense().getCurrentValue();
         damage = controlDamage(damage);
         return damage;
     }

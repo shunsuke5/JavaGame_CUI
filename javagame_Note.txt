@@ -1475,9 +1475,26 @@ if (this.turnCount == abnormalityTurnCount) {
 　そして上がる倍率、下がる倍率を渡せば自動的に計算して上下させるメソッドを作る
 　　→ 作成済み
 
+・バトルステータスを初期化、復元する処理を修正済み。
+
 ・ステータスセットの処理を実装することはできたが、次に考えなければならないのは
 　ステータス上下のターン上限を決める処理である。これを判別する処理は状態異常と同じく
 　battle()内で行うか？
+　状態異常(どくやまひ)は重複しないから「状態異常かどうか」で判別できていたが、
+　ステータス上下の場合、こうげき、ぼうぎょ、すばやさどれかが上下していたら
+　「ステータス上下している」になるので、普通にやったら判別処理が長くなってしまう。
+　何かいい方法はないか？
+BattleStatus battleAttack = new BattleAttack(this).
+if (!battleAttack.value == getDefaultAttack) {
+
+}
+if (!this.battleAttack.getTurnPeriod == 0) みたいな感じで判別するか？
+if (this.battleAttack.getIsChanged()) {
+    if (this.battleAttack.getTurnPeriod() == getTurnCount()) {
+        this.battleAttack.changedDefault();
+    }
+}
+相手の攻撃を下げる攻撃(brave,brave.getBattleAttack.setIsChanged(true))
 
 ・[進捗]defense()について経過ターン数を用いた判定の実装
 　　　　敵のアイテムドロップについて考える

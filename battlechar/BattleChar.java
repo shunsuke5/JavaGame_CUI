@@ -1,5 +1,8 @@
 package battlechar;
 
+import battlechar.battlestatus.BattleAgility;
+import battlechar.battlestatus.BattleAttack;
+import battlechar.battlestatus.BattleDefense;
 import battlechar.battlestatus.BattleStatus;
 import exception.StatusUpDownException;
 import state.*;
@@ -12,19 +15,18 @@ public abstract class BattleChar {
     private int mp;                     // 魔力
     private int maxMp;                  // 最大魔力
 
-    private int battleAttack;           // バトル時の攻撃力(状態によって変化)
     private int defaultAttack;          // 通常の攻撃力
-
-    private int battleDefense;          // バトル時の防御力(状態によって変化)
+    private BattleAttack battleAttack;  // バトル時のこうげきりょく
     private int defaultDefense;         // 通常の防御力
-
-    private int battleAgility;          // バトル時のすばやさ(状態によって変化)
+    private BattleDefense battleDefense;    // バトル時のぼうぎょりょく
     private int defaultAgility;         // 通常の素早さ
+    private BattleAgility battleAgility;    // バトル時のすばやさ
 
     private int turnCount;              // 経過ターン数
     private State state;                // 状態
     private int abnormalTurnPeriod;     // 状態異常持続ターン上限
-    private BattleStatus battleStatus;  // バトル時ステータス
+
+    
     private int statusTurnPeriod;       // ステータス上下持続ターン上限
 
     // 抽象メソッド
@@ -55,86 +57,17 @@ public abstract class BattleChar {
             user.setMp(user.getMp() + healPoint);
         }
     }
-    // バトル時のステータス上下用メソッド
-    public void restoreBattleAttack() {
-        this.battleAttack = this.defaultAttack;
+    // バトル開始時のステータス初期化メソッド
+    public void initializationBattleStatus() {
+        this.battleAttack = new BattleAttack(this);
+        this.battleDefense = new BattleDefense(this);
+        this.battleAgility = new BattleAgility(this);
     }
-    public void restoreBattleDefense() {
-        this.battleDefense = this.defaultDefense;
-    }
-    public void restoreBattleAgility() {
-        this.battleAgility = this.defaultAgility;
-    }
-    public void upBattleAttack(double magnification) {
-        try {
-            if (magnification < 1) {
-                throw new StatusUpDownException("ステータス「上昇」に 1 より「小さい」倍率が渡されました");
-            }
-        } catch (StatusUpDownException e) {
-            System.out.println(e.getMessage());
-            e.getStackTrace();
-        }
-        this.battleAttack = (int)(this.defaultAttack * magnification);
-    }
-    public void upBattleDefense(double magnification) {
-        try {
-            if (magnification < 1) {
-                throw new StatusUpDownException("ステータス「上昇」に 1 より「小さい」倍率が渡されました");
-            }
-        } catch (StatusUpDownException e) {
-            System.out.println(e.getMessage());
-            e.getStackTrace();
-        }
-        this.battleDefense = (int)(this.defaultDefense * magnification);
-    }
-    public void upBattleAgility(double magnification) {
-        try {
-            if (magnification < 1) {
-                throw new StatusUpDownException("ステータス「上昇」に 1 より「小さい」倍率が渡されました");
-            }
-        } catch (StatusUpDownException e) {
-            System.out.println(e.getMessage());
-            e.getStackTrace();
-        }
-        this.battleAgility = (int)(this.defaultAgility * magnification);
-    }
-    public void downBattleAttack(double magnification) {
-        try {
-            if (magnification < 1) {
-                throw new StatusUpDownException("ステータス「降下」に 1 より「大きい」倍率が渡されました");
-            }
-        } catch (StatusUpDownException e) {
-            System.out.println(e.getMessage());
-            e.getStackTrace();
-        }
-        this.battleAttack = (int)(this.defaultAttack * magnification);
-    }
-    public void downBattleDefense(double magnification) {
-        try {
-            if (magnification < 1) {
-                throw new StatusUpDownException("ステータス「降下」に 1 より「大きい」倍率が渡されました");
-            }
-        } catch (StatusUpDownException e) {
-            System.out.println(e.getMessage());
-            e.getStackTrace();
-        }
-        this.battleDefense = (int)(this.defaultDefense * magnification);
-    }
-    public void downBattleAgility(double magnification) {
-        try {
-            if (magnification < 1) {
-                throw new StatusUpDownException("ステータス「降下」に 1 より「大きい」倍率が渡されました");
-            }
-        } catch (StatusUpDownException e) {
-            System.out.println(e.getMessage());
-            e.getStackTrace();
-        }
-        // ここにbattleステータスが0.5かどうかのチェック
-        if ((getBattleAgility() * 2) < getDefaultAgility())
-        this.battleAgility = (int)(this.defaultAgility * magnification);
-    }
-    public void upOneStepStatus() {
-
+    // バトル終了時のステータス復元メソッド
+    public void restoreBattleStatus() {
+        this.battleAttack.setValue(this.defaultAttack);
+        this.battleDefense.setValue(this.defaultDefense);
+        this.battleAgility.setValue(this.defaultAgility);
     }
     // アクセサ
     public String getName() { return this.name; }
@@ -142,16 +75,15 @@ public abstract class BattleChar {
     public int getMaxHp() { return this.maxHp; }
     public int getMp() { return this.mp; }
     public int getMaxMp() { return this.maxMp; }
-    public int getBattleAttack() { return this.battleAttack; }
+    public BattleAttack getBattleAttack() { return this.battleAttack; }
     public int getDefaultAttack() { return this.defaultAttack; }
-    public int getBattleDefense() { return this.battleDefense; }
+    public BattleDefense getBattleDefense() { return this.battleDefense; }
     public int getDefaultDefense() { return this.defaultDefense; }
-    public int getBattleAgility() { return this.battleAgility; }
+    public BattleAgility getBattleAgility() { return this.battleAgility; }
     public int getDefaultAgility() { return this.defaultAgility; }
     public int getTurnCount() { return this.turnCount; }
     public State getState() { return this.state; }
     public int getAbnormalTurnPeriod() { return this.abnormalTurnPeriod; }
-    public BattleStatus getBattleStatus() { return this.battleStatus;}
     public int getStatusTurnPeriod() { return this.statusTurnPeriod; }
 
     public void setName(String name) { this.name = name; }

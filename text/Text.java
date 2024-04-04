@@ -1,6 +1,7 @@
 package text;
 
 import battlechar.BattleChar;
+import battlechar.brave.Brave;
 
 public abstract class Text {
     private static final String ANSWER_ARROW = "\n\s->\s";
@@ -76,5 +77,12 @@ public abstract class Text {
     }
     public static void healAbnormalState(BattleChar anyone) {
         System.out.println(anyone.getName() + "の\s" + anyone.getState().getName() + "\sじょうたいがなおった！");
+    }
+    public static void chooseBattleAction(Brave brave) {
+        System.out.printf("HP：%d / %d\nMP：%d / %d",
+            brave.getHp(),brave.getMaxHp(),brave.getMp(),brave.getMaxMp());
+        System.out.println(brave.getName() + "はどうする？");
+        System.out.println("攻撃：１　呪文：２　防御：３　アイテム：４　逃げる：５");
+        System.out.print("\n\s->\s");
     }
 }

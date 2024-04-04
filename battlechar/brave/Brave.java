@@ -211,19 +211,11 @@ public class Brave extends BattleChar {
 
         while (!this.winBattle || !this.loseBattle || !this.isEscape || !enemy.getIsEscape()) {
             if (getDefaultAgility() >= enemy.getDefaultAgility()) { // 勇者が先攻の場合
-                if (getTurnCount() == getAbnormalTurnPeriod()) {    // 状態異常終了判定
-                    Text.healAbnormalState(this);
-                    setState(new IsUsually());
-                }
+                judgeAbnormalPeriod();                              // 状態異常終了判定
                 getState().effect(this);                            // 状態異常効果
-                // そもそもステータスのどれかが通常状態から上下しているかを判別する処理が必要
-                // ここにステータス上下終了判定を入れたい
+                statusUpDown();                                     // ステータス上下処理
                 while (getTurnCount() == enemy.getTurnCount()) {    // 勇者ターン
-                    System.out.printf("HP：%d / %d\nMP：%d / %d",
-                                        getHp(),getMaxHp(),getMp(),getMaxMp());
-                    System.out.println(getName() + "はどうする？");
-                    System.out.println("攻撃：１　呪文：２　防御：３　アイテム：４　逃げる：５");
-                    System.out.print("\n\s->\s");
+                    Text.chooseBattleAction(this);
                     int action = new java.util.Scanner(System.in).nextInt();
 
                     switch (action) {
@@ -246,19 +238,16 @@ public class Brave extends BattleChar {
                             break;
                     }
                 }
-                if (enemy.getHp() <= 0) {                           // 勇者ターン終了、敵HPチェック
+                if (isWin(enemy)) {                           // 勇者ターン終了、敵HPチェック
                     win(enemy);
                     continue;
                 }
-                if (enemy.isRun(this.level)) {                      // 敵の逃げ判定
-                    enemy.run();
+                if (enemy.isRun(getLevel())) {                      // 敵の逃げ判定
                     continue;
                 }
-                if (enemy.getTurnCount() == enemy.getAbnormalTurnPeriod()) {    // 状態異常終了判定
-                    Text.healAbnormalState(enemy);
-                    enemy.setState(new IsUsually());
-                }
+                enemy.judgeAbnormalPeriod();                        // 状態異常終了判定
                 enemy.getState().effect(enemy);                     // 状態異常効果
+                enemy.statusUpDown();                               // 敵ステータス上下処理
                 if (!(enemy.getState().getStateDetail() == "cannotAction")) {
                     enemy.turn(this);                               // 敵ターン
                 }
@@ -267,15 +256,12 @@ public class Brave extends BattleChar {
                     continue;
                 }
             } else {                                                // 敵が先攻の場合
-                if (enemy.isRun(this.level)) {
-                    enemy.run();
+                if (enemy.isRun(getLevel())) {                      // 敵の逃げ判定
                     continue;
                 }
-                if (enemy.getTurnCount() == enemy.getAbnormalTurnPeriod()) {    // 状態異常終了判定
-                    Text.healAbnormalState(enemy);
-                    enemy.setState(new IsUsually());
-                }
+                enemy.judgeAbnormalPeriod();                        // 状態異常終了判定
                 enemy.getState().effect(enemy);                     // 状態異常効果
+                enemy.statusUpDown();                               // 敵ステータス上下処理
                 if (!(enemy.getState().getStateDetail() == "cannotAction")) {
                     enemy.turn(this);                               // 敵ターン
                 }
@@ -283,17 +269,11 @@ public class Brave extends BattleChar {
                     die();
                     continue;
                 }
-                if (getTurnCount() == getAbnormalTurnPeriod()) {    // 状態異常終了判定
-                    Text.healAbnormalState(this);
-                    setState(new IsUsually());
-                }
+                judgeAbnormalPeriod();                              // 状態異常終了判定
                 getState().effect(this);                            // 状態異常効果
+                statusUpDown();                                     // ステータス上下処理
                 while(getTurnCount() != enemy.getTurnCount()) {                                                // 勇者ターン
-                    System.out.printf("HP：%d / %d\nMP：%d / %d",
-                                        getHp(),getMaxHp(),getMp(),getMaxMp());
-                    System.out.println(getName() + "はどうする？");
-                    System.out.println("攻撃：１　呪文：２　防御：３　アイテム：４　逃げる：５");
-                    System.out.print("\n\s->\s");
+                    Text.chooseBattleAction(this);
                     int action = new java.util.Scanner(System.in).nextInt();
 
                     switch (action) {
@@ -316,7 +296,7 @@ public class Brave extends BattleChar {
                             break;
                     }
                 }
-                if (enemy.getHp() <= 0) {                           // 勇者ターン終了、敵HPチェック
+                if (isWin(enemy)) {                           // 勇者ターン終了、敵HPチェック
                     win(enemy);
                     continue;
                 }
@@ -603,6 +583,15 @@ public class Brave extends BattleChar {
     }
     public String toString() {
         return "Brave";
+    }
+    public boolean isWin(Enemy enemy) {
+        return enemy.getHp() >= 0;
+    }
+    public void judgeRunEnemy(Enemy enemy) {
+        if (enemy.isRun(this.level)) {                      // 敵の逃げ判定
+            enemy.run();
+            continue;
+        }
     }
     // アクセサ
     public int getLevel() { return this.level; }

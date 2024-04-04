@@ -4,8 +4,10 @@ import battlechar.battlestatus.BattleAgility;
 import battlechar.battlestatus.BattleAttack;
 import battlechar.battlestatus.BattleDefense;
 import battlechar.battlestatus.BattleStatus;
+import battlechar.enemy.Enemy;
 import exception.StatusUpDownException;
 import state.*;
+import text.Text;
 
 public abstract class BattleChar {
     private String name;                // 名前
@@ -57,6 +59,27 @@ public abstract class BattleChar {
             user.setMp(user.getMp() + healPoint);
         }
     }
+    // ステータス上下処理
+    public void statusUpDown() {
+        if (getBattleAttack().getIsChanged()) {
+            if (getBattleAttack().getTurnPeriod() == getTurnCount()) {
+                getBattleAttack().changedDefault();
+                getBattleAttack().setIsChanged(false);
+            }
+        }
+        if (getBattleDefense().getIsChanged()) {
+            if (getBattleDefense().getTurnPeriod() == getTurnCount()) {
+                getBattleDefense().changedDefault();
+                getBattleDefense().setIsChanged(false);
+            }
+        }
+        if (getBattleAgility().getIsChanged()) {
+            if (getBattleAgility().getTurnPeriod() == getTurnCount()) {
+                getBattleAgility().changedDefault();
+                getBattleAgility().setIsChanged(false);
+            }
+        }
+    }
     // バトル開始時のステータス初期化メソッド
     public void initializationBattleStatus() {
         this.battleAttack = new BattleAttack(this);
@@ -68,6 +91,13 @@ public abstract class BattleChar {
         this.battleAttack.setValue(this.defaultAttack);
         this.battleDefense.setValue(this.defaultDefense);
         this.battleAgility.setValue(this.defaultAgility);
+    }
+    // 状態異常終了判定
+    public void judgeAbnormalPeriod() {
+        if (getTurnCount() == getAbnormalTurnPeriod()) {    // 状態異常終了判定
+            Text.healAbnormalState(this);
+            setState(new IsUsually());
+        }
     }
     // アクセサ
     public String getName() { return this.name; }

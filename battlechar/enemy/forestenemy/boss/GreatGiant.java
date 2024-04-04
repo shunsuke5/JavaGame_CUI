@@ -30,7 +30,7 @@ public class GreatGiant extends ForestEnemy{
         brave.damagedHp(damage);
         int defenseDown = returnRandomNum(1, 100);
         if (defenseDown < 20) {
-            brave.getBattleDefense().changedStatus(brave.getName(), 1);
+            brave.getBattleDefense().changedStatus(brave, -1);
             brave.getBattleDefense().setIsChanged(true);
         }
     }

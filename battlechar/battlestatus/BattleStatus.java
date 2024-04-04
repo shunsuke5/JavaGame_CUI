@@ -1,5 +1,7 @@
 package battlechar.battlestatus;
 
+import battlechar.BattleChar;
+
 public class BattleStatus {
     private String name;        // ステータス名
     private int value;          // 現在のステータス
@@ -40,75 +42,88 @@ public class BattleStatus {
     public int decidedStatus(int changeValueStep) {
         return checkValue() + changeValueStep;
     }
-    public void changedStatus(String anyone, int changeValueStep) {
+    public void changedStatus(BattleChar anyone, int changeValueStep) {
         // 通常になった場合
         if (decidedStatus(changeValueStep) == 0) {
-            System.out.println(anyone + "の" + this.name + "がもとにもどった！");
+            System.out.println(anyone.getName() + "の" + this.name + "がもとにもどった！");
             this.value = DEFAULT_VALUE;
+            this.isChanged = false;
             return;
         }
         // 1アップした場合
         if (decidedStatus(changeValueStep) == 1) {
             if (changeValueStep < 0) {
-                System.out.println(anyone + "の" + this.name + "がすこしもどった。");
+                System.out.println(anyone.getName() + "の" + this.name + "がすこしもどった。");
                 this.value = ONE_UP_VALUE;
+                isStatusChanged(anyone);
                 return;
             } else {
-                System.out.println(anyone + "の" + this.name + "がすこしあがった！");
+                System.out.println(anyone.getName() + "の" + this.name + "がすこしあがった！");
                 this.value = ONE_UP_VALUE;
+                isStatusChanged(anyone);
                 return;
             }
         }
         // 2アップした場合
         if (decidedStatus(changeValueStep) == 2) {
-            System.out.println(anyone + "の" + this.name + "がかなりあがった！");
+            System.out.println(anyone.getName() + "の" + this.name + "がかなりあがった！");
             this.value = TWO_UP_VALUE;
+            isStatusChanged(anyone);
         }
         // 1アップ時に2アップ、もしくは2アップ時に1アップした場合(2アップ時に1アップのみ警告表示)
         if (decidedStatus(changeValueStep) == 3) {
             if (checkValue() == 1) {
-                System.out.println(anyone + "の" + this.name + "がかなりあがった！");
+                System.out.println(anyone.getName() + "の" + this.name + "がかなりあがった！");
                 this.value = TWO_UP_VALUE;
+                isStatusChanged(anyone);
             } else {
-                System.out.println("しかし" + anyone + "の" + this.name + "はこれいじょうあがらない！");
+                System.out.println("しかし" + anyone.getName() + "の" + this.name + "はこれいじょうあがらない！");
                 return;
             }
         }
         // 2アップ時に2アップした場合(警告表示)
         if (decidedStatus(changeValueStep) == 4) {
-            System.out.println("しかし" + anyone + "の" + this.name + "はこれいじょうあがらない！");
+            System.out.println("しかし" + anyone.getName() + "の" + this.name + "はこれいじょうあがらない！");
         }
         // 1ダウンした場合
         if (decidedStatus(changeValueStep) == -1) {
             if (changeValueStep < 0) {
-                System.out.println(anyone + "の" + this.name + "がすこしさがった！");
+                System.out.println(anyone.getName() + "の" + this.name + "がすこしさがった！");
                 this.value = ONE_DOWN_VALUE;
+                isStatusChanged(anyone);
                 return;
             } else {
-                System.out.println(anyone + "の" + this.name + "がすこしもどった。");
+                System.out.println(anyone.getName() + "の" + this.name + "がすこしもどった。");
                 this.value = ONE_DOWN_VALUE;
+                isStatusChanged(anyone);
                 return;
             }
         }
         // 2ダウンした場合
         if (decidedStatus(changeValueStep) == -2) {
-            System.out.println(anyone + "の" + this.name + "がかなりさがった！");
+            System.out.println(anyone.getName() + "の" + this.name + "がかなりさがった！");
             this.value = TWO_DOWN_VALUE;
+            isStatusChanged(anyone);
         }
         // 1ダウン時に2ダウン、もしくは2ダウン時に1ダウンした場合(2ダウン時に1ダウンのみ警告表示)
         if (decidedStatus(changeValueStep) == -3) {
             if (checkValue() == 1) {
-                System.out.println(anyone + "の" + this.name + "がかなりさがった！");
+                System.out.println(anyone.getName() + "の" + this.name + "がかなりさがった！");
                 this.value = TWO_UP_VALUE;
+                isStatusChanged(anyone);
             } else {
-                System.out.println("しかし" + anyone + "の" + this.name + "はこれいじょうさがらない！");
+                System.out.println("しかし" + anyone.getName() + "の" + this.name + "はこれいじょうさがらない！");
                 return;
             }
         }
         // 2ダウン時に2ダウンした場合(警告表示)
         if (decidedStatus(changeValueStep) == 4) {
-            System.out.println("しかし" + anyone + "の" + this.name + "はこれいじょうあがらない！");
+            System.out.println("しかし" + anyone.getName() + "の" + this.name + "はこれいじょうあがらない！");
         }
+    }
+    public void isStatusChanged(BattleChar anyone) {
+        this.isChanged = true;
+        this.turnPeriod = new java.util.Random().nextInt(3) + anyone.getTurnCount();
     }
     // アクセサ
     public String getName() { return this.name; }

@@ -53,10 +53,6 @@ public abstract class Enemy extends BattleChar {
             return damage;
         }
     }
-    public void run() {
-        System.out.println(getName() + "はにげだした！");
-        this.isEscape = true;
-    }
     public boolean isRun(int braveLevel) {                      // trueであれば逃げる、falseであれば逃げない
         // 勇者と自身のレベルを比較し、相手の方が大きければ大きいほど逃げる確率を高くする
         int levelGap = braveLevel - this.level;
@@ -67,6 +63,8 @@ public abstract class Enemy extends BattleChar {
         // 範囲が100の乱数を用意し、1からrunProbability(逃げる確率)の数までが出たら逃げる
         int result = new java.util.Random().nextInt(100) + 1;
         if (result < runProbability) {
+            System.out.println(getName() + "はにげだした！");
+            this.isEscape = true;
             return true;
         } else {
             return false;

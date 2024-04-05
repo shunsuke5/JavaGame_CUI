@@ -21,7 +21,6 @@ public class AbnormalitySpell extends Spell {
                 System.out.println("MPがたりない！");
             } else {
                 System.out.println("しかしMPがたりなかった！");
-                user.plusTurnCount();
             }
             return;
         }

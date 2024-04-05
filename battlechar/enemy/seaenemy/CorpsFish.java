@@ -18,11 +18,13 @@ public class CorpsFish extends SeaEnemy {
                 new Wota().resite(this, brave);
                 break;
             case 2:
+                gather();
                 break;
         }
     }
     public void gather() {
         System.out.println(getName() + "はなかまをあつめ、きょだいなさかなのようになった！");
         getBattleAttack().changedStatus(this, 1);
+        getBattleAttack().setIsChanged(true);
     }
 }

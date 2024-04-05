@@ -20,6 +20,5 @@ public class Slime extends ForestEnemy {
     public void purupuru() {         // スライムの特殊行動
         // ぷるぷるするだけの行動
         System.out.println(getName() + "はぷるぷるしている。");
-        plusTurnCount();
     }
 }

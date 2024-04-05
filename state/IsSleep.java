@@ -11,7 +11,13 @@ public class IsSleep extends State {    // 数ターン休み
 
     public void effect(BattleChar anyone) {
         System.out.println(anyone.getName() + "はねむっている！");
-        anyone.plusTurnCount();
-        anyone.plusAbnormalTurnPeriod();
+        if (anyone.toString().equals("Brave")) {    // 勇者の場合
+            anyone.plusTurnCount();
+            anyone.plusAbnormalTurnPeriod();
+            return;
+        } else {                                    // 敵の場合
+            anyone.plusAbnormalTurnPeriod();
+            return;
+        }
     }
 }

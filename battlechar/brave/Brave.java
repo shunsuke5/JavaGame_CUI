@@ -210,7 +210,7 @@ public class Brave extends BattleChar {
         enemy.initializationBattleStatus();
 
         while (!this.winBattle || !this.loseBattle || !this.isEscape || !enemy.getIsEscape()) {
-            if (getDefaultAgility() >= enemy.getDefaultAgility()) { // 勇者が先攻の場合
+            if (getBattleAgility().getValue() >= enemy.getBattleAgility().getValue()) { // 勇者が先攻の場合
                 judgeAbnormalPeriod();                              // 状態異常終了判定
                 getState().effect(this);                            // 状態異常効果
                 statusUpDown();                                     // ステータス上下処理
@@ -238,7 +238,7 @@ public class Brave extends BattleChar {
                             break;
                     }
                 }
-                if (isWin(enemy)) {                           // 勇者ターン終了、敵HPチェック
+                if (enemy.getHp() <= 0) {                           // 勇者ターン終了、敵HPチェック
                     win(enemy);
                     continue;
                 }
@@ -251,6 +251,7 @@ public class Brave extends BattleChar {
                 if (!(enemy.getState().getStateDetail() == "cannotAction")) {
                     enemy.turn(this);                               // 敵ターン
                 }
+                enemy.plusTurnCount();
                 if (getHp() <= 0) {                                 // 敵ターン終了、勇者HPチェック
                     die();
                     continue;
@@ -265,6 +266,7 @@ public class Brave extends BattleChar {
                 if (!(enemy.getState().getStateDetail() == "cannotAction")) {
                     enemy.turn(this);                               // 敵ターン
                 }
+                enemy.plusTurnCount();
                 if (getHp() <= 0) {                                 // 敵ターン終了、勇者HPチェック
                     die();
                     continue;
@@ -296,7 +298,7 @@ public class Brave extends BattleChar {
                             break;
                     }
                 }
-                if (isWin(enemy)) {                           // 勇者ターン終了、敵HPチェック
+                if (enemy.getHp() <= 0) {                           // 勇者ターン終了、敵HPチェック
                     win(enemy);
                     continue;
                 }
@@ -478,9 +480,9 @@ public class Brave extends BattleChar {
     }
     public int calculateDamage(Enemy enemy) {   // ダメージ値を計算して返す
         final int DEFAULT_RANGE = 1;
-        int attackRange = (getBattleAttack().getCurrentValue() % 4) + DEFAULT_RANGE;    // 攻撃力が4増える毎にダメージ範囲を +1
-        int braveAttack = new java.util.Random().nextInt(attackRange) + getBattleAttack().getCurrentValue();
-        int damage = braveAttack - enemy.getBattleDefense().getCurrentValue();
+        int attackRange = (getBattleAttack().getValue() % 4) + DEFAULT_RANGE;    // 攻撃力が4増える毎にダメージ範囲を +1
+        int braveAttack = new java.util.Random().nextInt(attackRange) + getBattleAttack().getValue();
+        int damage = braveAttack - enemy.getBattleDefense().getValue();
         damage = controlDamage(damage);
         return damage;
     }
@@ -586,6 +588,9 @@ public class Brave extends BattleChar {
     }
     public boolean isWin(Enemy enemy) {
         return enemy.getHp() >= 0;
+    }
+    public boolean isDie() {
+        return getHp() <= 0;
     }
     public void judgeRunEnemy(Enemy enemy) {
         if (enemy.isRun(this.level)) {                      // 敵の逃げ判定

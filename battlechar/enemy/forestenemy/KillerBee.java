@@ -20,12 +20,12 @@ public class KillerBee extends ForestEnemy{
     }
     public void poisonNeedle(Brave brave) {     // 毒針で刺す攻撃
         System.out.println(getName() + "はどくばりでさしてきた！");
-        int damage = calculateDamage(brave.getBattleDefense().getCurrentValue());
+        int damage = calculateDamage(brave.getBattleDefense().getValue());
         Text.attack(brave.getName(), damage);
+        
         if (isSuccessGiveAbnormality(10)) {
             brave.setState(new IsPoison(brave));
             Text.makePoison(brave.getName());
         }
-        plusTurnCount();
     }
 }

@@ -16,4 +16,7 @@ public class Pirate extends SeaEnemy {
             break;
         }
     }
+    public void hogehoge() {
+        
+    }
 }

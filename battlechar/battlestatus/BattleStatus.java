@@ -129,7 +129,7 @@ public class BattleStatus {
     public String getName() { return this.name; }
     public int getTurnPeriod() { return this.turnPeriod; }
     public boolean getIsChanged() { return this.isChanged; }
-    public int getCurrentValue() { return this.value; }
+    public int getValue() { return this.value; }
     public int getTwoDownValue() { return this.TWO_DOWN_VALUE; }
     public int getOneDownValue() { return this.ONE_DOWN_VALUE; }
     public int getDefaultValue() { return this.DEFAULT_VALUE; }

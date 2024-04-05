@@ -210,7 +210,7 @@ public class Brave extends BattleChar {
         enemy.initializationBattleStatus();
 
         while (!this.winBattle || !this.loseBattle || !this.isEscape || !enemy.getIsEscape()) {
-            if (getBattleAgility().getValue() >= enemy.getDefaultAgility().getValue()) { // 勇者が先攻の場合
+            if (getBattleAgility().getValue() >= enemy.getBattleAgility().getValue()) { // 勇者が先攻の場合
                 judgeAbnormalPeriod();                              // 状態異常終了判定
                 getState().effect(this);                            // 状態異常効果
                 statusUpDown();                                     // ステータス上下処理

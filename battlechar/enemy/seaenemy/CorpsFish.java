@@ -25,6 +25,5 @@ public class CorpsFish extends SeaEnemy {
     public void gather() {
         System.out.println(getName() + "はなかまをあつめ、きょだいなさかなのようになった！");
         getBattleAttack().changedStatus(this, 1);
-        getBattleAttack().setIsChanged(true);
     }
 }

@@ -10,26 +10,26 @@ import state.*;
 import text.Text;
 
 public abstract class BattleChar {
-    private String name;                // 名前
+    private String name;                    // 名前
 
-    private int hp;                     // 体力
-    private int maxHp;                  // 最大体力
-    private int mp;                     // 魔力
-    private int maxMp;                  // 最大魔力
+    private int hp;                         // 体力
+    private int maxHp;                      // 最大体力
+    private int mp;                         // 魔力
+    private int maxMp;                      // 最大魔力
 
-    private int defaultAttack;          // 通常の攻撃力
-    private BattleAttack battleAttack;  // バトル時のこうげきりょく
-    private int defaultDefense;         // 通常の防御力
+    private int defaultAttack;              // 通常の攻撃力
+    private BattleAttack battleAttack;      // バトル時のこうげきりょく
+    private int defaultDefense;             // 通常の防御力
     private BattleDefense battleDefense;    // バトル時のぼうぎょりょく
-    private int defaultAgility;         // 通常の素早さ
+    private int defaultAgility;             // 通常の素早さ
     private BattleAgility battleAgility;    // バトル時のすばやさ
 
-    private int turnCount;              // 経過ターン数
-    private State state;                // 状態
-    private int abnormalTurnPeriod;     // 状態異常持続ターン上限
+    private int turnCount;                  // 経過ターン数
+    private State state;                    // 状態
+    private int abnormalTurnPeriod;         // 状態異常持続ターン上限
 
     
-    private int statusTurnPeriod;       // ステータス上下持続ターン上限
+    private int statusTurnPeriod;           // ステータス上下持続ターン上限
 
     // 抽象メソッド
     public abstract String toString();

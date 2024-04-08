@@ -19,8 +19,8 @@ public abstract class State {
             while(data != null) {
                 if (data.contains(this.name)) {
                     Object[] dataArray = data.split(",");
-                    this.stateId = (int)dataArray[1];
-                    this.stateDetail = (String)dataArray[2];
+                    this.stateId = (int)(dataArray[1]);
+                    this.stateDetail = (String)(dataArray[2]);
                 }
             }
         } catch (IOException e) {

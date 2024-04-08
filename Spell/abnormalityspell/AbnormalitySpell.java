@@ -42,7 +42,7 @@ public class AbnormalitySpell extends Spell {
             while(data != null) {
                 if (data.contains(spellName)) {
                     Object[] dataArray = data.split(",");
-                    return (String)dataArray[6];
+                    return (String)(dataArray[6]);
                 }
                 br.readLine();
             }

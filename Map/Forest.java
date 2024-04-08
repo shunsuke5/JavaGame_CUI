@@ -6,7 +6,7 @@ import battlechar.enemy.forestenemy.*;
 public class Forest extends Map {
     // コンストラクタ
     public Forest() {
-        super("森");
+        super("もり");
     }
     // メソッド
     public Enemy createEnemy() {

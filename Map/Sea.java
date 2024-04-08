@@ -6,7 +6,7 @@ import battlechar.enemy.seaenemy.*;
 public class Sea extends Map {
     // コンストラクタ
     public Sea() {
-        super("海");
+        super("うみ");
     }
     // メソッド
     public Enemy createEnemy() {

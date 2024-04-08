@@ -83,17 +83,17 @@ public class Brave extends BattleChar {
         int number = new java.util.Scanner(System.in).nextInt();
         switch(number) {
             case 1:
-                System.out.println(getName() + "は" + "森へむかった！");
+                System.out.println(getName() + "は" + "もりへむかった！");
                 currentLocation().setThereIs(false);
                 this.forestMap.setThereIs(true);
                 break;
             case 2:
-                System.out.println(getName() + "は" + "海へむかった！");
+                System.out.println(getName() + "は" + "うみへむかった！");
                 currentLocation().setThereIs(false);
                 this.seaMap.setThereIs(true);
                 break;
             case 3:
-                System.out.println(getName() + "は" + "山へむかった！");
+                System.out.println(getName() + "は" + "やまへむかった！");
                 currentLocation().setThereIs(false);
                 this.mountainMap.setThereIs(true);
                 break;

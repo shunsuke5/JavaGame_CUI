@@ -3,17 +3,42 @@ import battlechar.BattleChar;
 import battlechar.brave.*;
 
 public abstract class Enemy extends BattleChar {
-    private int enemyId;        // 敵ID
-    private int level;          // レベル、これを用いて逃げるかの判断をする
-    private int point;          // 経験値
-    private int dropMoney;      // 落とすお金
-    private boolean isEscape;   // 逃げた時にtrue
-    private int enemyCount;     // 敵の数、今回は使わない予定
+    private int enemyId;            // 敵ID
+    private int level;              // レベル、これを用いて逃げるかの判断をする
+    private int point;              // 経験値
+    private int money;          // 落とすお金
+    private boolean isEscape;       // 逃げた時にtrue
+    private String appearanceMap;   // 出現マップ
+    private String classfication;   // 分類(通常敵かボスか)
 
     // コンストラクタ
     public Enemy(String name) {
         setName(name);
-        initializationTurnCount();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("Enemy_data.csv"));
+            String str = br.readLine();
+            // 名前,ID,レベル,HP,MP,攻撃力,防御力,すばやさ,経験値,マネー,出現マップ,区分
+            while(str != null) {
+                if (str.contains(getName())) {
+                    Object[] dataArray = str.split(",");
+                    this.enemyId = ((int)(dataArray[1]));
+                    this.level = ((int)(dataArray[2]));
+                    setHp((int)(dataArray[3]));
+                    setMp((int)(dataArray[4]));
+                    setDefaultAttack((int)(dataArray[5]));
+                    setDefaultDefense((int)(dataArray[6]));
+                    setDefaultAgility((int)(dataArray[7]));
+                    this.point = ((int)(dataArray[8]));
+                    this.money = ((int)(dataArray[9]));
+                    this.appearanceMap = (String)(dataArray[10]);
+                    this.classfication = (String)(dataArray[11]);
+                }
+                str = br.readLine();
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            e.getStackTrace();
+        }
     }
 
     // 抽象メソッド

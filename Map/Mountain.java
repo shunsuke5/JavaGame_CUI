@@ -6,7 +6,7 @@ import battlechar.enemy.mountainenemy.*;
 public class Mountain extends Map {
     // コンストラクタ
     public Mountain() {
-        super("山");
+        super("やま");
     }
     // メソッド
     public Enemy createEnemy() {

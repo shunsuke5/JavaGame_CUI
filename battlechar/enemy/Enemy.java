@@ -1,6 +1,9 @@
 package battlechar.enemy;
 import battlechar.BattleChar;
 import battlechar.brave.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public abstract class Enemy extends BattleChar {
     private int enemyId;            // 敵ID
@@ -111,14 +114,12 @@ public abstract class Enemy extends BattleChar {
     public int getEnemyId() { return this.enemyId; }
     public int getLevel() { return this.level; }
     public int getPoint() { return this.point; }
-    public int getMoney() { return this.dropMoney; }
-    public int getEnemyCount() { return this.enemyCount; }
+    public int getMoney() { return this.money; }
     public boolean getIsEscape() { return this.isEscape; }
 
     public void setEnemyId(int enemyId) { this.enemyId = enemyId; }
     public void setLevel(int level) { this.level = level; }
     public void setPoint(int point) { this.point = point; }
-    public void setMoney(int dropMoney) { this.dropMoney = dropMoney; }
-    public void setEnemyCount(int enemyCount) { this.enemyCount = enemyCount; }
+    public void setMoney(int dropMoney) { this.money = dropMoney; }
     public void setIsEscape(boolean isEscape) { this.isEscape = isEscape; }
 }

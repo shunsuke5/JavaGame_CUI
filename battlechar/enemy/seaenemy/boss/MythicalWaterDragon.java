@@ -30,7 +30,7 @@ public class MythicalWaterDragon extends SeaEnemy {
     }
     public void iceBreath(Brave brave) {    // 強い攻撃かつすばやさを1ダウン
         System.out.println(getName() + "はこおりのいきをはいてきた！");
-        int damage = ((int)calculateDamage(getAbnormalTurnPeriod()) * 1.5)
+        int damage = (int)(calculateDamage(getAbnormalTurnPeriod()) * 1.5);
         Text.attack(brave.getName(), damage);
         brave.getBattleAgility().changedStatus(brave, -1);
     }

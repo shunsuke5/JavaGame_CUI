@@ -592,12 +592,6 @@ public class Brave extends BattleChar {
     public boolean isDie() {
         return getHp() <= 0;
     }
-    public void judgeRunEnemy(Enemy enemy) {
-        if (enemy.isRun(this.level)) {                      // 敵の逃げ判定
-            enemy.run();
-            continue;
-        }
-    }
     // アクセサ
     public int getLevel() { return this.level; }
     public int getLevelPoint() { return this.levelPoint; }

@@ -8,6 +8,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
+
+import battlechar.brave.Brave;
+
 import java.io.FilterOutputStream;
 
 import item.Item;
@@ -31,13 +34,6 @@ public class Main {
         Event.congratulations();
         
         */
-        int agility = 23;
-        int oneDownAgility = (int)(agility * 0.75);
-        int twoDownAgillity = (int)(oneDownAgility * 0.75);
         
-        System.out.println((agility * 0.75) + (agility * 0.25));
-        System.out.println(oneDownAgility + (agility * 0.25));
-        System.out.println((agility * 0.5) + (agility * 0.5));
-        System.out.println(twoDownAgillity + (agility * 0.5));
     }
 }

@@ -27,6 +27,7 @@ public class AbnormalitySpell extends Spell {
         System.out.println(user.getName() + "は" + getName() + "をとなえた！");
         if (isSuccessGiveAbnormality(probability)) {
             switchAbnormalityText(receiver, state.getName());
+            receiver.setState(state);
         } else {
             System.out.println("ミス！じゅもんはあたらなかった！");
         }

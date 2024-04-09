@@ -28,7 +28,7 @@ public class Kraken extends SeaEnemy {
     public void poisonAttack(Brave brave) {
         System.out.println(getName() + "はどくをふきかけてきた！");
         if (isSuccessGiveAbnormality(30)) {
-            Text.makePoison(brave);
+            Text.makePoison(brave.getName());
             brave.setState(new IsPoison(brave));
         } else {
             System.out.println("しかしあたらなかった！");

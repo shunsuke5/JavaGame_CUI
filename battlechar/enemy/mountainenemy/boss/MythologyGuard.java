@@ -1,11 +1,12 @@
 package battlechar.enemy.mountainenemy.boss;
 
 import battlechar.enemy.mountainenemy.MountainEnemy;
+import battlechar.brave.Brave;
 
 public class MythologyGuard extends MountainEnemy {
     // コンストラクタ
     public MythologyGuard() {
-        super("しんわのばんにん")
+        super("しんわのばんにん");
     }
     // メソッド
     public void turn(Brave brave) {

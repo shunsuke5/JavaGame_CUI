@@ -1,9 +1,5 @@
 package battlechar.enemy.seaenemy;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-
 import battlechar.brave.Brave;
 import battlechar.enemy.Enemy;
 

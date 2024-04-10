@@ -21,7 +21,8 @@ public class ItemBag {
                 i++;
                 br.readLine();
             }
-            item = new Item[i][99];    
+            item = new Item[i][99];
+            br.close();
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.getStackTrace();
@@ -59,6 +60,7 @@ public class ItemBag {
                     str = br.readLine();
                 }
             }
+            br.close();
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.getStackTrace();
@@ -101,10 +103,12 @@ public class ItemBag {
             while(str != null) {
                 if (str.contains(Integer.toString(itemId))) {
                     String[] dataArray = str.split(",");
+                    br.close();
                     return dataArray;
                 }
                 str = br.readLine();
             }
+            br.close();
             return null;
         } catch (IOException e) {
             System.out.println(e.getMessage());

@@ -1,5 +1,7 @@
 package text;
 
+import java.util.Scanner;
+
 import battlechar.BattleChar;
 import battlechar.brave.Brave;
 
@@ -11,7 +13,8 @@ public abstract class Text {
     }
     public static int inputChoice() {
         printAnswerArrow();
-        return new java.util.Scanner(System.in).nextInt();
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextInt();
     }
     public static void chooseMap() {
         System.out.println("どのマップにいきますか？");

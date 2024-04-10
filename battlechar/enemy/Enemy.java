@@ -38,6 +38,7 @@ public abstract class Enemy extends BattleChar {
                 }
                 str = br.readLine();
             }
+            br.close();
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.getStackTrace();
@@ -48,7 +49,7 @@ public abstract class Enemy extends BattleChar {
     public abstract void turn(Brave brave);                     // 敵の行動をランダムに決めるメソッド
     
     // メソッド
-    public void attack(Brave brave) {
+    protected void attack(Brave brave) {
         // ミス、通常攻撃、痛恨の一撃のどれが出るかをランダムに決定する
         int result = new java.util.Random().nextInt(100) + 1;
 
@@ -73,7 +74,7 @@ public abstract class Enemy extends BattleChar {
         damage = controlDamage(damage);
         return damage;
     }
-    public int controlDamage(int damage) {                      // ダメージ値がマイナス値だった場合に0に変換する
+    private int controlDamage(int damage) {                      // ダメージ値がマイナス値だった場合に0に変換する
         if (damage < 0) {
             return 0;
         } else {
@@ -97,13 +98,13 @@ public abstract class Enemy extends BattleChar {
             return false;
         }
     }
-    public int decideAction(int actionKinds) {                  // 行動を決める乱数を返す          
+    protected int decideAction(int actionKinds) {                  // 行動を決める乱数を返す          
         return new java.util.Random().nextInt(actionKinds);
     }
-    public int returnRandomNum(int min, int range) {            // 各敵行動で乱数を使いたい時に使用
+    protected int returnRandomNum(int min, int range) {            // 各敵行動で乱数を使いたい時に使用
         return new java.util.Random().nextInt(range) + min;
     }
-    public boolean isSuccessGiveAbnormality(int probability) {  // 状態異常を相手に付与する時にtrue
+    protected boolean isSuccessGiveAbnormality(int probability) {  // 状態異常を相手に付与する時にtrue
         int result = new java.util.Random().nextInt(100);
         return 0 < result && result < probability;
     }
@@ -116,10 +117,9 @@ public abstract class Enemy extends BattleChar {
     public int getPoint() { return this.point; }
     public int getMoney() { return this.money; }
     public boolean getIsEscape() { return this.isEscape; }
+    public String getAppearanceMap() { return this.appearanceMap; }
+    public String getClassfication() { return this.classfication; }
 
-    public void setEnemyId(int enemyId) { this.enemyId = enemyId; }
-    public void setLevel(int level) { this.level = level; }
-    public void setPoint(int point) { this.point = point; }
-    public void setMoney(int dropMoney) { this.money = dropMoney; }
+    public void setMoney(int money) { this.money = money; }
     public void setIsEscape(boolean isEscape) { this.isEscape = isEscape; }
 }

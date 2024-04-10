@@ -3,7 +3,6 @@ package battlechar.enemy.seaenemy.boss;
 import battlechar.brave.Brave;
 import battlechar.enemy.seaenemy.SeaEnemy;
 import spell.attackspell.BigWota;
-import spell.attackspell.Wota;
 import state.IsPoison;
 import text.Text;
 
@@ -25,7 +24,7 @@ public class Kraken extends SeaEnemy {
                 break;
         }
     }
-    public void poisonAttack(Brave brave) {
+    private void poisonAttack(Brave brave) {
         System.out.println(getName() + "はどくをふきかけてきた！");
         if (isSuccessGiveAbnormality(30)) {
             Text.makePoison(brave.getName());

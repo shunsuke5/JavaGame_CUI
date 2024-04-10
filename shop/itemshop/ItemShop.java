@@ -56,17 +56,19 @@ public class ItemShop {
             }
         }
     }
-    public int payment(int itemId, int count) {  // 金額を返す
+    private int payment(int itemId, int count) {  // 金額を返す
         try {
             BufferedReader br = new BufferedReader(new FileReader("..\\..\\item\\Item_data.csv"));
             String data = br.readLine();
             while(data != null) {
                 if (data.contains(Integer.toString(itemId))) {
                     Object[] dataArray = data.split(",");
+                    br.close();
                     return (int)(dataArray[3]) * count;
                 }
                 br.readLine();
             }
+            br.close();
             return -1;
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -74,7 +76,7 @@ public class ItemShop {
             return -1;
         }
     }
-    public void displayMenu(int bossKillCount) {
+    private void displayMenu(int bossKillCount) {
         try {
             BufferedReader br = new BufferedReader(new FileReader("..\\..\\item\\Item_data.csv"));
             String data = br.readLine();
@@ -87,6 +89,7 @@ public class ItemShop {
                 System.out.println(dataArray[0] + "：" + dataArray[3] + "m -> " + (int)(dataArray[1]));
                 data = br.readLine();
             }
+            br.close();
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.getStackTrace();

@@ -2,6 +2,7 @@ package battlechar.enemy.lastboss;
 
 import battlechar.enemy.Enemy;
 import spell.abnormalityspell.Nekaasu;
+import spell.attackspell.BigWota;
 import spell.healspell.Bepyoimi;
 import state.IsSleep;
 import battlechar.brave.Brave;
@@ -22,9 +23,16 @@ public class DevilGod extends Enemy {
             case 2:
                 new Nekaasu().resite(this, brave, new IsSleep(brave), 80);
                 break;
+            case 3:
+                new BigWota().resite(this, brave);
+            case 4:
+                doubleAttack(brave);
+                break;
         }
     }
-    public void hogehoge() {
-
+    private void doubleAttack(Brave brave) {
+        System.out.println(getName() + "はれんぞくでこうげきしてきた！");
+        attack(brave);
+        attack(brave);
     }
 }

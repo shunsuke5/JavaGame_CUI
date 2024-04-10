@@ -2,7 +2,6 @@ package battlechar.enemy.seaenemy;
 
 import battlechar.brave.Brave;
 import spell.attackspell.Wota;
-import text.Text;
 
 public class CorpsFish extends SeaEnemy {
     public CorpsFish() {
@@ -22,7 +21,7 @@ public class CorpsFish extends SeaEnemy {
                 break;
         }
     }
-    public void gather() {
+    private void gather() {
         System.out.println(getName() + "はなかまをあつめ、きょだいなさかなのようになった！");
         getBattleAttack().changedStatus(this, 1);
     }

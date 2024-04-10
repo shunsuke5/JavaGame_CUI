@@ -32,7 +32,7 @@ public class AbnormalitySpell extends Spell {
             System.out.println("ミス！じゅもんはあたらなかった！");
         }
     }
-    public boolean isSuccessGiveAbnormality(int probability) {  // 状態異常を相手に付与する時にtrue
+    protected boolean isSuccessGiveAbnormality(int probability) {  // 状態異常を相手に付与する時にtrue
         int result = new java.util.Random().nextInt(100);
         return 0 < result && result < probability;
     }
@@ -43,10 +43,12 @@ public class AbnormalitySpell extends Spell {
             while(data != null) {
                 if (data.contains(spellName)) {
                     Object[] dataArray = data.split(",");
+                    br.close();
                     return (String)(dataArray[6]);
                 }
                 br.readLine();
             }
+            br.close();
             return null;
         } catch (IOException e) {
             System.out.println(e.getMessage());

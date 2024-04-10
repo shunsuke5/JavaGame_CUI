@@ -36,6 +36,7 @@ public abstract class Spell{
                 }
                 data = br.readLine();
             }
+            br.close();
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.getStackTrace();
@@ -46,16 +47,11 @@ public abstract class Spell{
     public abstract void resite(BattleChar user, BattleChar receiver, State state, int probability);
     // アクセサ
     public String getName() { return this.name; }
+    public int getSpellId() { return this.spellId; }
     public int getNeedLevel() { return this.needLevel; }
     public int getConsumptionMp() { return this.consumptionMp; }
     public int getMinPoint() { return this.minpoint; }
     public int getPointRange() { return this.pointRange; }
+    public String getGiveAbnormal() { return this.giveAbnormal; }
     public String getExplanation() { return this.explanation; }
-
-    public void setName(String name) { this.name = name; }
-    public void setNeedLevel(int needLevel) { this.needLevel = needLevel; }
-    public void setConsumptionMp(int consumptionMp) { this.consumptionMp = consumptionMp; }
-    public void setMinPoint(int minpoint) { this.minpoint = minpoint; }
-    public void setPointRange(int pointRange) { this.pointRange = pointRange; }
-    public void setExplanation(String explanation) { this.explanation = explanation; }
 }

@@ -23,6 +23,7 @@ public abstract class State {
                     this.stateDetail = (String)(dataArray[2]);
                 }
             }
+            br.close();
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.getStackTrace();

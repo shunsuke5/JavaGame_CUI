@@ -36,6 +36,7 @@ public abstract class Item {
                 }
                 str = br.readLine();
             }
+            br.close();
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.getStackTrace();

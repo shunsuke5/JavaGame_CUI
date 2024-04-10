@@ -3,9 +3,6 @@ package battlechar;
 import battlechar.battlestatus.BattleAgility;
 import battlechar.battlestatus.BattleAttack;
 import battlechar.battlestatus.BattleDefense;
-import battlechar.battlestatus.BattleStatus;
-import battlechar.enemy.Enemy;
-import exception.StatusUpDownException;
 import state.*;
 import text.Text;
 

@@ -4,13 +4,13 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import map.*;
 import shop.itemshop.ItemShop;
 import spell.*;
 import spell.attackspell.*;
 import spell.healspell.*;
-import state.IsUsually;
 import battlechar.BattleChar;
 import battlechar.enemy.Enemy;
 import equipment.*;
@@ -18,9 +18,6 @@ import equipment.sword.*;
 import equipment.helmet.*;
 import equipment.armor.*;
 import text.Text;
-import item.Item;
-import item.hpitem.*;
-import item.mpitem.*;
 import itembag.ItemBag;
 
 public class Brave extends BattleChar {
@@ -57,7 +54,9 @@ public class Brave extends BattleChar {
     // コンストラクタ
     public Brave() {
         System.out.print("主人公の名前を入力してください。:");
-        String name = new java.util.Scanner(System.in).nextLine();
+        Scanner scanner = new Scanner(System.in);
+        String name = scanner.nextLine();
+        scanner.close();
         setName(name);
         System.out.println("勇者" + getName() + "の冒険が幕を開けた…");
 
@@ -80,7 +79,9 @@ public class Brave extends BattleChar {
         Text.chooseMap();
         // 現在いるマップを選択したらもう一度マップアクションをやりなおさせたい、whileを追加
         // そのマップに最初に行く場合、そのマップのインスタンスを生成したい
-        int number = new java.util.Scanner(System.in).nextInt();
+        Scanner scanner = new Scanner(System.in);
+        int number = scanner.nextInt();
+        scanner.close();
         switch(number) {
             case 1:
                 System.out.println(getName() + "は" + "もりへむかった！");
@@ -119,7 +120,9 @@ public class Brave extends BattleChar {
         } else {
             Text.chooseChangedText(str);
         }
-        int number = new java.util.Scanner(System.in).nextInt();
+        Scanner scanner = new Scanner(System.in);
+        int number = scanner.nextInt();
+        scanner.close();
 
         switch(number) {
             case 1:
@@ -150,13 +153,15 @@ public class Brave extends BattleChar {
                 break;                      // 想定外の選択肢の場合、もう一度選ばせる
         }
     }
-    public void searchEnemy() {             // 敵と戦う
+    private void searchEnemy() {             // 敵と戦う
         System.out.println(getName() + "はてきをみつけた！");
         battle(currentLocation().createEnemy());
     }
-    public void rest() {                    // 休んで体力と魔力を回復する
+    private void rest() {                    // 休んで体力と魔力を回復する
         Text.rest();
-        int choose = new java.util.Scanner(System.in).nextInt();
+        Scanner scanner = new Scanner(System.in);
+        int choose = scanner.nextInt();
+        scanner.close();
         if (choose == 1) {
             this.money -= 20;
             setHp(getMaxHp());
@@ -165,11 +170,11 @@ public class Brave extends BattleChar {
             return;
         }
     }
-    public void shopping() {                // アイテム購入
+    private void shopping() {                // アイテム購入
         ItemShop itemShop = new ItemShop();
         itemShop.sell(this);
     }
-    public void checkItemBag() {            // アイテムリスト確認
+    private void checkItemBag() {            // アイテムリスト確認
         int itemId = 0;
 
         do {
@@ -181,7 +186,7 @@ public class Brave extends BattleChar {
             }
         } while(itemId != -1);
     }
-    public void checkStatus() {             // ステータス確認
+    private void checkStatus() {             // ステータス確認
         String str = """
                 なまえ：%s　レベル：%d
                 HP：%d / %d　MP：%d / %d
@@ -192,16 +197,16 @@ public class Brave extends BattleChar {
                             getDefaultAttack(),getDefaultDefense(),getDefaultAgility());
     }
 
-    public void battleBoss() {              // マップボス戦
+    private void battleBoss() {              // マップボス戦
         // ボスとのバトル
         // 勝ったら以下のようにボスキルカウントに+1する
         this.bossKillCount++;
         // ショップのアイテムを増やす処理を以下に記述
     }
-    public void searchHikyou() {            // 秘境探索(中ボス)
+    private void searchHikyou() {            // 秘境探索(中ボス)
         // 秘境が解放されているかのチェック
     }
-    public void battle(Enemy enemy) {       // 敵とエンカウントする
+    private void battle(Enemy enemy) {       // 敵とエンカウントする
         System.out.println(enemy.getName() + "があらわれた！");
         // バトルステータスとターンカウント初期化
         initializationTurnCount();
@@ -216,7 +221,9 @@ public class Brave extends BattleChar {
                 statusUpDown();                                     // ステータス上下処理
                 while (getTurnCount() == enemy.getTurnCount()) {    // 勇者ターン
                     Text.chooseBattleAction(this);
-                    int action = new java.util.Scanner(System.in).nextInt();
+                    Scanner scanner = new Scanner(System.in);
+                    int action = scanner.nextInt();
+                    scanner.close();
 
                     switch (action) {
                         case 1:
@@ -276,7 +283,9 @@ public class Brave extends BattleChar {
                 statusUpDown();                                     // ステータス上下処理
                 while(getTurnCount() != enemy.getTurnCount()) {                                                // 勇者ターン
                     Text.chooseBattleAction(this);
-                    int action = new java.util.Scanner(System.in).nextInt();
+                    Scanner scanner = new Scanner(System.in);
+                    int action = scanner.nextInt();
+                    scanner.close();
 
                     switch (action) {
                         case 1:
@@ -305,7 +314,7 @@ public class Brave extends BattleChar {
             }
         }
     }
-    public void attack(Enemy enemy) {       // ミス、通常攻撃、痛恨の一撃のどれが出るかをランダムに決定する
+    private void attack(Enemy enemy) {       // ミス、通常攻撃、痛恨の一撃のどれが出るかをランダムに決定する
         int result = new java.util.Random().nextInt(100) + 1;
 
         if (1 <= result && result <= 10) {              // 1から10が出たらミス
@@ -322,28 +331,32 @@ public class Brave extends BattleChar {
         }
         plusTurnCount();
     }
-    public void spell(Enemy enemy) {        // 戦闘において呪文を使用するメソッド
+    private void spell(Enemy enemy) {        // 戦闘において呪文を使用するメソッド
         if (this.level < 3) {
             System.out.println("つかえるじゅもんがない！");
             return;
         }
         System.out.println("どのじゅもんをつかう？(-1でもどる)");
         displaySpell();
-        int spellId = new java.util.Scanner(System.in).nextInt();
+        Scanner scanner = new Scanner(System.in);
+        int spellId = scanner.nextInt();
+        scanner.close();
         useSpell(spellId).resite(this, enemy);
         plusTurnCount();
     }
-    public void defense() {                 // 戦闘において防御するメソッド
-        int strongDefense = (int) (getDefaultDefense() * 1.5);
+    private void defense() {                 // 戦闘において防御するメソッド
+        int strongDefense = (int)(getBattleDefense().getValue() * 1.5);
         // この行動は素早さ関係なく勇者が先攻となる
         // そしてこのターン終了時には防御力を元に戻さなければならない
         plusTurnCount();
     }
 
-    public void battleUseItem() {           // 戦闘においてアイテムを使用するメソッド
+    private void battleUseItem() {           // 戦闘においてアイテムを使用するメソッド
         System.out.println("どのアイテムをつかう？(-1でもどる)");
         this.itemBag.displayItemBag();
-        int itemId = new java.util.Scanner(System.in).nextInt();
+        Scanner scanner = new Scanner(System.in);
+        int itemId = scanner.nextInt();
+        scanner.close();
         if (itemId == -1) {
             return;
         }
@@ -353,21 +366,21 @@ public class Brave extends BattleChar {
             return;
         }
     }
-    public boolean canUseItem(int itemId) { // アイテムが使用可能か返す
+    private boolean canUseItem(int itemId) { // アイテムが使用可能か返す
         return this.itemBag.checkStorage(itemId) == 0;
     }
-    public void useItem(int itemId) {       // アイテムを使用する
+    private void useItem(int itemId) {       // アイテムを使用する
         if (canUseItem(itemId)) {
             this.itemBag.getItem()[itemId][0].use(this);
             this.itemBag.decrease(itemId);
         }
     }
-    public void run() {     // 戦闘において逃げるメソッド
+    private void run() {     // 戦闘において逃げるメソッド
         // if (相手がボスの場合) 逃げられない
         // if (自分と相手のレベルと素早さの合計を比べてなんやかんや計算) → 逃げられるか無理かを決める
     }
 
-    public void win(Enemy enemy) {          // 戦いに勝利
+    private void win(Enemy enemy) {          // 戦いに勝利
         this.winBattle = true;
         System.out.println(enemy.getName() + "をたおした！");
         System.out.println(enemy.getPoint() + "ポイントのけいけんちをかくとく！");
@@ -380,12 +393,12 @@ public class Brave extends BattleChar {
         restoreBattleStatus();
     }
 
-    public void die() {                     // 戦いに敗北
+    private void die() {                     // 戦いに敗北
         this.loseBattle = true;
         System.out.println(getName() + "はしんでしまった！");
     }
 
-    public boolean isLevelUp(Enemy enemy) {
+    private boolean isLevelUp(Enemy enemy) {
         this.levelPoint += enemy.getPoint();
         try {
             BufferedReader br = new BufferedReader(new FileReader("LevelUp_data.csv"));
@@ -393,9 +406,11 @@ public class Brave extends BattleChar {
             while(str != null) {
                 if (str.contains(Integer.toString(this.level + 1))) {
                     String[] dataArray = str.split(",");
+                    br.close();
                     return this.levelPoint > Integer.parseInt(dataArray[1]);
                 }
             }
+            br.close();
             return false;
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -403,7 +418,7 @@ public class Brave extends BattleChar {
             return false;
         }
     }
-    public void upLevel() {
+    private void upLevel() {
         int beforeLevel = this.level;
         try {
             BufferedReader br = new BufferedReader(new FileReader("LevelUp_data.csv"));
@@ -424,12 +439,13 @@ public class Brave extends BattleChar {
                 }
                 str = br.readLine();
             }
+            br.close();
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
-    public void upStatus(int beforeLevel, int afterLevel) {     // レベルアップによるステータス上昇の処理
+    private void upStatus(int beforeLevel, int afterLevel) {     // レベルアップによるステータス上昇の処理
         Object[] beforeArray = new Object[3];
         Object[] afterArray = new Object[3];
         try {
@@ -456,12 +472,14 @@ public class Brave extends BattleChar {
             System.out.println("ちからが\s" + upPower + "\sあがった！");
             System.out.println("まもりが\s" + upDefense + "\sあがった！");
             System.out.println("すばやさが\s" + upAgility + "\sあがった！");
+
+            br.close();
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.getStackTrace();
         }
     }
-    public void checkSpellUp(int afterLevel) {        // 呪文を習得できるかチェックする
+    private void checkSpellUp(int afterLevel) {        // 呪文を習得できるかチェックする
         try {
             BufferedReader br = new BufferedReader(new FileReader("..\\spell\\Spell_data.csv"));
             String str = br.readLine();
@@ -469,16 +487,18 @@ public class Brave extends BattleChar {
                 String[] dataArray = str.split(",");
                 if (dataArray[2] == (Integer.toString(afterLevel))) {
                     System.out.println(getName() + "は" + dataArray[0] + "のじゅもんがつかえるようになった！");
+                    br.close();
                     return;
                 }
                 str = br.readLine();
             }
+            br.close();
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.getStackTrace();
         }
     }
-    public int calculateDamage(Enemy enemy) {   // ダメージ値を計算して返す
+    private int calculateDamage(Enemy enemy) {   // ダメージ値を計算して返す
         final int DEFAULT_RANGE = 1;
         int attackRange = (getBattleAttack().getValue() % 4) + DEFAULT_RANGE;    // 攻撃力が4増える毎にダメージ範囲を +1
         int braveAttack = new java.util.Random().nextInt(attackRange) + getBattleAttack().getValue();
@@ -486,14 +506,14 @@ public class Brave extends BattleChar {
         damage = controlDamage(damage);
         return damage;
     }
-    public int controlDamage(int damage) {   // ダメージ値がマイナス値だった場合に0に変換する
+    private int controlDamage(int damage) {   // ダメージ値がマイナス値だった場合に0に変換する
         if (damage < 0) {
             return 0;
         } else {
             return damage;
         }
     }
-    public Map currentLocation() {  // 現在地を返す
+    private Map currentLocation() {  // 現在地を返す
         if (this.forestMap.isThereIs()) {
             return this.forestMap;
         } else if(this.seaMap.isThereIs()) {
@@ -502,7 +522,7 @@ public class Brave extends BattleChar {
             return this.mountainMap;
         }
     }
-    public int countBossKill() {    // ボスを倒した数を取得
+    private int countBossKill() {    // ボスを倒した数を取得
         int bossKillCount = 0;
         if (this.forestMap.isBossKill()) {
             bossKillCount++;
@@ -515,7 +535,7 @@ public class Brave extends BattleChar {
         }
         return bossKillCount;
     }
-    public void displaySpell() {     // 習得した呪文を表示する
+    private void displaySpell() {     // 習得した呪文を表示する
         String spellName;
         int spellId;
         int needLevel;
@@ -529,17 +549,19 @@ public class Brave extends BattleChar {
                 spellId = Integer.parseInt(dataArray[1]);
                 needLevel = Integer.parseInt(dataArray[2]);
                 if (this.level < needLevel) {
+                    br.close();
                     return;
                 }
                 System.out.println(spellName + "：" + spellId);
                 str = br.readLine();
             }
+            br.close();
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.getStackTrace();
         }
     }
-    public Spell useSpell(int spellId) {
+    private Spell useSpell(int spellId) {
         String[] dataArray = spellLookUp(spellId);
         String spellName = dataArray[0];
         switch(spellName) {
@@ -556,17 +578,19 @@ public class Brave extends BattleChar {
         }
         return null;
     }
-    public String[] spellLookUp(int spellId) {
+    private String[] spellLookUp(int spellId) {
         try {
             BufferedReader br = new BufferedReader(new FileReader("..\\spell\\Spell_data.csv"));
             String str = br.readLine();
             while(str != null) {
                 if (str.contains(Integer.toString(spellId))) {
                     String[] dataArray = str.split(",");
+                    br.close();
                     return dataArray;
                 }
                 str = br.readLine();
             }
+            br.close();
             return null;
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -574,23 +598,17 @@ public class Brave extends BattleChar {
             return null;
         }
     }
-    public void equipSword() {      // 剣を装備する
+    private void equipSword() {      // 剣を装備する
 
     }
-    public void equipHelmet() {     // 兜を装備する
+    private void equipHelmet() {     // 兜を装備する
 
     }
-    public void equipArmor() {      // 鎧を装備する
+    private void equipArmor() {      // 鎧を装備する
 
     }
     public String toString() {
         return "Brave";
-    }
-    public boolean isWin(Enemy enemy) {
-        return enemy.getHp() >= 0;
-    }
-    public boolean isDie() {
-        return getHp() <= 0;
     }
     // アクセサ
     public int getLevel() { return this.level; }

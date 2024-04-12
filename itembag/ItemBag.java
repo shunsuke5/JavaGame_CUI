@@ -16,12 +16,12 @@ public class ItemBag {
 
         try {
             BufferedReader br = new BufferedReader(new FileReader("..\\item\\Item_data.csv"));
-            String str = br.readLine();
-            while(str != null) {
+            String data = br.readLine();
+            while(data != null) {
                 i++;
-                br.readLine();
+                data = br.readLine();
             }
-            item = new Item[i][99];
+            this.item = new Item[i][99];
             br.close();
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -47,17 +47,17 @@ public class ItemBag {
 
         try {
             BufferedReader br = new BufferedReader(new FileReader("..\\item\\Item_data.csv"));
-            String str = br.readLine();
-            while(str != null) {
-                String[] dataArray = str.split(",");
+            String data = br.readLine();
+            while(data != null) {
+                String[] dataArray = data.split(",");
                 itemName = dataArray[0];
                 itemId = Integer.parseInt(dataArray[1]);
                 if (checkStorage(itemId) == 0) {
-                    str = br.readLine();
+                    data = br.readLine();
                 } else {
                     int itemCount = checkStorage(itemId);
                     System.out.println(itemName + "：" + itemCount + "こ");
-                    str = br.readLine();
+                    data = br.readLine();
                 }
             }
             br.close();
@@ -99,14 +99,14 @@ public class ItemBag {
     public String[] itemLookUp(int itemId) {
         try {
             BufferedReader br = new BufferedReader(new FileReader("..\\item\\Item_data.csv"));
-            String str = br.readLine();
-            while(str != null) {
-                if (str.contains(Integer.toString(itemId))) {
-                    String[] dataArray = str.split(",");
+            String data = br.readLine();
+            while(data != null) {
+                if (data.contains(Integer.toString(itemId))) {
+                    String[] dataArray = data.split(",");
                     br.close();
                     return dataArray;
                 }
-                str = br.readLine();
+                data = br.readLine();
             }
             br.close();
             return null;

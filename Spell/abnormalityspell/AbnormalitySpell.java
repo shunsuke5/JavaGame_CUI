@@ -46,7 +46,7 @@ public class AbnormalitySpell extends Spell {
                     br.close();
                     return (String)(dataArray[6]);
                 }
-                br.readLine();
+                data = br.readLine();
             }
             br.close();
             return null;

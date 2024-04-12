@@ -753,7 +753,7 @@ indexOf(Herb) と lastindexOf(Herb) の2つを用いれば
 　「アイテムを入手する時に、入手するアイテムが既に要素内に入っているかを知りたい」
 this.itemBag.add(new Herb());
 String str = this.itemBag.get(0);
-if (str.contains(Herb)) {
+if (data.contains(Herb)) {
     itemBag.get(0).itemCount++;
 } else {
     itemBag.add(new Herb());
@@ -766,7 +766,7 @@ public void checkGetItem(String itemClassName) {
     }
     for (int i = 0; i < this.itemBag.size(); i++) {
         String str = this.itemBag.get(i);
-        if (str.contains(Herb)) {
+        if (data.contains(Herb)) {
             itemBag.get(i).itemCount++;
         }
         this.itemBag.add(new itemClassName);
@@ -779,7 +779,7 @@ public void checkGetItem(String itemClassName) {
 ・一応文字列の先頭文字だけ大文字にするプログラムは以下においておく
 
         String str = "shunsuke";
-        char[] name = str.toCharArray();            // 文字列をchar配列に格納
+        char[] name = data.toCharArray();            // 文字列をchar配列に格納
         name[0] = Character.toUpperCase(name[0]);   // 文字列の先頭文字を大文字に変換
         String itemName = String.valueOf(name);     // 先頭文字が大文字に変換された文字列を変数に格納
         System.out.println(itemName);               // 変換後の文字列を出力(大文字であることを確認)
@@ -1578,12 +1578,27 @@ if (this.battleAgility.getIsChanged()) {
 　(逆に今まで閉じてなかったのが怖い)
 
 ・メソッドのアクセス修飾子を見直す
+　　→ private,protectedで良さそうなものは修正済み。
+
+###20240412###
+
+・data = br.readLine();　を書き忘れているデータファイル読み込み処理が結構多かったので修正する。
+　注意してプログラムを書くようにする。
+　　→ 修正済み
+
+・装備も1つのデータファイルにまとめる。
+　　→ まとめた。
+
+・アイテムショップや装備ショップのcreate〇〇()メソッド内でいちいち名前に応じて
+　new 〇〇と手打ちしていくのが本当に面倒なので、これを作ってくれるプログラムをつくりたい。
+　たとえば「アイテム名」と「アイテムのクラス名」があれば、case アイテム名: return new アイテムのクラス名;
+　のようにしてひな形を作ることができる。これはぜひつくりたい。
 
 ・[進捗]defense()について経過ターン数を用いた判定の実装
 　　　　敵のアイテムドロップについて考える
 　　　　「そうびショップ」を作成する
+　　　　装備ショップのcreateEquipmentを自動作成するプログラムを作る → 取組中
 　　　　ファイルから読み込んで表示するテキストを整える処理を考える
-　　　　protectedやprivateにした方が良いメソッドのアクセス修飾子を変更する → 取組中
 　　　　{保留}
 　　　　勇者が使える呪文やアイテムに敵デバフのものを実装する
 　　　　敵の状態異常のかかりやすさを調整するプログラムを考える

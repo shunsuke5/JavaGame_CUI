@@ -1,8 +1,4 @@
 package equipment.armor;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-
 import equipment.Equipment;
 
 public class Armor extends Equipment {
@@ -12,23 +8,6 @@ public class Armor extends Equipment {
     // コンストラクタ
     public Armor(String name) {
         super(name);
-        try {
-            BufferedReader br = new BufferedReader(new FileReader("Armor_data.csv"));
-            String str = br.readLine();
-            while(str != null) {
-                if (str.contains(getName())) {
-                    Object[] dataArray = str.split(",");
-                    this.armorId = (int)(dataArray[1]);
-                    this.defense = (int)(dataArray[2]);
-                    setExplanation((String)(dataArray[3]));
-                }
-                str = br.readLine();
-            }
-            br.close();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            e.getStackTrace();
-        }
     }
     // アクセサ
     public int getArmorId() { return this.armorId; }

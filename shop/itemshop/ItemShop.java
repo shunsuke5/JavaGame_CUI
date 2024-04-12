@@ -66,7 +66,7 @@ public class ItemShop {
                     br.close();
                     return (int)(dataArray[3]) * count;
                 }
-                br.readLine();
+                data = br.readLine();
             }
             br.close();
             return -1;

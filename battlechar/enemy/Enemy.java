@@ -19,11 +19,11 @@ public abstract class Enemy extends BattleChar {
         setName(name);
         try {
             BufferedReader br = new BufferedReader(new FileReader("Enemy_data.csv"));
-            String str = br.readLine();
+            String data = br.readLine();
             // 名前,ID,レベル,HP,MP,攻撃力,防御力,すばやさ,経験値,マネー,出現マップ,区分
-            while(str != null) {
-                if (str.contains(getName())) {
-                    Object[] dataArray = str.split(",");
+            while(data != null) {
+                if (data.contains(getName())) {
+                    Object[] dataArray = data.split(",");
                     this.enemyId = ((int)(dataArray[1]));
                     this.level = ((int)(dataArray[2]));
                     setHp((int)(dataArray[3]));
@@ -36,7 +36,7 @@ public abstract class Enemy extends BattleChar {
                     this.appearanceMap = (String)(dataArray[10]);
                     this.classfication = (String)(dataArray[11]);
                 }
-                str = br.readLine();
+                data = br.readLine();
             }
             br.close();
         } catch (IOException e) {

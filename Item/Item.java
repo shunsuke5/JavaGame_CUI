@@ -21,10 +21,10 @@ public abstract class Item {
         this.name = name;
         try {
             BufferedReader br = new BufferedReader(new FileReader("HpItem_data.csv"));
-            String str = br.readLine();
-            while(str != null) {
-                if (str.contains(getName())) {
-                    Object[] dataArray = str.split(",");
+            String data = br.readLine();
+            while(data != null) {
+                if (data.contains(getName())) {
+                    Object[] dataArray = data.split(",");
                     this.itemId = (int)(dataArray[1]);
                     this.targetStatus = (String)(dataArray[2]);
                     this.price = (int)(dataArray[3]);
@@ -34,7 +34,7 @@ public abstract class Item {
                     this.needBossKill = (int)(dataArray[7]);
                     this.explanation = (String)(dataArray[8]);
                 }
-                str = br.readLine();
+                data = br.readLine();
             }
             br.close();
         } catch (IOException e) {

@@ -402,13 +402,14 @@ public class Brave extends BattleChar {
         this.levelPoint += enemy.getPoint();
         try {
             BufferedReader br = new BufferedReader(new FileReader("LevelUp_data.csv"));
-            String str = br.readLine();
-            while(str != null) {
-                if (str.contains(Integer.toString(this.level + 1))) {
-                    String[] dataArray = str.split(",");
+            String data = br.readLine();
+            while(data != null) {
+                if (data.contains(Integer.toString(this.level + 1))) {
+                    String[] dataArray = data.split(",");
                     br.close();
                     return this.levelPoint > Integer.parseInt(dataArray[1]);
                 }
+                data = br.readLine();
             }
             br.close();
             return false;
@@ -422,14 +423,14 @@ public class Brave extends BattleChar {
         int beforeLevel = this.level;
         try {
             BufferedReader br = new BufferedReader(new FileReader("LevelUp_data.csv"));
-            String str = br.readLine();
-            while(str != null) {
-                if (str.contains(Integer.toString(this.level + 1))) {
-                    String[] dataArray = str.split(",");
+            String data = br.readLine();
+            while(data != null) {
+                if (data.contains(Integer.toString(this.level + 1))) {
+                    String[] dataArray = data.split(",");
                     while(this.levelPoint >= Integer.parseInt(dataArray[1])) {
                         this.level++;
-                        str = br.readLine();
-                        str.split(",");
+                        data = br.readLine();
+                        data.split(",");
                     }
                     if (beforeLevel < this.level) {
                         System.out.println(getName() + "のレベルが" + beforeLevel + 
@@ -437,7 +438,7 @@ public class Brave extends BattleChar {
                         upStatus(beforeLevel, this.level);
                     }
                 }
-                str = br.readLine();
+                data = br.readLine();
             }
             br.close();
         } catch (IOException e) {
@@ -450,15 +451,15 @@ public class Brave extends BattleChar {
         Object[] afterArray = new Object[3];
         try {
             BufferedReader br = new BufferedReader(new FileReader("LevelUp_data.csv"));
-            String str = br.readLine();
-            while(str != null) {
-                if (str.contains(Integer.toString(beforeLevel))) {
-                    beforeArray = str.split(",");
+            String data = br.readLine();
+            while(data != null) {
+                if (data.contains(Integer.toString(beforeLevel))) {
+                    beforeArray = data.split(",");
                 }
-                if (str.contains(Integer.toString(afterLevel))) {
-                    afterArray = str.split(",");
+                if (data.contains(Integer.toString(afterLevel))) {
+                    afterArray = data.split(",");
                 }
-                br.readLine();
+                data = br.readLine();
             }
             // ステータス上昇処理
             this.power = (int)afterArray[2];
@@ -482,15 +483,15 @@ public class Brave extends BattleChar {
     private void checkSpellUp(int afterLevel) {        // 呪文を習得できるかチェックする
         try {
             BufferedReader br = new BufferedReader(new FileReader("..\\spell\\Spell_data.csv"));
-            String str = br.readLine();
-            while(str != null) {
-                String[] dataArray = str.split(",");
+            String data = br.readLine();
+            while(data != null) {
+                String[] dataArray = data.split(",");
                 if (dataArray[2] == (Integer.toString(afterLevel))) {
                     System.out.println(getName() + "は" + dataArray[0] + "のじゅもんがつかえるようになった！");
                     br.close();
                     return;
                 }
-                str = br.readLine();
+                data = br.readLine();
             }
             br.close();
         } catch (IOException e) {
@@ -542,9 +543,9 @@ public class Brave extends BattleChar {
 
         try {
             BufferedReader br = new BufferedReader(new FileReader("..\\spell\\Spell_data.csv"));
-            String str = br.readLine();
-            while(str != null) {
-                String[] dataArray = str.split(",");
+            String data = br.readLine();
+            while(data != null) {
+                String[] dataArray = data.split(",");
                 spellName = dataArray[0];
                 spellId = Integer.parseInt(dataArray[1]);
                 needLevel = Integer.parseInt(dataArray[2]);
@@ -553,7 +554,7 @@ public class Brave extends BattleChar {
                     return;
                 }
                 System.out.println(spellName + "：" + spellId);
-                str = br.readLine();
+                data = br.readLine();
             }
             br.close();
         } catch (IOException e) {
@@ -581,14 +582,14 @@ public class Brave extends BattleChar {
     private String[] spellLookUp(int spellId) {
         try {
             BufferedReader br = new BufferedReader(new FileReader("..\\spell\\Spell_data.csv"));
-            String str = br.readLine();
-            while(str != null) {
-                if (str.contains(Integer.toString(spellId))) {
-                    String[] dataArray = str.split(",");
+            String data = br.readLine();
+            while(data != null) {
+                if (data.contains(Integer.toString(spellId))) {
+                    String[] dataArray = data.split(",");
                     br.close();
                     return dataArray;
                 }
-                str = br.readLine();
+                data = br.readLine();
             }
             br.close();
             return null;

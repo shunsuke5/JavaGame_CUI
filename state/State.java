@@ -22,6 +22,7 @@ public abstract class State {
                     this.stateId = (int)(dataArray[1]);
                     this.stateDetail = (String)(dataArray[2]);
                 }
+                data = br.readLine();
             }
             br.close();
         } catch (IOException e) {

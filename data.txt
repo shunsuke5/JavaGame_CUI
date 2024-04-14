@@ -1,0 +1,15 @@
+へいしのつるぎ,SoldierSword
+どうのつるぎ,BronzeSword
+てつのつるぎ,IronSword
+はがねのつるぎ,SteelSword
+ゆうしゃのつるぎ,BraveSword
+へいしのかぶと,SoldierHelmet
+どうのかぶと,BronzeHelmet
+てつのかぶと,IronHelmet
+はがねのかぶと,SteelHelmet
+ゆうしゃのかぶと,BraveHelmet
+へいしのよろい,SoldierArmor
+どうのよろい,BronzeArmor
+てつのよろい,IronArmor
+はがねのよろい,SteelArmor
+ゆうしゃのよろい,BraveArmor

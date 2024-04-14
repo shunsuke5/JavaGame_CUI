@@ -1,3 +1,30 @@
-test
-てすと
-テスト
+case "へいしのつるぎ":
+	return new SoldierSword();
+case "どうのつるぎ":
+	return new BronzeSword();
+case "てつのつるぎ":
+	return new IronSword();
+case "はがねのつるぎ":
+	return new SteelSword();
+case "ゆうしゃのつるぎ":
+	return new BraveSword();
+case "へいしのかぶと":
+	return new SoldierHelmet();
+case "どうのかぶと":
+	return new BronzeHelmet();
+case "てつのかぶと":
+	return new IronHelmet();
+case "はがねのかぶと":
+	return new SteelHelmet();
+case "ゆうしゃのかぶと":
+	return new BraveHelmet();
+case "へいしのよろい":
+	return new SoldierArmor();
+case "どうのよろい":
+	return new BronzeArmor();
+case "てつのよろい":
+	return new IronArmor();
+case "はがねのよろい":
+	return new SteelArmor();
+case "ゆうしゃのよろい":
+	return new BraveArmor();

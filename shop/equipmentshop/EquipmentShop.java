@@ -15,8 +15,8 @@ public class EquipmentShop {
         while (!isLeave) {
             System.out.println("なにをかいますか？(-1でマップにもどる)\n");
             displayMenu(brave.getBossKillCount());
-            int itemId = Text.inputChoice();
-            if (itemId == -1) {                 // -1を選んだ場合マップアクションへ
+            int equipmentId = Text.inputChoice();
+            if (equipmentId == -1) {                 // -1を選んだ場合マップアクションへ
                 this.isLeave = true;
                 continue;
             }
@@ -25,7 +25,7 @@ public class EquipmentShop {
             if (count == -1) {                  // -1を選んだ場合ショップのアイテム一覧へ
                 continue;
             }
-            int price = payment(itemId, count); // 金額の計算
+            int price = payment(equipmentId, count); // 金額の計算
             if (brave.getMoney() < price) {
                 System.out.println("おかねがたりません！");
                 continue;
@@ -37,7 +37,7 @@ public class EquipmentShop {
                 continue;
             }
             brave.setMoney(brave.getMoney() - price);
-            brave.getItemBag().increase(itemId, count);
+            brave.getEquipmentBag().increase(equipmentId, count);
             
             System.out.println("おかいあげありがとうございます。");
             System.out.println("ほかにもなにかかいますか？");
@@ -50,12 +50,12 @@ public class EquipmentShop {
             }
         }
     }
-    private int payment(int itemId, int count) {  // 金額を返す
+    private int payment(int equipmentId, int count) {  // 金額を返す
         try {
-            BufferedReader br = new BufferedReader(new FileReader("..\\..\\item\\Item_data.csv"));
+            BufferedReader br = new BufferedReader(new FileReader("..\\..\\equipment\\Equipment_data.csv"));
             String data = br.readLine();
             while(data != null) {
-                if (data.contains(Integer.toString(itemId))) {
+                if (data.contains(Integer.toString(equipmentId))) {
                     Object[] dataArray = data.split(",");
                     br.close();
                     return (int)(dataArray[3]) * count;
@@ -72,7 +72,7 @@ public class EquipmentShop {
     }
     private void displayMenu(int bossKillCount) {
         try {
-            BufferedReader br = new BufferedReader(new FileReader("..\\..\\item\\Item_data.csv"));
+            BufferedReader br = new BufferedReader(new FileReader("..\\..\\equipment\\Equipment_data.csv"));
             String data = br.readLine();
             while(data != null) {
                 Object[] dataArray = data.split(",");

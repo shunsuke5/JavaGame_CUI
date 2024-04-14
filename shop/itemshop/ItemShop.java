@@ -82,7 +82,11 @@ public class ItemShop {
             String data = br.readLine();
             while(data != null) {
                 Object[] dataArray = data.split(",");
-                if (bossKillCount <= (int)(dataArray[4])) {
+                do {
+                    System.out.println(dataArray[0] + "：" + dataArray[3] + "m -> " + (int)(dataArray[1]));
+                    data = br.readLine();
+                } while (bossKillCount < (int)(dataArray[7]));
+                if (bossKillCount <= (int)(dataArray[7])) {
                     br.readLine();
                     continue;
                 }

@@ -16,6 +16,8 @@ public class Main {
         Event.congratulations();
         
         */
-        
+
+        CreateEquipment ce = new CreateEquipment();
+        ce.printToFile();
     }
 }

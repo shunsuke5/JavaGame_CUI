@@ -3,6 +3,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import equipment.Equipment;
+import equipment.sword.*;
+import equipment.helmet.*;
+import equipment.armor.*;
 
 public class EquipmentBag {
     private Equipment[][] equipment;
@@ -74,22 +77,38 @@ public class EquipmentBag {
         String[] dataArray = equipmentLookUp(equipmentId);
         String equipmentName = dataArray[0];
         switch(equipmentName) {
-            case "やくそう":
-                return new Herb();
-            case "まりょくのみず":
-                return new MagicWater();
-            case "かいふくやく":
-                return new MedicineLiquid();
-            case "まほうのせいすい":
-                return new MagicHolyWater();
-            case "せいめいそう":
-                return new LifeHerb();
-            case "いにしえのまどうしょ":
-                return new AncientMagicBook();
-            case "だいちのしゅくふく":
-                return new BlessingOfGround();
-            case "めがみのしゅくふく":
-                return new BlessingOfVenus();
+            case "へいしのつるぎ":
+                return new SoldierSword();
+            case "どうのつるぎ":
+                return new BronzeSword();
+            case "てつのつるぎ":
+                return new IronSword();
+            case "はがねのつるぎ":
+                return new SteelSword();
+            case "ゆうしゃのつるぎ":
+                return new BraveSword();
+            case "へいしのかぶと":
+                return new SoldierHelmet();
+            case "どうのかぶと":
+                return new BronzeHelmet();
+            case "てつのかぶと":
+                return new IronHelmet();
+            case "はがねのかぶと":
+                return new SteelHelmet();
+            case "ゆうしゃのかぶと":
+                return new BraveHelmet();
+            case "へいしのよろい":
+                return new SoldierArmor();
+            case "どうのよろい":
+                return new BronzeArmor();
+            case "てつのよろい":
+                return new IronArmor();
+            case "はがねのよろい":
+                return new SteelArmor();
+            case "ゆうしゃのよろい":
+                return new BraveArmor();
+        
+
         }
         return null;
     }

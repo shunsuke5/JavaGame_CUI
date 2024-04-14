@@ -15,6 +15,7 @@ import battlechar.BattleChar;
 import battlechar.enemy.Enemy;
 import equipment.*;
 import equipment.sword.*;
+import equipmentbag.EquipmentBag;
 import equipment.helmet.*;
 import equipment.armor.*;
 import text.Text;
@@ -35,7 +36,7 @@ public class Brave extends BattleChar {
     private Helmet helmet;                      // かぶと
     private Armor armor;                        // よろい
     private ItemBag itemBag;                    // 自作アイテムバッグクラス
-    private ArrayList<Equipment> equipmentBag;  // 所持そうび一覧
+    private EquipmentBag equipmentBag;  // 所持そうび一覧
 
     // 呪文
     private Spell spell;
@@ -621,6 +622,7 @@ public class Brave extends BattleChar {
     public Helmet getHelmet() { return this.helmet; }
     public Armor getArmor() { return this.armor; }
     public ItemBag getItemBag() { return this.itemBag; }
+    public EquipmentBag getEquipmentBag() { return this.equipmentBag; }
     public Spell getSpell() { return this.spell; }
     public int getBossKillCount() { return this.bossKillCount; }
 

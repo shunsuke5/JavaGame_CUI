@@ -9,8 +9,7 @@ public abstract class Enemy extends BattleChar {
     private int enemyId;            // 敵ID
     private int level;              // レベル、これを用いて逃げるかの判断をする
     private int point;              // 経験値
-    private int money;          // 落とすお金
-    private boolean isEscape;       // 逃げた時にtrue
+    private int money;              // 落とすお金
     private String appearanceMap;   // 出現マップ
     private String classfication;   // 分類(通常敵かボスか)
 
@@ -92,7 +91,7 @@ public abstract class Enemy extends BattleChar {
         int result = new java.util.Random().nextInt(100) + 1;
         if (result < runProbability) {
             System.out.println(getName() + "はにげだした！");
-            this.isEscape = true;
+            setIsEscape(true);
             return true;
         } else {
             return false;
@@ -116,10 +115,8 @@ public abstract class Enemy extends BattleChar {
     public int getLevel() { return this.level; }
     public int getPoint() { return this.point; }
     public int getMoney() { return this.money; }
-    public boolean getIsEscape() { return this.isEscape; }
     public String getAppearanceMap() { return this.appearanceMap; }
     public String getClassfication() { return this.classfication; }
 
     public void setMoney(int money) { this.money = money; }
-    public void setIsEscape(boolean isEscape) { this.isEscape = isEscape; }
 }

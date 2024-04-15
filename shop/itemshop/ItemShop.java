@@ -16,7 +16,7 @@ public class ItemShop {
     // メソッド
     public void sell(Brave brave) {
         this.isLeave = false;
-        System.out.println("ショップへようこそ。");
+        System.out.println("アイテムショップへようこそ。");
 
         while (!isLeave) {
             System.out.println("なにをかいますか？(-1でマップにもどる)\n");
@@ -85,13 +85,8 @@ public class ItemShop {
                 do {
                     System.out.println(dataArray[0] + "：" + dataArray[3] + "m -> " + (int)(dataArray[1]));
                     data = br.readLine();
-                } while (bossKillCount < (int)(dataArray[7]));
-                if (bossKillCount <= (int)(dataArray[7])) {
-                    br.readLine();
-                    continue;
-                }
-                System.out.println(dataArray[0] + "：" + dataArray[3] + "m -> " + (int)(dataArray[1]));
-                data = br.readLine();
+                    dataArray = data.split(",");
+                } while (!(bossKillCount < (int)(dataArray[7])));
             }
             br.close();
         } catch (IOException e) {

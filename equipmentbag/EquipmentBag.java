@@ -40,7 +40,7 @@ public class EquipmentBag {
     public void decrease(int equipmentId) {           // アイテムが減る動作
         this.equipment[equipmentId][checkStorage(equipmentId)] = null;
     }
-    public void displayequipmentBag() {
+    public void displayEquipmentBag() {
         // equipment_data.csvファイルから各アイテムの識別番号を取得していく
         int equipmentId;
         String equipmentName;

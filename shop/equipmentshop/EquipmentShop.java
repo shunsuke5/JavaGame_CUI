@@ -10,7 +10,7 @@ public class EquipmentShop {
     // メソッド
     public void sell(Brave brave) {
         this.isLeave = false;
-        System.out.println("ショップへようこそ。");
+        System.out.println("そうびショップへようこそ。");
 
         while (!isLeave) {
             System.out.println("なにをかいますか？(-1でマップにもどる)\n");
@@ -76,12 +76,11 @@ public class EquipmentShop {
             String data = br.readLine();
             while(data != null) {
                 Object[] dataArray = data.split(",");
-                if (bossKillCount <= (int)(dataArray[4])) {
-                    br.readLine();
-                    continue;
-                }
-                System.out.println(dataArray[0] + "：" + dataArray[3] + "m -> " + (int)(dataArray[1]));
-                data = br.readLine();
+                do {
+                    System.out.println(dataArray[0] + "：" + dataArray[3] + "m -> " + (int)(dataArray[1]));
+                    data = br.readLine();
+                    dataArray = data.split(",");
+                } while (!(bossKillCount < (int)(dataArray[7])));
             }
             br.close();
         } catch (IOException e) {

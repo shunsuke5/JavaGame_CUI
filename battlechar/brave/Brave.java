@@ -3,10 +3,10 @@ package battlechar.brave;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import map.*;
+import shop.equipmentshop.EquipmentShop;
 import shop.itemshop.ItemShop;
 import spell.*;
 import spell.attackspell.*;
@@ -49,7 +49,6 @@ public class Brave extends BattleChar {
     // プログラム用変数
     private boolean winBattle;          // バトルに勝った時にtrue
     private boolean loseBattle;         // バトルに負けた時にtrue
-    private boolean isEscape;           // バトルから逃げた時にtrue
     private int bossKillCount;          // ボスを倒した数
     
     // コンストラクタ
@@ -59,7 +58,7 @@ public class Brave extends BattleChar {
         String name = scanner.nextLine();
         scanner.close();
         setName(name);
-        System.out.println("勇者" + getName() + "の冒険が幕を開けた…");
+        System.out.println("ゆうしゃ" + getName() + "のぼうけんがまくをあけた…");
 
         this.level = 1;
         setHp(20);
@@ -172,8 +171,19 @@ public class Brave extends BattleChar {
         }
     }
     private void shopping() {                // アイテム購入
-        ItemShop itemShop = new ItemShop();
-        itemShop.sell(this);
+        System.out.println("どちらのショップにいきますか？");
+        System.out.println("アイテムショップ：1  そうびショップ：2");
+        int choice = Text.inputChoice();
+        switch(choice) {
+            case 1:
+                ItemShop itemShop = new ItemShop();
+                itemShop.sell(this);
+                break;
+            case 2:
+                EquipmentShop equipmentShop = new EquipmentShop();
+                equipmentShop.sell(this);
+                break;
+        }
     }
     private void checkItemBag() {            // アイテムリスト確認
         int itemId = 0;
@@ -203,6 +213,7 @@ public class Brave extends BattleChar {
         // 勝ったら以下のようにボスキルカウントに+1する
         this.bossKillCount++;
         // ショップのアイテムを増やす処理を以下に記述
+        // ここにボスを3体倒したかのチェック処理を入れ、trueならラスボスフラグをonにする？
     }
     private void searchHikyou() {            // 秘境探索(中ボス)
         // 秘境が解放されているかのチェック
@@ -215,7 +226,7 @@ public class Brave extends BattleChar {
         enemy.initializationTurnCount();
         enemy.initializationBattleStatus();
 
-        while (!this.winBattle || !this.loseBattle || !this.isEscape || !enemy.getIsEscape()) {
+        while (!this.winBattle || !this.loseBattle || !getIsEscape() || !enemy.getIsEscape()) {
             if (getBattleAgility().getValue() >= enemy.getBattleAgility().getValue()) { // 勇者が先攻の場合
                 judgeAbnormalPeriod();                              // 状態異常終了判定
                 getState().effect(this);                            // 状態異常効果
@@ -240,7 +251,7 @@ public class Brave extends BattleChar {
                             battleUseItem();
                             break;
                         case 5:
-                            run();
+                            run(enemy);
                             continue;
                         default:
                             break;
@@ -302,7 +313,7 @@ public class Brave extends BattleChar {
                             battleUseItem();
                             break;
                         case 5:
-                            run();
+                            run(enemy);
                             continue;
                         default:
                             break;
@@ -347,7 +358,6 @@ public class Brave extends BattleChar {
     }
     private void defense() {                 // 戦闘において防御するメソッド
         int strongDefense = (int)(getBattleDefense().getValue() * 1.5);
-        // この行動は素早さ関係なく勇者が先攻となる
         // そしてこのターン終了時には防御力を元に戻さなければならない
         plusTurnCount();
     }
@@ -376,9 +386,25 @@ public class Brave extends BattleChar {
             this.itemBag.decrease(itemId);
         }
     }
-    private void run() {     // 戦闘において逃げるメソッド
-        // if (相手がボスの場合) 逃げられない
-        // if (自分と相手のレベルと素早さの合計を比べてなんやかんや計算) → 逃げられるか無理かを決める
+    private void run(Enemy enemy) {     // 戦闘において逃げるメソッド
+        if (enemy.getClassfication().equals("ボス")) {
+            System.out.println("このたたかいはにげることができない！");
+            return;
+        }
+
+        int levelGap = enemy.getLevel() - this.level;
+        if (levelGap < 0) {
+            levelGap = 0;
+        }
+        int runEnable = levelGap * 5;
+        int result = new java.util.Random().nextInt(100) + 1;
+        if (result < runEnable) {
+            System.out.println(getName() + "はにげだした！");
+            setIsEscape(true);
+        } else {
+            System.out.println("しかしおいつかれてしまった！");
+            plusTurnCount();
+        }
     }
 
     private void win(Enemy enemy) {          // 戦いに勝利

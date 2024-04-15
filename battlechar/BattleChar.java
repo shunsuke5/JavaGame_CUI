@@ -24,9 +24,8 @@ public abstract class BattleChar {
     private int turnCount;                  // 経過ターン数
     private State state;                    // 状態
     private int abnormalTurnPeriod;         // 状態異常持続ターン上限
-
-    
     private int statusTurnPeriod;           // ステータス上下持続ターン上限
+    private boolean isEscape;               // 逃げたらtrue
 
     // 抽象メソッド
     public abstract String toString();
@@ -112,6 +111,7 @@ public abstract class BattleChar {
     public State getState() { return this.state; }
     public int getAbnormalTurnPeriod() { return this.abnormalTurnPeriod; }
     public int getStatusTurnPeriod() { return this.statusTurnPeriod; }
+    public boolean getIsEscape() { return this.isEscape; }
 
     public void setName(String name) { this.name = name; }
     public void setHp(int hp) { this.hp = hp; }
@@ -132,4 +132,5 @@ public abstract class BattleChar {
     }
     public void setAbnormalTurnPeriod(int abnormalTurnPeriod) { this.abnormalTurnPeriod = abnormalTurnPeriod; }
     public void plusAbnormalTurnPeriod() { this.abnormalTurnPeriod++; }
+    public void setIsEscape(boolean isEscpae) { this.isEscape = isEscpae; }
 }

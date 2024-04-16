@@ -23,7 +23,8 @@ public class BattleStatus {
         this.TWO_UP_VALUE = (int)(value * 1.5);
     }
     // メソッド
-    public void changedDefault() {
+    public void changedDefault(BattleChar anyone) {
+        System.out.println(anyone.getName() + "の" + this.name + "がもとにもどった！");
         this.value = DEFAULT_VALUE;
     }
     public int checkValue() {

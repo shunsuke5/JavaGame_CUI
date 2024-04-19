@@ -59,19 +59,19 @@ public abstract class BattleChar {
     public void statusUpDown() {
         if (getBattleAttack().getIsChanged()) {
             if (getBattleAttack().getTurnPeriod() == getTurnCount()) {
-                getBattleAttack().changedDefault();
+                getBattleAttack().changedDefault(this);
                 getBattleAttack().setIsChanged(false);
             }
         }
         if (getBattleDefense().getIsChanged()) {
             if (getBattleDefense().getTurnPeriod() == getTurnCount()) {
-                getBattleDefense().changedDefault();
+                getBattleDefense().changedDefault(this);
                 getBattleDefense().setIsChanged(false);
             }
         }
         if (getBattleAgility().getIsChanged()) {
             if (getBattleAgility().getTurnPeriod() == getTurnCount()) {
-                getBattleAgility().changedDefault();
+                getBattleAgility().changedDefault(this);
                 getBattleAgility().setIsChanged(false);
             }
         }

@@ -50,6 +50,7 @@ public class Brave extends BattleChar {
     private boolean winBattle;          // バトルに勝った時にtrue
     private boolean loseBattle;         // バトルに負けた時にtrue
     private int bossKillCount;          // ボスを倒した数
+    private boolean isGuard;          // 「ぼうぎょ」を選んだ時にtrue
     
     // コンストラクタ
     public Brave() {
@@ -245,7 +246,7 @@ public class Brave extends BattleChar {
                             spell(enemy);
                             break;
                         case 3:
-                            defense();
+                            guard();
                             break;
                         case 4:
                             battleUseItem();
@@ -307,7 +308,7 @@ public class Brave extends BattleChar {
                             spell(enemy);
                             break;
                         case 3:
-                            defense();
+                            guard();
                             break;
                         case 4:
                             battleUseItem();
@@ -356,12 +357,14 @@ public class Brave extends BattleChar {
         useSpell(spellId).resite(this, enemy);
         plusTurnCount();
     }
-    private void defense() {                 // 戦闘において防御するメソッド
-        int strongDefense = (int)(getBattleDefense().getValue() * 1.5);
+    private void guard() {                 // 戦闘において防御するメソッド
+        int strongDefense = (int)(getBattleDefense().getValue() * 1.25);
         // そしてこのターン終了時には防御力を元に戻さなければならない
         plusTurnCount();
     }
-
+    private void undoGuard() {
+        
+    }
     private void battleUseItem() {           // 戦闘においてアイテムを使用するメソッド
         System.out.println("どのアイテムをつかう？(-1でもどる)");
         this.itemBag.displayItemBag();

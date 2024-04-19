@@ -16,6 +16,7 @@ public class BattleStatus {
     // コンストラクタ
     public BattleStatus(String name, int value) {
         this.name = name;
+        this.value = value;
         this.TWO_DOWN_VALUE = (int)(value * 0.5);
         this.ONE_DOWN_VALUE = (int)(value * 0.75);
         this.DEFAULT_VALUE = value;

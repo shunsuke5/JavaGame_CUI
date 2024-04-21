@@ -36,7 +36,7 @@ public class Brave extends BattleChar {
     private Helmet helmet;                      // かぶと
     private Armor armor;                        // よろい
     private ItemBag itemBag;                    // 自作アイテムバッグクラス
-    private EquipmentBag equipmentBag;  // 所持そうび一覧
+    private EquipmentBag equipmentBag;          // 所持そうび一覧
 
     // 呪文
     private Spell spell;
@@ -50,7 +50,8 @@ public class Brave extends BattleChar {
     private boolean winBattle;          // バトルに勝った時にtrue
     private boolean loseBattle;         // バトルに負けた時にtrue
     private int bossKillCount;          // ボスを倒した数
-    private boolean isGuard;          // 「ぼうぎょ」を選んだ時にtrue
+    private boolean isGuard;            // 「ぼうぎょ」を選んだ時にtrue
+    private int beforeGuard;            // 「ぼうぎょ」する前の防御力
     
     // コンストラクタ
     public Brave() {
@@ -72,6 +73,8 @@ public class Brave extends BattleChar {
 
         // 装備の初期化もここで行いたい
         // へいしのけん、へいしのかぶと、へいしのよろい　などを装備させる
+        this.sword = new SoldierSword();
+
         // 装備 + ステータスでdefaultAttack,defaultDefenseをセットする
 
     }
@@ -232,6 +235,9 @@ public class Brave extends BattleChar {
                 judgeAbnormalPeriod();                              // 状態異常終了判定
                 getState().effect(this);                            // 状態異常効果
                 statusUpDown();                                     // ステータス上下処理
+                if (this.isGuard) {                                 // 「ぼうぎょ」を解く処理
+                    undoGuard();
+                }
                 while (getTurnCount() == enemy.getTurnCount()) {    // 勇者ターン
                     Text.chooseBattleAction(this);
                     Scanner scanner = new Scanner(System.in);
@@ -294,6 +300,9 @@ public class Brave extends BattleChar {
                 judgeAbnormalPeriod();                              // 状態異常終了判定
                 getState().effect(this);                            // 状態異常効果
                 statusUpDown();                                     // ステータス上下処理
+                if (this.isGuard) {                                 // 「ぼうぎょ」を解く処理
+                    undoGuard();
+                }
                 while(getTurnCount() != enemy.getTurnCount()) {                                                // 勇者ターン
                     Text.chooseBattleAction(this);
                     Scanner scanner = new Scanner(System.in);
@@ -358,12 +367,19 @@ public class Brave extends BattleChar {
         plusTurnCount();
     }
     private void guard() {                 // 戦闘において防御するメソッド
-        int strongDefense = (int)(getBattleDefense().getValue() * 1.25);
-        // そしてこのターン終了時には防御力を元に戻さなければならない
+        System.out.println(getName() + "はみをまもった！");
+        this.beforeGuard = getBattleDefense().getValue();
+        getBattleDefense().guard();
+        this.isGuard = true;
         plusTurnCount();
     }
     private void undoGuard() {
-        
+        if (getStatusTurnPeriod() == getTurnCount()) {
+            getBattleDefense().setValue(getBattleDefense().getDefaultValue());
+        } else {
+            getBattleDefense().setValue(this.beforeGuard);
+        }
+        this.isGuard = false;
     }
     private void battleUseItem() {           // 戦闘においてアイテムを使用するメソッド
         System.out.println("どのアイテムをつかう？(-1でもどる)");

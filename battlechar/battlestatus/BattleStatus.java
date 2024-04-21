@@ -41,6 +41,19 @@ public class BattleStatus {
             return 2;
         }
     }
+    public int returnValue(int status) {
+        if (status == -2) {
+            return TWO_DOWN_VALUE;
+        } else if(status == -1) {
+            return ONE_DOWN_VALUE;
+        } else if(status == 0) {
+            return DEFAULT_VALUE;
+        } else if(status == 1) {
+            return ONE_UP_VALUE;
+        } else {
+            return TWO_UP_VALUE;
+        }
+    }
     public int decidedStatus(int changeValueStep) {
         return checkValue() + changeValueStep;
     }
